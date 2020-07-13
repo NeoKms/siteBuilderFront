@@ -1,37 +1,38 @@
 <template>
 	<div v-if="loadSuccess">
 		<div class="header">
-			<div class="header__title">{{ siteName }} ({{ siteId }})</div>
+			<router-link :to="{name: 'site'}">back</router-link>
+			<div class="header__title">{{ siteName }} ({{ id }})</div>
 			<div class="header__tab-container">
 				<div v-for="(tab, index) in tabs" :key="index"
 					:class="{ active: activeTab === tab.name }"
-					@click="activeTab = tab.name"
 					class="tab"
 				>
-					{{tab.label}}
+					<router-link
+					:to="{ name: tab.route, params: { tabName:  tab.name}}"
+					>
+						{{tab.label}}
+					</router-link>
 				</div>
 			</div>
 		</div>
 		<div class="component-container">
-			<siteViewDescription v-if="activeTab==='description'"></siteViewDescription>
-			<siteViewContent v-if="activeTab==='content'"></siteViewContent>
+			<router-view :key="this.$route.path"/>
 		</div>
 	</div>
 </template>
 
 <script>
-    import siteViewDescription from './siteView/siteViewDescription.vue'
-    import siteViewContent from './siteView/siteViewContent.vue'
-
     export default {
         name: "siteDetails",
-        components: {
-            siteViewDescription,
-            siteViewContent
+        props: {
+            id: {
+                type: String,
+                required: true
+            }
         },
 		data() {
             return {
-                siteId: Number(this.$route.params.id),
                 isLoading: false,
 				loadSuccess: false,
                 activeTab: 'description',
@@ -39,22 +40,23 @@
                     description: {
                         name: 'description',
                         label: 'Описание',
-                        component: siteViewDescription,
+                        route: 'siteDescription',
                     },
                     content: {
                         name: 'content',
                         label: 'Контент',
-                        component: siteViewContent,
+                        route: 'siteContent',
                     },
                 },
 			}
 		},
 		mounted() {
+            this.setActiveTab()
             this.loadData();
         },
 		computed: {
             siteData: function () {
-                return this.$store.getters.getSiteById(this.siteId)
+                return this.$store.getters.getSiteById(this.id)
             },
             siteName: function () {
 				return this.siteData.name
@@ -65,7 +67,7 @@
                 if (this.siteData === undefined) {
                     try {
                         this.isLoading = true;
-                        await this.$store.dispatch('fetchSiteData', {id: this.siteId})
+                        await this.$store.dispatch('fetchSiteData', {id: this.id})
                     } catch (e) {
                         console.log(e);
                     } finally {
@@ -77,10 +79,16 @@
 				}
             },
             setActiveTab() {
-                const { tab } = this.$route.params;
+                const { tabName } = this.$route.params;
                 const tabs = Object.keys(this.tabs);
-                if (tabs.some(item => item === tab)) this.activeTab = tab;
-                else this.activeTab = 'description';
+                if (tabs.some(item => item === tabName)) {
+                    this.activeTab = tabName;
+                }
+                else {
+                    this.activeTab = 'description';
+                    this.$router.push({ name: this.tabs[this.activeTab].route, params: { tabName:  this.activeTab} })
+                }
+                //
             },
 		}
     }

@@ -11,7 +11,11 @@ export default new Vuex.Store({
 	},
 	state: {
 		messages: [],
-		siteList: [],
+		user: {
+			login: null,
+			pass: null,
+			auth: false
+		}
 	},
 	mutations: {
 		addMessage(state, msgData) {
@@ -24,10 +28,18 @@ export default new Vuex.Store({
 			msgData.id = Date.now().toLocaleString()
 			state.messages.push(msgData)
 		},
+		login(state, data) {
+			console.log(data)
+			state.user = data
+			state.user.auth = true
+		}
 	},
 	getters: {
 		getMessages(state) {
-			return state.messages;
+			return state.messages
 		},
+		getUserAuth(state) {
+			return state.user.auth
+		}
 	},
 });

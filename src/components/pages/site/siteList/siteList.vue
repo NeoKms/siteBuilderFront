@@ -50,7 +50,7 @@
         },
         methods: {
             goToDetails: function () {
-                this.$router.push({ name: 'siteDetails', params: { id: this.currentSiteId } })
+                this.$router.push({ name: 'siteDetails', params: { id: String(this.currentSiteId) } })
 			},
             setCurrentSiteId: function (id) {
 				this.currentSiteId = id
