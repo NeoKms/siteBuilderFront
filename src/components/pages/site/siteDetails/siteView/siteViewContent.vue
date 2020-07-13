@@ -1,6 +1,7 @@
 <template>
 	<div>
-		dskfjsdkj
+		<h1>content</h1>
+		<h1>{{this.$route.params}}</h1>
 	</div>
 </template>
 

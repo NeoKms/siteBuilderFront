@@ -8,7 +8,10 @@ export default {
 			return state.siteList;
 		},
 		getSiteById: state => id => {
-			return state.sitesDataList.find(siteData => Number(siteData.id) === id);
+			return state.sitesDataList.find(siteData => Number(siteData.id) === Number(id));
+		},
+		getSiteDataList(state) {
+			return state.sitesDataList;
 		},
 	},
 	mutations: {
@@ -33,21 +36,26 @@ export default {
 			];
 		},
 		getSiteById (state, payload) {
+			//типо ответ от апи
 			let data = [
 				{
 					id: 1,
-					name: 'site1'
+					name: 'site1',
+					address: 'q23',
 				},
 				{
 					id: 2,
-					name: 'site2'
+					name: 'site2',
+					address: '214jhkjs'
 				}
 			]
+			//
 			state.sitesDataList.push(data[payload.id-1])
 		}
 	},
 	actions: {
 		fetchSiteData (context, payload) {
+			//запрашиваем от апи, если такого еще нет у нас
 			if (context.getters.getSiteById(payload.id) === undefined) {
 				context.commit('getSiteById', {id: payload.id})
 			}
