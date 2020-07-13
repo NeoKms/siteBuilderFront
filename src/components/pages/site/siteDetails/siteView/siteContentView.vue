@@ -7,7 +7,7 @@
 
 <script>
     export default {
-        name: "siteViewContent"
+        name: "siteContentView"
     }
 </script>
 

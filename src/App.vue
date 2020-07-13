@@ -62,6 +62,7 @@ export default {
 		margin: 5% auto 5%;
 	}
 	.navbar {
+		width: 100%;
 		background-color: #f8f9fa;
 		box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
 		position: relative;

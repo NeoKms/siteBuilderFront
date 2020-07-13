@@ -26,15 +26,27 @@ const router = new Router({
             children: [
                 {
                     path: ":tabName",
-                    name: "siteDescription",
+                    name: "siteDescriptionView",
                     props: true,
-                    component: () => import("../components/pages/site/siteDetails/siteView/siteViewDescription"),
+                    component: () => import("../components/pages/site/siteDetails/siteView/siteDescriptionView"),
                 },
                 {
                     path: ":tabName",
-                    name: "siteContent",
+                    name: "siteContentView",
                     props: true,
-                    component: () => import("../components/pages/site/siteDetails/siteView/siteViewContent"),
+                    component: () => import("../components/pages/site/siteDetails/siteView/siteContentView"),
+                },
+                {
+                    path: ":tabName/edit",
+                    name: "siteDescriptionEdit",
+                    props: true,
+                    component: () => import("../components/pages/site/siteDetails/siteEditor/siteDescriptionEdit"),
+                },
+                {
+                    path: ":tabName/edit",
+                    name: "siteContentEdit",
+                    props: true,
+                    component: () => import("../components/pages/site/siteDetails/siteEditor/siteContentEdit"),
                 }
             ],
             beforeEnter: (to, from, next) => {

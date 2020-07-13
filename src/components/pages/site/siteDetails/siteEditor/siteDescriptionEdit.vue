@@ -1,11 +1,16 @@
 <template>
-	<div class="container">
-		<div class="description">
+	<div>
+		<div class="editorButtons">
+			<div>Принять</div>
+			<div>Отменить</div>
+		</div>
+	<div class="row container">
+		<div class="column-60 description">
 			<div class="description__title">
-				<div class="title">Общее</div>
+				<div class="title">Общее редактирование</div>
 				<div class="active">
-					<div class="mark" :class="{yes: site.active}"></div>
-					<div class="text">{{site.active?'Активный':'Не активый'}}</div>
+					<label>Активность</label>
+					<input type="checkbox" v-model="site.active">
 				</div>
 			</div>
 			<table class="table-descr">
@@ -26,49 +31,75 @@
 					<td>{{site.description}}</td>
 				</tr>
 			</table>
+			<div class="description__title">
+				<div class="title">Публикации</div>
+			</div>
 		</div>
 		<div class="line">&shy;</div>
-		<div class="template">
+		<div class="column-40 template">
 			<div class="template__title">
 				<div class="title">Шаблон</div>
 			</div>
+			<div class="template__img" :style="site.template.img?'':'display: grid;'">
+				<img v-if="site.template.img" :src="site.template.img">
+				<span v-else>Выберите шаблон сайта</span>
+			</div>
 		</div>
 	</div>
+	</div>
 </template>
-
 <script>
     export default {
-        name: "siteViewDescription",
-		props: {
-			id: {
-				type: String,
-				required: true
-			}
-		},
-		computed: {
+        name: "siteDescriptionEdit",
+        props: {
+            id: {
+                type: String,
+                required: true
+            }
+        },
+        computed: {
             site: function () {
                 return this.$store.getters.getSiteById(this.id)
             },
+        },
+		mounted() {
+            this.$emit('editorOn')
 		}
     }
 </script>
 
 <style scoped lang="scss">
-	.container {
+	.editorButtons {
+		text-align: left;
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		margin-left: 10px;
+		margin-top: -35px;
+		margin-bottom: 10px;
+	}
+	.row {
 		display: flex;
 		justify-content: space-between;
 		align-items: inherit;
 	}
-	.description {		padding: 1%;
+	.column-60 {
+		padding: 1%;
 		width:60%;
+	}
+	.column-40 {
+		padding: 1%;
+		width:40%;
+	}
+	.title {
+		font-size: 14pt;
+		font-weight: bold;
+	}
+	.description {
 		&__title {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			.title {
-				font-size: 14pt;
-				font-weight: bold;
-			}
 			.active {
 				align-items: center;
 				display: flex;
@@ -90,7 +121,12 @@
 		background: #dedede;
 	}
 	.template {
-		padding: 1%;
-		width:40%;
+		&__img {
+			align-items: center;
+			border: 2px dotted grey;
+			margin: auto;
+			width: 350px;
+			height: 200px;
+		}
 	}
 </style>

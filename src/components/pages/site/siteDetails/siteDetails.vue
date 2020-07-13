@@ -3,21 +3,34 @@
 		<div class="header">
 			<router-link :to="{name: 'site'}">back</router-link>
 			<div class="header__title">{{ siteName }} ({{ id }})</div>
-			<div class="header__tab-container">
-				<div v-for="(tab, index) in tabs" :key="index"
-					:class="{ active: activeTab === tab.name }"
-					class="tab"
+			<div class="header__tab-container" >
+<!--				<div v-if="!edit">-->
+					<div v-for="(tab, index) in tabs" :key="index"
+						:class="{ active: activeTab === tab.name }"
+						class="tab"
+					>
+						<router-link
+						:to="{ name: tab.route, params: { tabName:  tab.name}}"
+						>
+							{{tab.label}}
+						</router-link>
+					</div>
+<!--				</div>-->
+				<div
+						class="edit"
+						v-if="!edit"
 				>
 					<router-link
-					:to="{ name: tab.route, params: { tabName:  tab.name}}"
+							class="tab"
+							:to="{ name: editTabs[activeTab].route, params: { tabName:  activeTab}}"
 					>
-						{{tab.label}}
+						<img :src="editTabs[activeTab].img" width="20">
 					</router-link>
 				</div>
 			</div>
 		</div>
 		<div class="component-container">
-			<router-view :key="this.$route.path"/>
+			<router-view :key="this.$route.path" @editorOn="edit = true" @editorOff="edit = false"/>
 		</div>
 	</div>
 </template>
@@ -36,18 +49,31 @@
                 isLoading: false,
 				loadSuccess: false,
                 activeTab: 'description',
+				edit: false,
                 tabs: {
                     description: {
                         name: 'description',
                         label: 'Описание',
-                        route: 'siteDescription',
+                        route: 'siteDescriptionView',
                     },
                     content: {
                         name: 'content',
                         label: 'Контент',
-                        route: 'siteContent',
+                        route: 'siteContentView',
                     },
                 },
+				editTabs: {
+                    description: {
+                        name: 'description',
+                        img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAABmJLR0QA/wD/AP+gvaeTAAABhElEQVRIib3VPWsUQRgA4EcJVtEDO9GYw0JshJQWVlZKmpAPOQ0EDHYqNhaaMmX6NDYmZUIIFqZIYWdQEf+BH02IBC0EbYxezmJ2ub3Bu9zsLb7wMvvBzrPvzM4s1cVFrGIdVyvstyMu4xtaWf7GdNXICZzDhwJUOdbAR1zogv3B7UGRYexmHX5GHSMZHFdWes6uoYZL+BJh5/+BrZVBJvALb47APhWgp6nIJA4KHfTCRrPjr9l53zEVIXm+xqkuWB1jKciMMKkxkuerLpXVqkTyfI/Twg6xi0cpyK0+kXjOTqYgs8KC6xfJcy4FaSRWkufC/0CepCB30CyBPE5BZkogh3iYgsDLwsP9Ig9SkZqw6n/iBpbwDHs9kHupCNzMOngeXd/sgtxPBYaydjxrt6L7P6LzljBcy6kQHMe+8KZno3tT2pU0cbcMkMcV7T/hdZzBPDbwXXu45gdBYFHnb7f41R0IX+PsoAi81TnZ+1gR1lXSNt8rhrCDY9jGC7wTqqo0/gKUsOfqJ3dX9AAAAABJRU5ErkJggg==',
+                        route: 'siteDescriptionEdit',
+                    },
+                    content: {
+                        name: 'content',
+                        img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAABmJLR0QA/wD/AP+gvaeTAAABhElEQVRIib3VPWsUQRgA4EcJVtEDO9GYw0JshJQWVlZKmpAPOQ0EDHYqNhaaMmX6NDYmZUIIFqZIYWdQEf+BH02IBC0EbYxezmJ2ub3Bu9zsLb7wMvvBzrPvzM4s1cVFrGIdVyvstyMu4xtaWf7GdNXICZzDhwJUOdbAR1zogv3B7UGRYexmHX5GHSMZHFdWes6uoYZL+BJh5/+BrZVBJvALb47APhWgp6nIJA4KHfTCRrPjr9l53zEVIXm+xqkuWB1jKciMMKkxkuerLpXVqkTyfI/Twg6xi0cpyK0+kXjOTqYgs8KC6xfJcy4FaSRWkufC/0CepCB30CyBPE5BZkogh3iYgsDLwsP9Ig9SkZqw6n/iBpbwDHs9kHupCNzMOngeXd/sgtxPBYaydjxrt6L7P6LzljBcy6kQHMe+8KZno3tT2pU0cbcMkMcV7T/hdZzBPDbwXXu45gdBYFHnb7f41R0IX+PsoAi81TnZ+1gR1lXSNt8rhrCDY9jGC7wTqqo0/gKUsOfqJ3dX9AAAAABJRU5ErkJggg==',
+                        route: 'siteContentEdit',
+                    },
+				}
 			}
 		},
 		mounted() {
@@ -86,7 +112,8 @@
                 }
                 else {
                     this.activeTab = 'description';
-                    this.$router.push({ name: this.tabs[this.activeTab].route, params: { tabName:  this.activeTab} })
+                    console.log(this.activeTab)
+                    // this.$router.push({ name: this.tabs[this.activeTab].route, params: { tabName:  this.activeTab} })
                 }
                 //
             },
