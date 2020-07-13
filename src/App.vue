@@ -48,6 +48,10 @@ export default {
 		padding: 0;
 		box-sizing: border-box;
 	}
+	a {
+		color: #007bff;
+		text-decoration: none;
+	}
 	.main-body {
 		max-width: 960px;
 		text-align: center;

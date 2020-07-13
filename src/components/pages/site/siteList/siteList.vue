@@ -11,7 +11,7 @@
 			<div v-if="!site.img" class="siteCard__img" style="background-image: url('assets/img/none.png')"></div>
 			<div class="siteCard__info">
 				<div class="title">
-					<div class="title__type">{{ site.type}}</div>
+					<div class="title__type">{{ site.type.options.find( name => name.value === site.type.value ).label }}</div>
 					<div class="title__active" :class="{active: site.active}"></div>
 				</div>
 				<div class="name">{{ site.name }}</div>

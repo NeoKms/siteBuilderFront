@@ -102,17 +102,18 @@
 			text-align: left;
 		}
 		&__tab-container {
+			border-bottom: 2px solid lightgrey;
+			box-shadow: 0 2px 1px rgba(0, 0, 0, 0.5);
 			position: relative;
 			display: flex;
 			flex-wrap: wrap;
 			align-items: center;
-			margin-top: 10px;
-			margin-bottom: 10px;
+			margin: 10px -15px;
+			padding: 5px;
 			.tab {
 				margin-left: 20px;
-				cursor: pointer;
-				&.active {
-					color: #16C0B0;
+				&.active a {
+					color: #34c3ce;
 					text-decoration: underline;
 				}
 			}

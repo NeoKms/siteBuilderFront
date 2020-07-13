@@ -38,17 +38,17 @@ const router = new Router({
                 }
             ],
             beforeEnter: (to, from, next) => {
-                const pathTo = to.path.split('/')
-                if (pathTo.length>0 && pathTo[1]==='site' && pathTo.length>=4) {
-                    const exists = store.getters.getSiteById(to.params.id)
-                    if (exists) {
-                        next()
-                    } else {
-                        next({name: '404'})
-                    }
-                } else {
+                // const pathTo = to.path.split('/')
+                // if (pathTo.length>0 && pathTo[1]==='site' && pathTo.length>=4) {
+                //     const exists = store.getters.getSiteById(to.params.id)
+                //     if (exists) {
+                //         next()
+                //     } else {
+                //         next({name: '404'})
+                //     }
+                // } else {
                     next()
-                }
+                // }
             }
         },
         {
