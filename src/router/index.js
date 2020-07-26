@@ -26,29 +26,41 @@ const router = new Router({
             children: [
                 {
                     path: ":tabName",
-                    name: "siteDescription",
+                    name: "siteDescriptionView",
                     props: true,
-                    component: () => import("../components/pages/site/siteDetails/siteView/siteViewDescription"),
+                    component: () => import("../components/pages/site/siteDetails/siteView/siteDescriptionView"),
                 },
                 {
                     path: ":tabName",
-                    name: "siteContent",
+                    name: "siteContentView",
                     props: true,
-                    component: () => import("../components/pages/site/siteDetails/siteView/siteViewContent"),
+                    component: () => import("../components/pages/site/siteDetails/siteView/siteContentView"),
+                },
+                {
+                    path: ":tabName/edit",
+                    name: "siteDescriptionEdit",
+                    props: true,
+                    component: () => import("../components/pages/site/siteDetails/siteEditor/siteDescriptionEdit"),
+                },
+                {
+                    path: ":tabName/edit",
+                    name: "siteContentEdit",
+                    props: true,
+                    component: () => import("../components/pages/site/siteDetails/siteEditor/siteContentEdit"),
                 }
             ],
             beforeEnter: (to, from, next) => {
-                const pathTo = to.path.split('/')
-                if (pathTo.length>0 && pathTo[1]==='site' && pathTo.length>=4) {
-                    const exists = store.getters.getSiteById(to.params.id)
-                    if (exists) {
-                        next()
-                    } else {
-                        next({name: '404'})
-                    }
-                } else {
+                // const pathTo = to.path.split('/')
+                // if (pathTo.length>0 && pathTo[1]==='site' && pathTo.length>=4) {
+                //     const exists = store.getters.getSiteById(to.params.id)
+                //     if (exists) {
+                //         next()
+                //     } else {
+                //         next({name: '404'})
+                //     }
+                // } else {
                     next()
-                }
+                // }
             }
         },
         {
