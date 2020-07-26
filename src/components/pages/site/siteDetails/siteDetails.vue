@@ -1,16 +1,17 @@
 <template>
-	<div v-if="loadSuccess">
+	<v-container class="grey lighten-5"  v-if="loadSuccess">
 		<div class="header">
 			<router-link :to="{name: 'site'}">back</router-link>
 			<div class="header__title">{{ siteName }} ({{ id }})</div>
 			<div class="header__tab-container" >
-<!--				<div v-if="!edit">-->
+<!--				<div >-->
 					<div v-for="(tab, index) in tabs" :key="index"
 						:class="{ active: activeTab === tab.name }"
 						class="tab"
 					>
 						<router-link
 						:to="{ name: tab.route, params: { tabName:  tab.name}}"
+						v-if="!edit"
 						>
 							{{tab.label}}
 						</router-link>
@@ -32,7 +33,7 @@
 		<div class="component-container">
 			<router-view :key="this.$route.path" @editorOn="edit = true" @editorOff="edit = false"/>
 		</div>
-	</div>
+	</v-container>
 </template>
 
 <script>
@@ -113,7 +114,7 @@
                 else {
                     this.activeTab = 'description';
                     console.log(this.activeTab)
-                    // this.$router.push({ name: this.tabs[this.activeTab].route, params: { tabName:  this.activeTab} })
+                    this.$router.push({ name: this.tabs[this.activeTab].route, params: { tabName:  this.activeTab} })
                 }
                 //
             },
@@ -138,6 +139,7 @@
 			margin: 10px -15px;
 			padding: 5px;
 			.tab {
+				height: 24px;
 				margin-left: 20px;
 				&.active a {
 					color: #34c3ce;
