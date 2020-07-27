@@ -67,6 +67,7 @@ export default {
 		padding: 15px;
 		box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
 		margin: 5% auto 5%;
+		overflow: hidden;
 	}
 	.nav_btn {
 		color: rgba(0,0,0,.5) !important;

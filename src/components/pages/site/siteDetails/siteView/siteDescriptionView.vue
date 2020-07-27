@@ -1,52 +1,112 @@
 <template>
-	<div class="row container">
-		<div class="column-60 description">
-			<div class="description__title">
-				<div class="title">Общее</div>
-				<div class="active">
-					<div class="mark" :class="{yes: site.active}"></div>
-					<div class="text">{{site.active?'Активный':'Не активый'}}</div>
-				</div>
-			</div>
-			<table class="table-descr">
-				<tr>
-					<td class="left">Название</td>
-					<td>{{site.name}}</td>
-				</tr>
-				<tr>
-					<td class="left">Адрес</td>
-					<td>{{site.address}}</td>
-				</tr>
-				<tr>
-					<td class="left">Тип</td>
-					<td>{{site.type.options.find( name => name.value === site.type.value ).label}}</td>
-				</tr>
-				<tr>
-					<td class="left">Описание</td>
-					<td>{{site.description}}</td>
-				</tr>
-			</table>
-			<div class="description__title">
-				<div class="title">Публикации</div>
-			</div>
-		</div>
-		<div class="line">&shy;</div>
-		<div class="column-40 template">
-			<div class="template__title">
-				<div class="title">Шаблон</div>
-			</div>
-			<div class="template__img" :style="site.template.img?'':'display: grid;'">
-				<img v-if="site.template.img" :src="site.template.img">
-				<span v-else>Выберите шаблон сайта</span>
-			</div>
-		</div>
-	</div>
+	<v-container class="grey lighten-5">
+		<v-row align-content="center">
+			<v-col cols="8">
+				<v-container class="description">
+					<v-row>
+						<v-col align="left" class="title">
+							Общее
+							<v-btn color="primary" fab x-small dark  :to="{ name: 'siteDescriptionEdit', params: { tabName:  this.tabName}}">
+								<v-icon>mdi-pencil</v-icon>
+							</v-btn>
+						</v-col>
+						<v-col align="right">
+							<v-row>
+								<v-col align="right" class="ct-c"><div class="mark" :class="{yes: site.active}"></div></v-col>
+								<v-col align="left" class="ct-c">{{site.active?'Активный':'Не активый'}}</v-col>
+							</v-row>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col>
+							<table class="table-descr">
+								<tr>
+									<td class="left">Название</td>
+									<td>{{site.name}}</td>
+								</tr>
+								<tr>
+									<td class="left">Адрес</td>
+									<td>{{site.address}}</td>
+								</tr>
+								<tr>
+									<td class="left">Тип</td>
+									<td>{{site.type.options.find( name => name.value === site.type.value ).label}}</td>
+								</tr>
+								<tr>
+									<td class="left">Описание</td>
+									<td>{{site.description}}</td>
+								</tr>
+							</table>
+						</v-col>
+					</v-row>
+				</v-container>
+			</v-col>
+			<v-col cols="4">
+				<v-container>
+					<v-row>
+						<v-col class="title">
+							Контакты
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col>
+							<table class="table-descr-sm">
+								<tr>
+									<td class="left">Название организации</td>
+									<td>ООО ТРАНССВЯЗЬ</td>
+								</tr>
+								<tr>
+									<td class="left">Телефон</td>
+									<td>88005553535</td>
+								</tr>
+								<tr>
+									<td class="left">Адрес</td>
+									<td>666666, г. Санкт-Петербург, ул. Пушкина д.1 лит А </td>
+								</tr>
+								<tr>
+									<td class="left">Основной E-mail</td>
+									<td>tmp1@gmila.com</td>
+								</tr>
+								<tr>
+									<td class="left">Обратная связь E-mail</td>
+									<td>tmp2@gmail.com</td>
+								</tr>
+								<tr>
+									<td class="left">Координаты</td>
+									<td>59.9558742615268 30.369708388251336</td>
+								</tr>
+							</table>
+						</v-col>
+					</v-row>
+				</v-container>
+				<v-container>
+					<v-row>
+						<v-col class="title">
+							Шаблон
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col>
+							<div class="template__img" :style="site.template.img?'':'display: grid;'">
+								<img v-if="site.template.img" :src="site.template.img">
+								<span v-else>Выберите шаблон сайта</span>
+							</div>
+						</v-col>
+					</v-row>
+				</v-container>
+			</v-col>
+		</v-row>
+	</v-container>
 </template>
 <script>
     export default {
         name: "siteDescriptionView",
 		props: {
 			id: {
+				type: String,
+				required: true
+			},
+            tabName: {
 				type: String,
 				required: true
 			}
@@ -60,55 +120,30 @@
 </script>
 
 <style scoped lang="scss">
-	.row {
-		display: flex;
-		justify-content: space-between;
-		align-items: inherit;
-	}
-	.column-60 {
-		padding: 1%;
-		width:60%;
-	}
-	.column-40 {
-		padding: 1%;
-		width:40%;
-	}
 	.title {
 		font-size: 14pt;
 		font-weight: bold;
 	}
-	.description {
-		&__title {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			.active {
-				align-items: center;
-				display: flex;
-				.mark {
-					margin-right: 5px;
-					background-color: #aebdc6;
-					width: 12px;
-					height: 12px;
-					border-radius: 50%;
-					&.yes {
-						background-color: #2946c6;
-					}
-				}
-			}
+	.mark {
+		margin-right: -12px;
+		background-color: #aebdc6;
+		width: 15px;
+		height: 15px;
+		border-radius: 50%;
+		&.yes {
+			background-color: #2946c6;
 		}
 	}
-	.line {
-		width:.3%;
-		background: #dedede;
+	.ct-c {
+		align-self: center;
 	}
 	.template {
 		&__img {
 			align-items: center;
 			border: 2px dotted grey;
 			margin: auto;
-			width: 350px;
-			height: 200px;
+			width: 250px;
+			height: 160px;
 		}
 	}
 </style>

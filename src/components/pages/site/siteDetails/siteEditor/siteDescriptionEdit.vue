@@ -1,56 +1,164 @@
 <template>
-	<div>
-		<div class="editorButtons">
-			<div>Принять</div>
-			<div>Отменить</div>
-		</div>
-	<div class="row container">
-		<div class="column-60 description">
-			<div class="description__title">
-				<div class="title">Общее редактирование</div>
-				<div class="active">
-					<label>Активность</label>
-					<input type="checkbox" v-model="site.active">
-				</div>
-			</div>
-			<table class="table-descr">
-				<tr>
-					<td class="left">Название</td>
-					<td>{{site.name}}</td>
-				</tr>
-				<tr>
-					<td class="left">Адрес</td>
-					<td>{{site.address}}</td>
-				</tr>
-				<tr>
-					<td class="left">Тип</td>
-					<td>{{site.type.options.find( name => name.value === site.type.value ).label}}</td>
-				</tr>
-				<tr>
-					<td class="left">Описание</td>
-					<td>{{site.description}}</td>
-				</tr>
-			</table>
-			<div class="description__title">
-				<div class="title">Публикации</div>
-			</div>
-		</div>
-		<div class="line">&shy;</div>
-		<div class="column-40 template">
-			<div class="template__title">
-				<div class="title">Шаблон</div>
-			</div>
-			<div class="template__img" :style="site.template.img?'':'display: grid;'">
-				<img v-if="site.template.img" :src="site.template.img">
-				<span v-else>Выберите шаблон сайта</span>
-			</div>
-		</div>
-	</div>
-	</div>
+	<v-container class="grey lighten-5">
+		<v-row align-content="center">
+			<v-col cols="7">
+				<v-container class="description">
+					<v-row>
+						<v-col align="left" class="title ct-c" cols="2">
+							Общее
+						</v-col>
+						<v-col cols="2" class="ct-c">
+							<v-btn small class="btn-save">
+								<v-icon left>mdi-content-save</v-icon> Save
+							</v-btn>
+						</v-col >
+						<v-col cols="2" class="ct-c">
+							<v-btn small class="btn-cancel">
+								<v-icon left>mdi-close-circle</v-icon> Cancel
+							</v-btn>
+						</v-col>
+						<v-col align="right" cols="6">
+							<v-row>
+								<v-col align="right" class="ct-c">
+								</v-col>
+								<v-col align="left" class="ct-c">
+									<v-switch v-model="site.active" :label="site.active?'Активный':'Не активый'" value="John"></v-switch>
+								</v-col>
+							</v-row>
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col>
+							<table class="table-descr">
+								<tr>
+									<td class="left">Название</td>
+									<td>
+										<v-text-field v-model="site.name"></v-text-field>
+									</td>
+								</tr>
+								<tr>
+									<td class="left">Адрес</td>
+									<td>
+										<v-text-field v-model="site.address"></v-text-field>
+									</td>
+								</tr>
+								<tr>
+									<td class="left">Тип</td>
+									<td>
+										<v-select
+												v-model="selectedType"
+												:items="site.type.options"
+												item-text="label"
+												item-value="value"
+												@input="selectType(selectTypeVal,$event)"
+												persistent-hint
+												return-object
+												single-line
+										></v-select>
+									</td>
+								</tr>
+								<tr>
+									<td class="left">Описание</td>
+									<td>
+										<v-textarea
+												filled
+												v-model="site.description"
+										></v-textarea>
+									</td>
+								</tr>
+							</table>
+						</v-col>
+					</v-row>
+				</v-container>
+			</v-col>
+			<v-col cols="5">
+				<v-container>
+					<v-row>
+						<v-col class="title">
+							Контакты
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col>
+							<table class="table-descr-sm">
+								<tr>
+									<td class="left">Название организации</td>
+									<td><v-text-field v-model="site.contacts.title"></v-text-field></td>
+								</tr>
+								<tr>
+									<td class="left">Телефон</td>
+									<td><v-text-field v-model="site.contacts.phone"></v-text-field></td>
+								</tr>
+								<tr>
+									<td class="left">Город</td>
+									<td><v-text-field v-model="site.contacts.city"></v-text-field></td>
+								</tr>
+								<tr>
+									<td class="left">Улица</td>
+									<td><v-text-field v-model="site.contacts.street"></v-text-field></td>
+								</tr>
+								<tr>
+									<td class="left">Дом</td>
+									<td><v-text-field v-model="site.contacts.house"></v-text-field></td>
+								</tr>
+								<tr>
+									<td class="left">Литера</td>
+									<td><v-text-field v-model="site.contacts.litera"></v-text-field></td>
+								</tr>
+								<tr>
+									<td class="left">Индекс</td>
+									<td><v-text-field v-model="site.contacts.index"></v-text-field></td>
+								</tr>
+								<tr>
+									<td class="left">Основной E-mail</td>
+									<td><v-text-field v-model="site.contacts.emailMain"></v-text-field></td>
+								</tr>
+								<tr>
+									<td class="left">Обратная связь E-mail</td>
+									<td><v-text-field v-model="site.contacts.emailFeedback"></v-text-field></td>
+								</tr>
+								<tr>
+									<td class="left">Координаты</td>
+									<td>
+										<v-text-field v-model="site.contacts.coordinate.x" label="x"></v-text-field>
+										<v-text-field v-model="site.contacts.coordinate.y" label="y"></v-text-field>
+									</td>
+								</tr>
+
+							</table>
+						</v-col>
+					</v-row>
+				</v-container>
+				<v-container>
+					<v-row>
+						<v-col class="title">
+							Шаблон
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col>
+							<div class="template__img" :style="site.template.img?'':'display: grid;'">
+								<img v-if="site.template.img" :src="site.template.img">
+								<span v-else>Выберите шаблон сайта</span>
+							</div>
+						</v-col>
+					</v-row>
+					<v-row>
+
+					</v-row>
+				</v-container>
+			</v-col>
+		</v-row>
+	</v-container>
 </template>
 <script>
     export default {
         name: "siteDescriptionEdit",
+		data() {
+            return {
+                selectTypeVal: { state: '', abbr: '' },
+			}
+		},
         props: {
             id: {
                 type: String,
@@ -61,6 +169,14 @@
             site: function () {
                 return this.$store.getters.getSiteById(this.id)
             },
+            selectedType: function () {
+				return this.site.type.options.find( name => name.value === this.site.type.value )
+            }
+        },
+        methods: {
+            selectType(propName, propVal) {
+                this.site.type.value = propVal.value;
+            }
         },
 		mounted() {
             this.$emit('editorOn')
@@ -69,64 +185,42 @@
 </script>
 
 <style scoped lang="scss">
-	.editorButtons {
-		text-align: left;
-		position: relative;
-		display: flex;
-		flex-wrap: wrap;
-		margin-left: 10px;
-		margin-top: -35px;
-		margin-bottom: 10px;
+	.btn-cancel {
+		color: red !important;
+		i {
+			color: #ea0400 !important;
+		}
 	}
-	.row {
-		display: flex;
-		justify-content: space-between;
-		align-items: inherit;
-	}
-	.column-60 {
-		padding: 1%;
-		width:60%;
-	}
-	.column-40 {
-		padding: 1%;
-		width:40%;
+	.btn-save {
+		color: #2946c6 !important;
+		i {
+			color: #2946c6 !important;
+		}
 	}
 	.title {
 		font-size: 14pt;
 		font-weight: bold;
 	}
-	.description {
-		&__title {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			.active {
-				align-items: center;
-				display: flex;
-				.mark {
-					margin-right: 5px;
-					background-color: #aebdc6;
-					width: 12px;
-					height: 12px;
-					border-radius: 50%;
-					&.yes {
-						background-color: #2946c6;
-					}
-				}
-			}
+	.mark {
+		margin-right: -12px;
+		background-color: #aebdc6;
+		width: 15px;
+		height: 15px;
+		border-radius: 50%;
+		&.yes {
+			background-color: #2946c6;
 		}
 	}
-	.line {
-		width:.3%;
-		background: #dedede;
+	.ct-c {
+		align-self: center;
 	}
 	.template {
 		&__img {
 			align-items: center;
 			border: 2px dotted grey;
 			margin: auto;
-			width: 350px;
-			height: 200px;
+			width: 250px;
+			height: 160px;
 		}
 	}
 </style>

@@ -67,6 +67,19 @@ export default {
 						],
 						value: 1
 					},
+					contacts:{
+						"title":"названиеорг",
+						"phone":"телорг",
+						"city":"город",
+						"street":"улиц",
+						"house":"1",
+						"litera":"2",
+						"index":333444,
+						"emailMain":"tmp1@gmila.com",
+						"emailFeedback":"tmp2@gmail.com",
+						"doubleMailing":"1",
+						"coordinate":{"x":"59.9558742615268","y":"30.369708388251336"}
+					},
 					template: 0,
 				},
 				{
@@ -83,6 +96,19 @@ export default {
 							{value: 3, label: 'Промо-сайт', code:'promoSite'},
 						],
 						value: 2
+					},
+					contacts:{
+					"title":"названиеорг1",
+						"phone":"телорг1",
+						"city":"город1",
+						"street":"улиц1",
+						"house":"2",
+						"litera":"3",
+						"index":111111,
+						"emailMain":"tmp1@gmila.com1",
+						"emailFeedback":"tmp2@gmail.com1",
+						"doubleMailing":"0",
+						"coordinate":{"x":"59.9558742615268","y":"30.369708388251336"}
 					},
 					template: 0,
 				}
