@@ -87,9 +87,16 @@
 					</v-row>
 					<v-row>
 						<v-col>
-							<div class="template__img" :style="site.template.img?'':'display: grid;'">
-								<img v-if="site.template.img" :src="site.template.img">
-								<span v-else>Выберите шаблон сайта</span>
+							<div class="template__img">
+									<v-img
+											v-show="site.template.data.img"
+											:src="site.template.data.img"
+											width="250" height="155" contain
+									/>
+								<span v-show="!site.template.data.img">Выберите шаблон сайта</span>
+							</div>
+							<div v-if="site.template.data.img">
+								{{site.template.data.name}}
 							</div>
 						</v-col>
 					</v-row>
@@ -144,6 +151,7 @@
 			margin: auto;
 			width: 250px;
 			height: 160px;
+			display: grid;
 		}
 	}
 </style>

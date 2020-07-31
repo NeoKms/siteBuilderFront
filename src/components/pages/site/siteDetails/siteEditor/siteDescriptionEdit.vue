@@ -22,7 +22,7 @@
 								<v-col align="right" class="ct-c">
 								</v-col>
 								<v-col align="left" class="ct-c">
-									<v-switch v-model="site.active" :label="site.active?'Активный':'Не активый'" value="John"></v-switch>
+									<v-switch v-model="site.active" :label="site.active?'Активный':'Не активый'"></v-switch>
 								</v-col>
 							</v-row>
 						</v-col>
@@ -137,26 +137,50 @@
 					</v-row>
 					<v-row>
 						<v-col>
-							<div class="template__img" :style="site.template.img?'':'display: grid;'">
-								<img v-if="site.template.img" :src="site.template.img">
-								<span v-else>Выберите шаблон сайта</span>
+							<div
+									class="template__img"
+									@click.stop="viewTemplates = true"
+									@mousemove="viewEdit = true"
+									@mouseleave="viewEdit = false"
+							>
+								<v-img
+										v-show="site.template.data.img"
+										v-if="!viewEdit"
+										:src="site.template.data.img"
+										width="250" height="155" contain
+								/>
+								<span v-show="viewEdit">Выберите шаблон сайта</span>
+							</div>
+							<div v-if="site.template.data.img">
+								{{site.template.data.name}}
 							</div>
 						</v-col>
-					</v-row>
-					<v-row>
-
 					</v-row>
 				</v-container>
 			</v-col>
 		</v-row>
+		<v-dialog
+				v-model="viewTemplates"
+				max-width="900"
+		>
+			<MtemplateChoose :viewTemplates="viewTemplates" @setChosenTmpl="setChosenTmpl"/>
+		</v-dialog>
 	</v-container>
 </template>
 <script>
+    import MtemplateChoose from './MtemplateChoose'
+
     export default {
         name: "siteDescriptionEdit",
+        components: {
+            MtemplateChoose,
+        },
 		data() {
             return {
                 selectTypeVal: { state: '', abbr: '' },
+				viewTemplates: false,
+				viewEdit: false,
+				// site: undefined,
 			}
 		},
         props: {
@@ -176,7 +200,13 @@
         methods: {
             selectType(propName, propVal) {
                 this.site.type.value = propVal.value;
-            }
+            },
+            setChosenTmpl(id) {
+                this.site.template.id = id
+				this.viewTemplates = false
+				this.site.template.data = this.$store.getters.getTemplatById(id)
+				console.log(this.$store.getters.getTemplatById(id))
+			},
         },
 		mounted() {
             this.$emit('editorOn')
@@ -221,6 +251,8 @@
 			margin: auto;
 			width: 250px;
 			height: 160px;
+			cursor: pointer;
+			display: grid;
 		}
 	}
 </style>

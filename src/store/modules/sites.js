@@ -2,6 +2,7 @@ export default {
 	state: {
 		siteList: [],
 		sitesDataList: [],
+		templatesList: [],
 	},
 	getters: {
 		getSiteList(state) {
@@ -12,6 +13,12 @@ export default {
 		},
 		getSiteDataList(state) {
 			return state.sitesDataList;
+		},
+		getTemplatesList(state) {
+			return state.templatesList;
+		},
+		getTemplatById: state => id => {
+			return state.templatesList.find(template => Number(template.id) === Number(id));
 		},
 	},
 	mutations: {
@@ -54,7 +61,7 @@ export default {
 			let data = [
 				{
 					id: 1,
-					active: 1,
+					active: true,
 					address: "vlad.dev.lan",
 					description: "Описание",
 					name: "site1",
@@ -80,11 +87,16 @@ export default {
 						"doubleMailing":"1",
 						"coordinate":{"x":"59.9558742615268","y":"30.369708388251336"}
 					},
-					template: 0,
+					template: {
+						id: 0,
+						data: {
+
+						}
+					},
 				},
 				{
 					id: 2,
-					active: 0,
+					active: false,
 					address: "vlad2.dev.lan",
 					description: "Описание",
 					name: "site1",
@@ -110,18 +122,48 @@ export default {
 						"doubleMailing":"0",
 						"coordinate":{"x":"59.9558742615268","y":"30.369708388251336"}
 					},
-					template: 0,
+					template: {
+						id: 0,
+						data: {
+
+						}
+					},
 				}
 			]
 			//
 			state.sitesDataList.push(data[payload.id-1])
-		}
+		},
+		getTemplatesList (state) {
+			//типо ответ от апи
+			state.templatesList = [
+				{
+					id: 1,
+					type: 1,
+					name: 'Сайт бц',
+					active: 1,
+					img: "https://trikky.ru/wp-content/blogs.dir/1/files/2020/06/10/d9b97b5646fbb691e29947a921049a1d.jpg",
+				},
+				{
+					id: 2,
+					type: 1,
+					name: 'Сайт школы',
+					active: 1,
+					img: "https://static10.tgstat.ru/channels/_0/e7/e7bf72a2d6081ba3f5a2e0b86606aa6b.jpg",
+				},
+			];
+			//
+		},
 	},
 	actions: {
 		fetchSiteData (context, payload) {
 			//запрашиваем от апи, если такого еще нет у нас
 			if (context.getters.getSiteById(payload.id) === undefined) {
 				context.commit('getSiteById', {id: payload.id})
+			}
+		},
+		fetchTemplatesList (context) {
+			if (context.getters.getTemplatesList.length === 0) {
+				context.commit('getTemplatesList');
 			}
 		}
 	},
