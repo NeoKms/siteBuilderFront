@@ -11,6 +11,9 @@ export default {
 		getSiteById: state => id => {
 			return state.sitesDataList.find(siteData => Number(siteData.id) === Number(id));
 		},
+		getSiteByIdInd: state => id => {
+			return state.sitesDataList.findIndex(siteData => Number(siteData.id) === Number(id));
+		},
 		getSiteDataList(state) {
 			return state.sitesDataList;
 		},
@@ -20,6 +23,7 @@ export default {
 		getTemplatById: state => id => {
 			return state.templatesList.find(template => Number(template.id) === Number(id));
 		},
+
 	},
 	mutations: {
 		getSiteList (state) {
@@ -153,8 +157,20 @@ export default {
 			];
 			//
 		},
+		setSiteData (state, payload)
+		{
+			state.sitesDataList[payload.ind]=payload.data
+		}
 	},
 	actions: {
+		updateSiteData(context, payload) {
+			if (context.getters.getSiteById(payload.id) !== undefined) {
+				const ind = context.getters.getSiteByIdInd(payload.id)
+				return context.commit('setSiteData', {ind:ind,data: payload})
+			} else {
+				return false
+			}
+		},
 		fetchSiteData (context, payload) {
 			//запрашиваем от апи, если такого еще нет у нас
 			if (context.getters.getSiteById(payload.id) === undefined) {

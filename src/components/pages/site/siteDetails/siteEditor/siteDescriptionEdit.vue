@@ -8,12 +8,18 @@
 							Общее
 						</v-col>
 						<v-col cols="2" class="ct-c">
-							<v-btn small class="btn-save">
+							<v-btn
+									small class="btn-save"
+									@click="editorSave"
+							>
 								<v-icon left>mdi-content-save</v-icon> Save
 							</v-btn>
 						</v-col >
 						<v-col cols="2" class="ct-c">
-							<v-btn small class="btn-cancel">
+							<v-btn
+									small class="btn-cancel"
+									@click="editorCancel"
+							>
 								<v-icon left>mdi-close-circle</v-icon> Cancel
 							</v-btn>
 						</v-col>
@@ -180,7 +186,6 @@
                 selectTypeVal: { state: '', abbr: '' },
 				viewTemplates: false,
 				viewEdit: false,
-				// site: undefined,
 			}
 		},
         props: {
@@ -190,11 +195,11 @@
             }
         },
         computed: {
-            site: function () {
-                return this.$store.getters.getSiteById(this.id)
-            },
             selectedType: function () {
 				return this.site.type.options.find( name => name.value === this.site.type.value )
+            },
+			site: function () {
+                return this.$store.getters.getCopyObj(this.$store.getters.getSiteById(this.id))
             }
         },
         methods: {
@@ -204,9 +209,22 @@
             setChosenTmpl(id) {
                 this.site.template.id = id
 				this.viewTemplates = false
-				this.site.template.data = this.$store.getters.getTemplatById(id)
-				console.log(this.$store.getters.getTemplatById(id))
-			},
+				this.site.template.data = this.$store.getters.getCopyObj(this.$store.getters.getTemplatById(id))
+            },
+            editorCancel() {
+                this.$emit('editorCancel')
+				this.$router.go(-1)
+                this.$emit('editorOff')
+            },
+            editorSave() {
+                this.$emit('editorSave')
+				this.$store.dispatch('updateSiteData', this.site).then(res=>{
+					console.log(res)
+				})
+				//toDo сделать првоверку на значение
+                this.$router.go(-1)
+                this.$emit('editorOff')
+			}
         },
 		mounted() {
             this.$emit('editorOn')
