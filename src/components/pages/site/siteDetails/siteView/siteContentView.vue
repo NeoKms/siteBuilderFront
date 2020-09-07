@@ -68,7 +68,7 @@
         data() {
             return {
                 iframe: {
-                    src: 'http://public.dev.lan/sites/45/app/index.php',
+                    src: 'http://public.dev.lan/sites/60/app/index.php',
 					loaded: false,
 					transform: 0.378,
 					marginL: -615,
@@ -80,27 +80,27 @@
 				framesSrc: [
 					{
 						name: 'Main',
-						src: 'http://public.dev.lan/sites/45/app/index.php',
+						src: 'http://public.dev.lan/sites/60/app/index.php',
 					},
                     {
                         name: 'Info',
-                        src: 'http://public.dev.lan/sites/45/app/Informaciya.php',
+                        src: 'http://public.dev.lan/sites/60/app/Informaciya.php',
                     },
                     {
                         name: 'Actions',
-                        src: 'http://public.dev.lan/sites/45/app/Akcii.php',
+                        src: 'http://public.dev.lan/sites/60/app/Akcii.php',
                     },
                     {
                         name: 'Publications',
-                        src: 'http://public.dev.lan/sites/45/app/Publikacii.php',
+                        src: 'http://public.dev.lan/sites/60/app/Publikacii.php',
                     },
                     {
                         name: 'Detail',
-                        src: 'http://public.dev.lan/sites/45/app/detail.php?id=2575',
+                        src: 'http://public.dev.lan/sites/60/app/detail.php?id=2575',
                     },
                     {
                         name: 'Contacts',
-                        src: 'http://public.dev.lan/sites/45/app/Kontakty.php',
+                        src: 'http://public.dev.lan/sites/60/app/Kontakty.php',
                     }
 				]
 			}
@@ -163,12 +163,12 @@
 </script>
 
 <style scoped lang="scss">
-.block_head {
-	font-size: 16px;
-	line-height: 24px;
-	padding-left: 4px;
-	border-left: 2px solid #2946c6;
-}
+	.block_head {
+		font-size: 16px;
+		line-height: 24px;
+		padding-left: 4px;
+		border-left: 2px solid #2946c6;
+	}
 	ul, li {
 		text-align: left;
 		list-style-type: none;
@@ -196,10 +196,5 @@
 				color: #6200ea !important;
 			}
 		}
-	}
-	.iframe-scale5555 {
-		transform: scale(0.378);
-		margin-left: -615px;
-		margin-top: -615px;
 	}
 </style>
