@@ -8,12 +8,18 @@
 							Общее
 						</v-col>
 						<v-col cols="2" class="ct-c">
-							<v-btn small class="btn-save">
+							<v-btn
+									small class="btn-save"
+									@click="editorSave"
+							>
 								<v-icon left>mdi-content-save</v-icon> Save
 							</v-btn>
 						</v-col >
 						<v-col cols="2" class="ct-c">
-							<v-btn small class="btn-cancel">
+							<v-btn
+									small class="btn-cancel"
+									@click="editorCancel"
+							>
 								<v-icon left>mdi-close-circle</v-icon> Cancel
 							</v-btn>
 						</v-col>
@@ -22,7 +28,7 @@
 								<v-col align="right" class="ct-c">
 								</v-col>
 								<v-col align="left" class="ct-c">
-									<v-switch v-model="site.active" :label="site.active?'Активный':'Не активый'"></v-switch>
+									<v-switch v-model="siteForm.active" :label="siteForm.active?'Активный':'Не активый'"></v-switch>
 								</v-col>
 							</v-row>
 						</v-col>
@@ -33,13 +39,13 @@
 								<tr>
 									<td class="left">Название</td>
 									<td>
-										<v-text-field v-model="site.name"></v-text-field>
+										<v-text-field v-model="siteForm.name"></v-text-field>
 									</td>
 								</tr>
 								<tr>
 									<td class="left">Адрес</td>
 									<td>
-										<v-text-field v-model="site.address"></v-text-field>
+										<v-text-field v-model="siteForm.address"></v-text-field>
 									</td>
 								</tr>
 								<tr>
@@ -47,7 +53,7 @@
 									<td>
 										<v-select
 												v-model="selectedType"
-												:items="site.type.options"
+												:items="siteForm.type.options"
 												item-text="label"
 												item-value="value"
 												@input="selectType(selectTypeVal,$event)"
@@ -62,7 +68,7 @@
 									<td>
 										<v-textarea
 												filled
-												v-model="site.description"
+												v-model="siteForm.description"
 										></v-textarea>
 									</td>
 								</tr>
@@ -83,45 +89,45 @@
 							<table class="table-descr-sm">
 								<tr>
 									<td class="left">Название организации</td>
-									<td><v-text-field v-model="site.contacts.title"></v-text-field></td>
+									<td><v-text-field v-model="siteForm.contacts.title"></v-text-field></td>
 								</tr>
 								<tr>
 									<td class="left">Телефон</td>
-									<td><v-text-field v-model="site.contacts.phone"></v-text-field></td>
+									<td><v-text-field v-model="siteForm.contacts.phone"></v-text-field></td>
 								</tr>
 								<tr>
 									<td class="left">Город</td>
-									<td><v-text-field v-model="site.contacts.city"></v-text-field></td>
+									<td><v-text-field v-model="siteForm.contacts.city"></v-text-field></td>
 								</tr>
 								<tr>
 									<td class="left">Улица</td>
-									<td><v-text-field v-model="site.contacts.street"></v-text-field></td>
+									<td><v-text-field v-model="siteForm.contacts.street"></v-text-field></td>
 								</tr>
 								<tr>
 									<td class="left">Дом</td>
-									<td><v-text-field v-model="site.contacts.house"></v-text-field></td>
+									<td><v-text-field v-model="siteForm.contacts.house"></v-text-field></td>
 								</tr>
 								<tr>
 									<td class="left">Литера</td>
-									<td><v-text-field v-model="site.contacts.litera"></v-text-field></td>
+									<td><v-text-field v-model="siteForm.contacts.litera"></v-text-field></td>
 								</tr>
 								<tr>
 									<td class="left">Индекс</td>
-									<td><v-text-field v-model="site.contacts.index"></v-text-field></td>
+									<td><v-text-field v-model="siteForm.contacts.index"></v-text-field></td>
 								</tr>
 								<tr>
 									<td class="left">Основной E-mail</td>
-									<td><v-text-field v-model="site.contacts.emailMain"></v-text-field></td>
+									<td><v-text-field v-model="siteForm.contacts.emailMain"></v-text-field></td>
 								</tr>
 								<tr>
 									<td class="left">Обратная связь E-mail</td>
-									<td><v-text-field v-model="site.contacts.emailFeedback"></v-text-field></td>
+									<td><v-text-field v-model="siteForm.contacts.emailFeedback"></v-text-field></td>
 								</tr>
 								<tr>
 									<td class="left">Координаты</td>
 									<td>
-										<v-text-field v-model="site.contacts.coordinate.x" label="x"></v-text-field>
-										<v-text-field v-model="site.contacts.coordinate.y" label="y"></v-text-field>
+										<v-text-field v-model="siteForm.contacts.coordinate.x" label="x"></v-text-field>
+										<v-text-field v-model="siteForm.contacts.coordinate.y" label="y"></v-text-field>
 									</td>
 								</tr>
 
@@ -144,15 +150,15 @@
 									@mouseleave="viewEdit = false"
 							>
 								<v-img
-										v-show="site.template.data.img"
+										v-show="siteForm.template.data.img"
 										v-if="!viewEdit"
-										:src="site.template.data.img"
+										:src="siteForm.template.data.img"
 										width="250" height="155" contain
 								/>
 								<span v-show="viewEdit">Выберите шаблон сайта</span>
 							</div>
-							<div v-if="site.template.data.img">
-								{{site.template.data.name}}
+							<div v-if="siteForm.template.data.img">
+								{{siteForm.template.data.name}}
 							</div>
 						</v-col>
 					</v-row>
@@ -180,7 +186,7 @@
                 selectTypeVal: { state: '', abbr: '' },
 				viewTemplates: false,
 				viewEdit: false,
-				// site: undefined,
+				siteForm: {},
 			}
 		},
         props: {
@@ -190,25 +196,39 @@
             }
         },
         computed: {
-            site: function () {
-                return this.$store.getters.getSiteById(this.id)
-            },
             selectedType: function () {
-				return this.site.type.options.find( name => name.value === this.site.type.value )
+				return this.siteForm.type.options.find( name => name.value === this.siteForm.type.value )
+            },
+			site: function () {
+                return this.$store.getters.getCopyObj(this.$store.getters.getSiteById(this.id))
             }
         },
         methods: {
             selectType(propName, propVal) {
-                this.site.type.value = propVal.value;
+                this.siteForm.type.value = propVal.value;
             },
             setChosenTmpl(id) {
-                this.site.template.id = id
+                this.siteForm.template.id = id
 				this.viewTemplates = false
-				this.site.template.data = this.$store.getters.getTemplatById(id)
-				console.log(this.$store.getters.getTemplatById(id))
-			},
+				this.siteForm.template.data = this.$store.getters.getCopyObj(this.$store.getters.getTemplatById(id))
+            },
+            editorCancel() {
+                this.$emit('editorCancel')
+				this.$router.go(-1)
+                this.$emit('editorOff')
+            },
+            editorSave() {
+                this.$emit('editorSave')
+				this.$store.dispatch('updateSiteData', this.siteForm).then(res=>{
+					console.log(res)
+				})
+				//toDo сделать првоверку на значение
+                this.$router.go(-1)
+                this.$emit('editorOff')
+			}
         },
 		mounted() {
+            this.siteForm = this.site;
             this.$emit('editorOn')
 		}
     }

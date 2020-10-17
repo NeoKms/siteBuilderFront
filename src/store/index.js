@@ -19,6 +19,9 @@ export default new Vuex.Store({
 
 	},
 	getters: {
-
-	},
+		// eslint-disable-next-line no-unused-vars
+		getCopyObj: state => obj => {
+			return JSON.parse(JSON.stringify(obj))
+		},
+	}
 });

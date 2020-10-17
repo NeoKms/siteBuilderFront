@@ -1,5 +1,5 @@
 <template>
-	<v-container class="grey lighten-5">
+	<v-container class="grey lighten-5" v-if="site">
 		<v-row align-content="center">
 			<v-col cols="8">
 				<v-container class="description">

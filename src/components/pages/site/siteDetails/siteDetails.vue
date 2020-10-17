@@ -98,17 +98,23 @@
 				}
             },
             setActiveTab() {
-                const { tabName } = this.$route.params;
-                const tabs = Object.keys(this.tabs);
-                if (tabs.some(item => item === tabName)) {
-                    this.activeTab = tabName;
-                }
-                else {
-                    this.activeTab = 'description';
-                    console.log(this.activeTab)
-                    this.$router.push({ name: this.tabs[this.activeTab].route, params: { tabName:  this.activeTab} })
-                }
-                //
+                let { path } = this.$route;
+                path = path.toString().split('/')
+                if (path[path.length-1]!=='edit'){
+                    const tabs = Object.keys(this.tabs);
+                    const tabName=path[path.length-1];
+                    if (tabs.some(item => item === tabName)) {
+                        this.activeTab = path[path.length-1];
+                        this.$router.push({ name: this.tabs[this.activeTab].route, params: { tabName:  this.activeTab} }).catch(()=>{})
+                    }
+                    else {
+                        this.activeTab = 'description';
+                        this.$router.push({ name: this.tabs[this.activeTab].route, params: { tabName:  this.activeTab} }).catch(()=>{})
+                    }
+                } else {
+                    this.activeTab = path[path.length-2];
+                    this.$router.push({ name: this.editTabs[this.activeTab].route, params: { tabName:  this.activeTab} }).catch(()=>{})
+				}
             },
 		}
     }
