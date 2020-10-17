@@ -68,7 +68,7 @@
         data() {
             return {
                 iframe: {
-                    src: 'http://public.dev.lan/sites/60/app/index.php',
+                    src: 'https://jrgreez.ru/testsite/index.html',
 					loaded: false,
 					transform: 0.378,
 					marginL: -615,
@@ -80,19 +80,19 @@
 				framesSrc: [
 					{
 						name: 'Main',
-						src: 'http://public.dev.lan/sites/60/app/index.php',
+						src: 'https://jrgreez.ru/testsite/index.html',
 					},
                     {
                         name: 'Info',
-                        src: 'http://public.dev.lan/sites/60/app/Informaciya.php',
+                        src: 'https://jrgreez.ru/testsite/Informaciya.html',
                     },
                     {
                         name: 'Actions',
-                        src: 'http://public.dev.lan/sites/60/app/Akcii.php',
+                        src: 'https://jrgreez.ru/testsite/Akcii.html',
                     },
                     {
                         name: 'Publications',
-                        src: 'http://public.dev.lan/sites/60/app/Publikacii.php',
+                        src: 'https://jrgreez.ru/testsite/Publikacii.html',
                     },
                     {
                         name: 'Detail',
@@ -100,7 +100,7 @@
                     },
                     {
                         name: 'Contacts',
-                        src: 'http://public.dev.lan/sites/60/app/Kontakty.php',
+                        src: 'https://jrgreez.ru/testsite/Kontakty.html',
                     }
 				]
 			}
