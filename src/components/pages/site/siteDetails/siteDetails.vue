@@ -75,7 +75,7 @@
         },
 		computed: {
             siteData: function () {
-                return this.$store.getters.getSiteById(this.id)
+                return this.$store.getters['sites/getSiteById'](this.id)
             },
             siteName: function () {
 				return this.siteData.name
@@ -86,7 +86,7 @@
                 if (this.siteData === undefined) {
                     try {
                         this.isLoading = true;
-                        await this.$store.dispatch('fetchSiteData', {id: this.id})
+                        await this.$store.dispatch('sites/fetchSiteData', {id: this.id})
                     } catch (e) {
                         console.log(e);
                     } finally {

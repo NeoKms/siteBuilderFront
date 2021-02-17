@@ -174,7 +174,7 @@
         },
         computed: {
             site: function () {
-                return this.$store.getters.getCopyObj(this.$store.getters.getSiteById(this.id))
+                return this.$store.getters.getCopyObj(this.$store.getters['sites/getSiteById'](this.id))
             },
             sitePages() {
                 console.log(this.siteForm);

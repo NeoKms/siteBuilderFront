@@ -1,4 +1,5 @@
 export default {
+    namespaced: true,
     state: {
         messages: [],
     },
@@ -11,12 +12,16 @@ export default {
         addMessage(state, msgData) {
             if (!msgData.type)
                 msgData.type = 'success'
-            if (!msgData.time && (!msgData.leftButton || !msgData.rightButton))
+            if (!msgData.time && (!msgData.leftButton || !msgData.rightButton)) {
                 msgData.time = 1000
-            if (msgData.time && (msgData.leftButton || msgData.rightButton))
-                msgData.time = 0
-            msgData.id = Date.now().toLocaleString()
+            }
+            msgData.id = new Date().getTime()
             state.messages.push(msgData)
+            if (msgData.time > 0) {
+                setTimeout(() => {
+                    state.messages.splice(state.messages.findIndex(elem => elem.id === msgData.id), 1)
+                }, msgData.time)
+            }
         },
     }
-};
+}

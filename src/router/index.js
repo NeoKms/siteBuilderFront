@@ -80,7 +80,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some( record => record.meta.requiresAuth)) {
-        if (!store.getters.getUserAuth) {
+        if (!store.getters['login/getUserAuth']) {
             next({
                 name: 'login',
                 query: {redirect: to.fullPath}

@@ -118,7 +118,7 @@
         },
 		computed: {
             site: function () {
-                return this.$store.getters.getSiteById(this.id)
+                return this.$store.getters['sites/getSiteById'](this.id)
             },
 			sitePages() {
                 return this.site.template.pages;

@@ -36,7 +36,7 @@ export default {
   },
 	methods: {
         testNotif() {
-            this.$store.commit('addMessage', {
+            this.$store.commit('notifications/addMessage', {
                 name: 'Тест 1222222222222222222222222222\n2222222222222222222',
                 leftButton: 'Ok',
 				rightButton: 'No',
@@ -44,7 +44,7 @@ export default {
             })
         },
         testNotif2() {
-            this.$store.commit('addMessage', {
+            this.$store.commit('notifications/addMessage', {
                 name: 'Тест 2',
                 type: 'warning',
                 time: 1000,

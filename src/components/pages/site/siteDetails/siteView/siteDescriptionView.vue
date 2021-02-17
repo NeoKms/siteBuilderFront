@@ -53,27 +53,33 @@
 							<table class="table-descr-sm">
 								<tr>
 									<td class="left">Название организации</td>
-									<td>ООО ТРАНССВЯЗЬ</td>
+									<td>{{site.contacts.title}}</td>
 								</tr>
 								<tr>
 									<td class="left">Телефон</td>
-									<td>88005553535</td>
+									<td>{{site.contacts.phone}}</td>
 								</tr>
 								<tr>
 									<td class="left">Адрес</td>
-									<td>666666, г. Санкт-Петербург, ул. Пушкина д.1 лит А </td>
+									<td>{{[
+										site.contacts.index,
+										site.contacts.city,
+										site.contacts.street,
+										site.contacts.litera,
+										site.contacts.house
+										].join(',')}}</td>
 								</tr>
 								<tr>
 									<td class="left">Основной E-mail</td>
-									<td>tmp1@gmila.com</td>
+									<td>{{site.contacts.emailMain}}</td>
 								</tr>
 								<tr>
 									<td class="left">Обратная связь E-mail</td>
-									<td>tmp2@gmail.com</td>
+									<td>{{site.contacts.emailFeedback}}</td>
 								</tr>
 								<tr>
 									<td class="left">Координаты</td>
-									<td>59.9558742615268 30.369708388251336</td>
+									<td>{{site.contacts.coordinate.x}}<br>{{site.contacts.coordinate.y}}</td>
 								</tr>
 							</table>
 						</v-col>
@@ -89,11 +95,11 @@
 						<v-col>
 							<div class="template__img">
 									<v-img
-											v-show="site.template.data.img"
+											v-if="site.template.data.img"
 											:src="site.template.data.img"
 											width="250" height="155" contain
 									/>
-								<span v-show="!site.template.data.img">Выберите шаблон сайта</span>
+								<span v-else >Выберите шаблон сайта</span>
 							</div>
 							<div v-if="site.template.data.img">
 								{{site.template.data.name}}
@@ -108,21 +114,21 @@
 <script>
     export default {
         name: "siteDescriptionView",
-		props: {
-			id: {
-				type: String,
-				required: true
-			},
-            tabName: {
-				type: String,
-				required: true
-			}
-		},
-		computed: {
-            site: function () {
-                return this.$store.getters.getSiteById(this.id)
+        props: {
+            id: {
+                type: String,
+                required: true
             },
-		}
+            tabName: {
+                type: String,
+                required: true
+            }
+        },
+        computed: {
+            site: function () {
+                return this.$store.getters['sites/getSiteById'](this.id)
+            },
+        }
     }
 </script>
 

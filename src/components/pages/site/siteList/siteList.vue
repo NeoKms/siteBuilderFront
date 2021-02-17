@@ -38,13 +38,13 @@
                 currentSiteId: 0
 			}
 		},
-        created() {
+        mounted() {
             if (this.siteList.length === 0) {
-                this.$store.commit('getSiteList')
+                this.$store.commit('sites/getSiteList')
             }
         },
         computed: {
-            ...mapGetters({
+            ...mapGetters('sites',{
                 siteList: 'getSiteList',
             }),
         },

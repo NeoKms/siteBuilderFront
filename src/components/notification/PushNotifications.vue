@@ -6,7 +6,7 @@
 		>
 			<div
 					class="PushNotifications__content"
-					v-for="(message, index) in messages"
+					v-for="message in messages"
 					:key="message.id"
 					:class="message.type"
 			>
@@ -14,8 +14,8 @@
 					<span>{{message.name}}</span>
 				</div>
 				<div class="content__buttons">
-					<button class="button left" v-if="message.leftButton" @click="clickLeft(index)">{{message.leftButton}}</button>
-					<button class="button right" v-if="message.rightButton" @click="clickRight(index)">{{message.rightButton}}</button>
+					<button class="button left" v-if="message.leftButton" @click="clickLeft(message.id)">{{message.leftButton}}</button>
+					<button class="button right" v-if="message.rightButton" @click="clickRight(message.id)">{{message.rightButton}}</button>
 				</div>
 			</div>
 		</transition-group>
@@ -38,44 +38,38 @@
 			}
 		},
 		methods: {
-			hideNotification(lastInd) {
-				let vm = this;
-				if (this.messages.length>0 && this.messages[lastInd].time>0 && lastInd>=0) {
-					setTimeout(function () {
-						vm.messages.splice(lastInd, 1)
-					}, vm.messages[lastInd].time)
-				}
-			},
-            clickLeft: function (ind) {
-				this.$eventBus.$emit(this.messages[ind].action+'-left')
-                this.messages[ind].time = 200;
-                this.hideNotification(ind)
+            hideNotification(lastId) {
+                let vm = this;
+                let index = this.messages.findIndex( elem => elem.id === lastId)
+                if (this.messages.length > 0 && this.messages[index].time>0) {
+                    setTimeout( () => {
+                        vm.messages.splice(this.messages.findIndex( elem => elem.id === lastId), 1)
+                    }, vm.messages[index].time)
+                }
             },
-            clickRight: function (ind) {
-                this.$eventBus.$emit(this.messages[ind].action+'-right')
-                this.messages[ind].time = 200;
-                this.hideNotification(ind)
-                // this.$eventBus.$on('test-left', data => {
-                //     this.flag = true
-                // })
+            clickLeft: function (id) {
+                this.$eventBus.$emit(this.messages[this.messages.findIndex( elem => elem.id === id)].action+'-left')
+                this.messages[this.messages.findIndex( elem => elem.id === id)].time = 1;
+                this.hideNotification(id)
+            },
+            clickRight: function (id) {
+                this.$eventBus.$emit(this.messages[this.messages.findIndex( elem => elem.id === id)].action+'-right')
+                this.messages[this.messages.findIndex( elem => elem.id === id)].time = 1;
+                this.hideNotification(id)
             }
-		},
-		watch: {
-			messages() {
-				this.hideNotification(this.messages.length - 1)
-			}
-		},
+        },
         computed: {
-            ...mapGetters({
+            ...mapGetters('notifications',{
                 messages: 'getMessages',
             }),
         },
-	}
+    }
 </script>
 
 <style lang="scss">
 	.PushNotifications {
 		position: fixed;
+		min-width: 220px;
 		top: 80px;
 		right: 16px;
 		z-index: 10;

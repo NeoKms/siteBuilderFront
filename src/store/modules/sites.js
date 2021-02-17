@@ -1,4 +1,5 @@
 export default {
+	namespaced: true,
 	state: {
 		siteList: [],
 		sitesDataList: [],
@@ -2081,7 +2082,8 @@ export default {
 		updateSiteData(context, payload) {
 			if (context.getters.getSiteById(payload.id) !== undefined) {
 				const ind = context.getters.getSiteByIdInd(payload.id)
-				return context.commit('setSiteData', {ind:ind,data: payload})
+				context.commit('setSiteData', {ind:ind,data: payload})
+				return true
 			} else {
 				return false
 			}

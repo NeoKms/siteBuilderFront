@@ -26,7 +26,6 @@ Vue.config.productionTip = false
 Vue.prototype.$eventBus = new Vue()
 
 new Vue({
-    // el: '#app',
     store,
     router,
     vuetify,

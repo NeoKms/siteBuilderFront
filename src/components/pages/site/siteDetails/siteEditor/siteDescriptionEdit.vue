@@ -52,11 +52,11 @@
 									<td class="left">Тип</td>
 									<td>
 										<v-select
-												v-model="selectedType"
+												v-bind="selectedType"
 												:items="siteForm.type.options"
 												item-text="label"
 												item-value="value"
-												@input="selectType(selectTypeVal,$event)"
+												@input="selectType"
 												persistent-hint
 												return-object
 												single-line
@@ -200,30 +200,28 @@
 				return this.siteForm.type.options.find( name => name.value === this.siteForm.type.value )
             },
 			site: function () {
-                return this.$store.getters.getCopyObj(this.$store.getters.getSiteById(this.id))
+                return this.$store.getters.getCopyObj(this.$store.getters['sites/getSiteById'](this.id))
             }
         },
         methods: {
-            selectType(propName, propVal) {
-                this.siteForm.type.value = propVal.value;
+            selectType(val) {
+                this.siteForm.type.value = val.value;
             },
             setChosenTmpl(id) {
                 this.siteForm.template.id = id
 				this.viewTemplates = false
-				this.siteForm.template.data = this.$store.getters.getCopyObj(this.$store.getters.getTemplatById(id))
+				this.siteForm.template.data = this.$store.getters.getCopyObj(this.$store.getters['sites/getTemplatById'](id))
             },
             editorCancel() {
                 this.$emit('editorCancel')
-				this.$router.go(-1)
+				this.$router.push({name:'siteDescriptionView',params:this.$router.history.current.params})
                 this.$emit('editorOff')
             },
             editorSave() {
                 this.$emit('editorSave')
-				this.$store.dispatch('updateSiteData', this.siteForm).then(res=>{
-					console.log(res)
-				})
+				this.$store.dispatch('sites/updateSiteData', this.siteForm)
 				//toDo сделать првоверку на значение
-                this.$router.go(-1)
+                this.$router.push({name:'siteDescriptionView',params:this.$router.history.current.params})
                 this.$emit('editorOff')
 			}
         },
