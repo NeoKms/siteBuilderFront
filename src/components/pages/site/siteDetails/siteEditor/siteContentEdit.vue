@@ -10,69 +10,69 @@
 				<v-checkbox v-model="siteForm.active" :label="siteForm.active.toString()"></v-checkbox>
 			</v-col>
 		</v-row>
-		<v-row>
-			<v-col cols="8">
-				<template v-if="pageValue">
-				<v-form label-position="top">
-					<v-expansion-panels v-model="activeDataInd" accordion>
-						<template v-for="(elem, index) in pageValue.blockList">
-							<v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item">
-								<v-expansion-panel-header class="head_accordion siteLayout__collapse-header" >
-									{{elem.name}}
-								</v-expansion-panel-header>
-								<v-expansion-panel-content class="acc_content">
-								<v-row class="siteDataEdit__blockItem">
-									<v-col :span="elem2.col"
-											v-for="(elem2, index2) in elem.elements"
-											:key="index2" style="margin-bottom: 16px;">
-										<component v-if="elem2.active" :is="blockComponent(elem2.type)" :data="elem2.data"/>
-									</v-col>
-								</v-row>
-								</v-expansion-panel-content>
-							</v-expansion-panel>
-						</template>
-					</v-expansion-panels>
-				</v-form>
-			</template>
-			</v-col>
-			<v-col cols="4" >
-				<v-expansion-panels v-model="this.activePageInd" accordion class="siteLayout__collapse" style="padding-right: 20px;">
-					<template v-for="(elem, index) in this.siteForm.template.pages">
-						<v-expansion-panel v-if="elem.active" :key="index" class="siteLayout__collapse-item" :name="elem.name">
-							<v-expansion-panel-header class="head_accordion" @click="changeFrame(elem.name)">
-								{{elem.name}}
-							</v-expansion-panel-header>
-							<v-expansion-panel-content class="acc_content">
-								<ul v-for="(elem2, index2) in elem.blockList"
-								:key="index2"
-								class="siteLayout__collapse-blockMainList">
-								<li class="siteLayout__collapse-blockMainItem block_head">
-									<span>
-										{{elem2.name}}
-									</span>
-									<v-btn v-if="!(!elem2.reorder
-                                   || !(!!(elem.blockList[index2-1])
-                                   && (elem.blockList[index2-1]).reorder))" @click="changeOrder(index2, elem.blockList)"
-											сolor="primary" fab x-small dark>
-										<v-icon>mdi-swap-vertical</v-icon>
-									</v-btn>
-								</li>
-								<li>
-									<ul v-for="(elem3, index3) in elem2.elements"
-										class="siteLayout__collapse-blockSubList"
-										:key="index3">
-										<li class="siteLayout__collapse-blockSubItem">
-											<v-checkbox v-model="elem3.active" :disabled="elem3.require" :label="elem3.name" class="checkboxElement"></v-checkbox>
-										</li>
-									</ul>
-								</li>
-							</ul>
-							</v-expansion-panel-content>
-						</v-expansion-panel>
-					</template>
-				</v-expansion-panels>
-			</v-col>
-		</v-row>
+<!--		<v-row>-->
+<!--			<v-col cols="8">-->
+<!--				<template v-if="pageValue">-->
+<!--				<v-form label-position="top">-->
+<!--					<v-expansion-panels v-model="activeDataInd" accordion>-->
+<!--						<template v-for="(elem, index) in pageValue.blockList">-->
+<!--							<v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item">-->
+<!--								<v-expansion-panel-header class="head_accordion siteLayout__collapse-header" >-->
+<!--									{{elem.name}}-->
+<!--								</v-expansion-panel-header>-->
+<!--								<v-expansion-panel-content class="acc_content">-->
+<!--								<v-row class="siteDataEdit__blockItem">-->
+<!--									<v-col :span="elem2.col"-->
+<!--											v-for="(elem2, index2) in elem.elements"-->
+<!--											:key="index2" style="margin-bottom: 16px;">-->
+<!--										<component v-if="elem2.active" :is="blockComponent(elem2.type)" :data="elem2.data"/>-->
+<!--									</v-col>-->
+<!--								</v-row>-->
+<!--								</v-expansion-panel-content>-->
+<!--							</v-expansion-panel>-->
+<!--						</template>-->
+<!--					</v-expansion-panels>-->
+<!--				</v-form>-->
+<!--			</template>-->
+<!--			</v-col>-->
+<!--			<v-col cols="4" >-->
+<!--				<v-expansion-panels v-model="this.activePageInd" accordion class="siteLayout__collapse" style="padding-right: 20px;">-->
+<!--					<template v-for="(elem, index) in this.siteForm.template.pages">-->
+<!--						<v-expansion-panel v-if="elem.active" :key="index" class="siteLayout__collapse-item" :name="elem.name">-->
+<!--							<v-expansion-panel-header class="head_accordion" @click="changeFrame(elem.name)">-->
+<!--								{{elem.name}}-->
+<!--							</v-expansion-panel-header>-->
+<!--							<v-expansion-panel-content class="acc_content">-->
+<!--								<ul v-for="(elem2, index2) in elem.blockList"-->
+<!--								:key="index2"-->
+<!--								class="siteLayout__collapse-blockMainList">-->
+<!--								<li class="siteLayout__collapse-blockMainItem block_head">-->
+<!--									<span>-->
+<!--										{{elem2.name}}-->
+<!--									</span>-->
+<!--									<v-btn v-if="!(!elem2.reorder-->
+<!--                                   || !(!!(elem.blockList[index2-1])-->
+<!--                                   && (elem.blockList[index2-1]).reorder))" @click="changeOrder(index2, elem.blockList)"-->
+<!--											сolor="primary" fab x-small dark>-->
+<!--										<v-icon>mdi-swap-vertical</v-icon>-->
+<!--									</v-btn>-->
+<!--								</li>-->
+<!--								<li>-->
+<!--									<ul v-for="(elem3, index3) in elem2.elements"-->
+<!--										class="siteLayout__collapse-blockSubList"-->
+<!--										:key="index3">-->
+<!--										<li class="siteLayout__collapse-blockSubItem">-->
+<!--											<v-checkbox v-model="elem3.active" :disabled="elem3.require" :label="elem3.name" class="checkboxElement"></v-checkbox>-->
+<!--										</li>-->
+<!--									</ul>-->
+<!--								</li>-->
+<!--							</ul>-->
+<!--							</v-expansion-panel-content>-->
+<!--						</v-expansion-panel>-->
+<!--					</template>-->
+<!--				</v-expansion-panels>-->
+<!--			</v-col>-->
+<!--		</v-row>-->
 	</v-container>
 </template>
 
@@ -105,7 +105,9 @@
         },
         data() {
             return {
-                siteForm: {"active":false},
+                siteForm2: {
+                    active: false
+                },
                 checkbox1: true,
                 blockElements: [
                     {
@@ -170,10 +172,10 @@
                 activeDataInd: null,
                 activeLayout: 'Главная',
                 activePageInd: 0,
-            };
+            }
         },
         computed: {
-            site: function () {
+            siteForm: function () {
                 return this.$store.getters.getCopyObj(this.$store.getters['sites/getSiteById'](this.id))
             },
             sitePages() {
@@ -200,19 +202,15 @@
                 return false;
             },
             changeOrder(index, array) {
-                console.log(index);
                 array[index].order -= 1;
                 array[index - 1].order += 1;
-                console.log(array[index]);
-                console.log(array[index - 1]);
-
                 array.sort((elem1, elem2) => {
                     return elem1.order - elem2.order;
                 });
             },
         },
 		mounted() {
-            this.siteForm = this.site;
+
         }
     }
 </script>

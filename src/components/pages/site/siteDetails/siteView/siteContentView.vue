@@ -69,19 +69,19 @@
             return {
                 iframe: {
                     src: 'https://jrgreez.ru/testsite/index.html',
-					loaded: false,
-					transform: 0.378,
-					marginL: -615,
+                    loaded: false,
+                    transform: 0.378,
+                    marginL: -615,
                     marginT: -615,
-					width: 1980,
-					now: 1
+                    width: 1980,
+                    now: 1
                 },
                 first: 0,
-				framesSrc: [
-					{
-						name: 'Main',
-						src: 'https://jrgreez.ru/testsite/index.html',
-					},
+                framesSrc: [
+                    {
+                        name: 'Main',
+                        src: 'https://jrgreez.ru/testsite/index.html',
+                    },
                     {
                         name: 'Info',
                         src: 'https://jrgreez.ru/testsite/Informaciya.html',
@@ -96,15 +96,15 @@
                     },
                     {
                         name: 'Detail',
-                        src: 'http://public.dev.lan/sites/60/app/detail.php?id=2575',
+                        src: 'https://jrgreez.ru/testsite/object.html',
                     },
                     {
                         name: 'Contacts',
                         src: 'https://jrgreez.ru/testsite/Kontakty.html',
                     }
-				]
-			}
-		},
+                ]
+            }
+        },
         name: "siteContentView",
         props: {
             id: {
@@ -116,47 +116,49 @@
                 required: true
             }
         },
-		computed: {
+        computed: {
             site: function () {
                 return this.$store.getters['sites/getSiteById'](this.id)
             },
-			sitePages() {
+            sitePages() {
                 return this.site.template.pages;
             },
         },
         methods: {
-            frameLoad: function(){
+            frameLoad: function () {
                 this.iframe.loaded = true;
             },
             changeFrame: function (name) {
                 const src = this.framesSrc.find(data => data.name === name).src;
-				if (src!==undefined && src!==this.iframe.src) {
+                if (typeof src !== 'undefined' && src !== this.iframe.src) {
                     this.iframe.loaded = false;
-					this.iframe.src = src;
-				}
+                    this.iframe.src = src;
+                }
             },
             changeFrameStyle: function (type) {
-                if (type===1) {
-                    this.iframe.marginL = -615;
-                    this.iframe.marginT = -615;
-                    this.iframe.transform = 0.378;
-                    this.iframe.width = 1980;
-                    this.iframe.now = 1;
+                switch (type) {
+                    case 1:
+                        this.iframe.marginL = -615;
+                        this.iframe.marginT = -615;
+                        this.iframe.transform = 0.378;
+                        this.iframe.width = 1980;
+                        this.iframe.now = 1;
+                        break
+                    case 2:
+                        this.iframe.marginL = -9;
+                        this.iframe.marginT = -9;
+                        this.iframe.transform = 0.977;
+                        this.iframe.width = 768;
+                        this.iframe.now = 2;
+                        break
+                    case 3:
+                        this.iframe.marginL = 0;
+                        this.iframe.marginT = 163;
+                        this.iframe.transform = 1.764;
+                        this.iframe.width = 425;
+                        this.iframe.now = 3;
+                        break
                 }
-                if (type===2) {
-                    this.iframe.marginL = -9;
-                    this.iframe.marginT = -9;
-                    this.iframe.transform = 0.977;
-                    this.iframe.width = 768;
-                    this.iframe.now = 2;
-                }
-				if (type===3) {
-					this.iframe.marginL = 0;
-                    this.iframe.marginT = 163;
-                    this.iframe.transform = 1.764;
-                    this.iframe.width = 425;
-                    this.iframe.now = 3;
-				}
             }
         }
     }

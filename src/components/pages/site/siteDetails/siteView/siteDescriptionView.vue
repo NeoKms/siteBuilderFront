@@ -49,39 +49,57 @@
 						</v-col>
 					</v-row>
 					<v-row>
-						<v-col>
-							<table class="table-descr-sm">
-								<tr>
-									<td class="left">Название организации</td>
-									<td>{{site.contacts.title}}</td>
-								</tr>
-								<tr>
-									<td class="left">Телефон</td>
-									<td>{{site.contacts.phone}}</td>
-								</tr>
-								<tr>
-									<td class="left">Адрес</td>
-									<td>{{[
-										site.contacts.index,
-										site.contacts.city,
-										site.contacts.street,
-										site.contacts.litera,
-										site.contacts.house
-										].join(',')}}</td>
-								</tr>
-								<tr>
-									<td class="left">Основной E-mail</td>
-									<td>{{site.contacts.emailMain}}</td>
-								</tr>
-								<tr>
-									<td class="left">Обратная связь E-mail</td>
-									<td>{{site.contacts.emailFeedback}}</td>
-								</tr>
-								<tr>
-									<td class="left">Координаты</td>
-									<td>{{site.contacts.coordinate.x}}<br>{{site.contacts.coordinate.y}}</td>
-								</tr>
-							</table>
+						<v-col cols="6">
+							Название организации
+						</v-col>
+						<v-col cols="6">
+							{{site.contacts.title}}
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="6">
+							Телефон
+						</v-col>
+						<v-col cols="6">
+							{{site.contacts.phone}}
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="6">
+							Адрес
+						</v-col>
+						<v-col cols="6">
+							{{[
+							site.contacts.index,
+							site.contacts.city,
+							site.contacts.street,
+							site.contacts.litera,
+							site.contacts.house
+							].join(',')}}
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="6">
+							Основной E-mail
+						</v-col>
+						<v-col cols="6">
+							{{site.contacts.emailMain}}
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="6">
+							Обратная связь E-mail
+						</v-col>
+						<v-col cols="6">
+							{{site.contacts.emailFeedback}}
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="6">
+							Координаты
+						</v-col>
+						<v-col cols="6">
+							{{site.contacts.coordinate.x}}<br>{{site.contacts.coordinate.y}}
 						</v-col>
 					</v-row>
 				</v-container>
@@ -95,14 +113,14 @@
 						<v-col>
 							<div class="template__img">
 									<v-img
-											v-if="site.template.data.img"
-											:src="site.template.data.img"
+											v-if="site.template.img"
+											:src="site.template.img"
 											width="250" height="155" contain
 									/>
 								<span v-else >Выберите шаблон сайта</span>
 							</div>
-							<div v-if="site.template.data.img">
-								{{site.template.data.name}}
+							<div v-if="site.template.img">
+								{{site.template.name}}
 							</div>
 						</v-col>
 					</v-row>

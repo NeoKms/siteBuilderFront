@@ -4,7 +4,7 @@ export default {
         user: {
             login: null,
             pass: null,
-            auth: false//изменить на фолс при выгрузке
+            auth: true//изменить на фолс при выгрузке
         }
     },
     getters: {

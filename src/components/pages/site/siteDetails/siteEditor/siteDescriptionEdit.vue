@@ -150,15 +150,15 @@
 									@mouseleave="viewEdit = false"
 							>
 								<v-img
-										v-show="siteForm.template.data.img"
+										v-show="siteForm.template.img"
 										v-if="!viewEdit"
-										:src="siteForm.template.data.img"
+										:src="siteForm.template.img"
 										width="250" height="155" contain
 								/>
 								<span v-show="viewEdit">Выберите шаблон сайта</span>
 							</div>
-							<div v-if="siteForm.template.data.img">
-								{{siteForm.template.data.name}}
+							<div v-if="siteForm.template.img">
+								{{siteForm.template.name}}
 							</div>
 						</v-col>
 					</v-row>
@@ -210,7 +210,7 @@
             setChosenTmpl(id) {
                 this.siteForm.template.id = id
 				this.viewTemplates = false
-				this.siteForm.template.data = this.$store.getters.getCopyObj(this.$store.getters['sites/getTemplatById'](id))
+				this.siteForm.template = this.$store.getters.getCopyObj(this.$store.getters['sites/getTemplatById'](id))
             },
             editorCancel() {
                 this.$emit('editorCancel')
