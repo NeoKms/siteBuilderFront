@@ -39,25 +39,13 @@
                 required: true
             }
         },
-		data() {
+        data() {
             return {
                 isLoading: false,
-				loadSuccess: false,
+                loadSuccess: false,
                 activeTab: 'description',
-				edit: false,
-                tabs: {
-                    description: {
-                        name: 'description',
-                        label: 'Описание',
-                        route: 'siteDescriptionView',
-                    },
-                    content: {
-                        name: 'content',
-                        label: 'Контент',
-                        route: 'siteContentView',
-                    },
-                },
-				editTabs: {
+                edit: false,
+                editTabs: {
                     description: {
                         name: 'description',
                         route: 'siteDescriptionEdit',
@@ -66,22 +54,39 @@
                         name: 'content',
                         route: 'siteContentEdit',
                     },
-				}
-			}
-		},
-		mounted() {
+                }
+            }
+        },
+        mounted() {
             this.setActiveTab()
             this.loadData();
         },
-		computed: {
+        computed: {
             siteData: function () {
                 return this.$store.getters['sites/getSiteById'](this.id)
             },
             siteName: function () {
-				return this.siteData.name
+                return this.siteData.name
+            },
+            tabs: function () {
+                let tabs = {
+                    description: {
+                        name: 'description',
+                        label: 'Описание',
+                        route: 'siteDescriptionView',
+                    }
+                }
+                if (this.siteData && this.siteData.template.id > 0) {
+                    tabs.content = {
+                        name: 'content',
+                        label: 'Контент',
+                        route: 'siteContentView',
+                    }
+                }
+                return tabs
             }
-		},
-		methods: {
+        },
+        methods: {
             async loadData() {
                 if (this.siteData === undefined) {
                     try {
@@ -95,28 +100,39 @@
                     }
                 } else {
                     this.loadSuccess = true;
-				}
+                }
             },
             setActiveTab() {
-                let { path } = this.$route;
+                let {path} = this.$route;
                 path = path.toString().split('/')
-                if (path[path.length-1]!=='edit'){
+                if (path[path.length - 1] !== 'edit') {
                     const tabs = Object.keys(this.tabs);
-                    const tabName=path[path.length-1];
+                    const tabName = path[path.length - 1];
                     if (tabs.some(item => item === tabName)) {
-                        this.activeTab = path[path.length-1];
-                        this.$router.push({ name: this.tabs[this.activeTab].route, params: { tabName:  this.activeTab} }).catch(()=>{})
-                    }
-                    else {
+                        this.activeTab = path[path.length - 1];
+                        this.$router.push({
+                            name: this.tabs[this.activeTab].route,
+                            params: {tabName: this.activeTab}
+                        }).catch(() => {
+                        })
+                    } else {
                         this.activeTab = 'description';
-                        this.$router.push({ name: this.tabs[this.activeTab].route, params: { tabName:  this.activeTab} }).catch(()=>{})
+                        this.$router.push({
+                            name: this.tabs[this.activeTab].route,
+                            params: {tabName: this.activeTab}
+                        }).catch(() => {
+                        })
                     }
                 } else {
-                    this.activeTab = path[path.length-2];
-                    this.$router.push({ name: this.editTabs[this.activeTab].route, params: { tabName:  this.activeTab} }).catch(()=>{})
-				}
+                    this.activeTab = path[path.length - 2];
+                    this.$router.push({
+                        name: this.editTabs[this.activeTab].route,
+                        params: {tabName: this.activeTab}
+                    }).catch(() => {
+                    })
+                }
             },
-		}
+        }
     }
 </script>
 

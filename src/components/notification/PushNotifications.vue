@@ -72,7 +72,7 @@
 		min-width: 220px;
 		top: 80px;
 		right: 16px;
-		z-index: 10;
+		z-index: 1000;
 		&__messages_list {
 			display: flex;
 			flex-direction: column-reverse;

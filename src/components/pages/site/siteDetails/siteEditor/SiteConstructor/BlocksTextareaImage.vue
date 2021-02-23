@@ -21,7 +21,6 @@
                      @click="loadImage"
                      :style="{ height : data.height  + 'px'}">
                     load photo
-<!--                    <pb-icon name="loadPhoto" style="color: #D3D5DD; font-size: 42px;"></pb-icon>-->
                     <div class="textAreaImage__addPhoto-title">{{data.btnText}}</div>
                 </div>
             </v-col>
