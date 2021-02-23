@@ -1,6 +1,6 @@
 <template>
     <div :label="data.label">
-        <v-text-field  v-model="data.value" :placeholder="data.placeholder"></v-text-field>
+        <v-text-field  v-model="data.value" :label="data.placeholder"></v-text-field>
     </div>
 </template>
 

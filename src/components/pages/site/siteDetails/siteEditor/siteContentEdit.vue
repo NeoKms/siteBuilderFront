@@ -17,9 +17,11 @@
                                                    style="margin-bottom: 16px;"
                                                    v-for="(elem2, index2) in elem.elements"
                                                    :hidden="!elem2.active"
+                                                   :lg="elem2.col" :sm="elem2.col" :md="elem2.col" :xl="elem2.col" :xs="elem2.col"
                                             >
+                                                {{elem2.data.label}}
                                                 {{elem2.type}}
-                                                <component :data="elem2.data" :is="blockComponent(elem2.type)"
+                                                <component :data="siteForm.template.pages[activePageInd].blockList[index].elements[index2].data" :is="blockComponent(elem2.type)"
                                                            v-if="elem2.active" />
                                             </v-col>
                                         </v-row>
@@ -32,7 +34,7 @@
             </v-col>
             <v-col cols="4">
                 <v-expansion-panels accordion class="siteLayout__collapse" style="padding-right: 20px;"
-                                    v-model="this.activePageInd">
+                                    v-model="activePageInd">
                     <template v-for="(elem, index) in this.siteForm.template.pages">
                         <v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item"
                                            v-if="elem.active">
@@ -91,6 +93,7 @@
     import BlockTextareaTitle from './SiteConstructor/BlocksTextareaTitle.vue';
     import BlockTextareaImage from './SiteConstructor/BlocksTextareaImage.vue';
     import DataPickerSimple from './SiteConstructor/DataPickerSimple.vue';
+    import SwitchSimple from './SiteConstructor/SwitchSimple';
 
     export default {
         name: "siteContentEdit",
@@ -167,6 +170,10 @@
                         name: 'dataPickerSimple',
                         component: DataPickerSimple,
                     },
+                    {
+                        name: 'SwitchSimple',
+                        component: SwitchSimple
+                    }
                 ],
                 beforeActive: '',
                 activeData: '',

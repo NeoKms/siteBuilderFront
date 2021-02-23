@@ -1,12 +1,16 @@
 <template>
-    <div style="margin: 0; line-height: 0;">
-        <v-checkbox class="checkboxSimple"
-                    v-for="(elem,key) in data.options"
-                    :key="key"
-                     v-model="elem.active"
-        :label="elem.label">
-        </v-checkbox>
-    </div>
+    <v-row no-gutters>
+        <v-col sm="4"
+               v-for="(elem,key) in data.options"
+               :key="key"
+        >
+            <v-checkbox class="checkboxSimple"
+                        v-model="elem.active"
+                        :label="elem.label"
+            >
+            </v-checkbox>
+        </v-col>
+    </v-row>
 </template>
 
 <script>

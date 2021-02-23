@@ -3,7 +3,7 @@
         <v-textarea
                 filled
                 counter
-                rows="4"
+                :rows="data.rows || 5"
                 v-model="data.value"
                 :placeholder="data.placeholder ? data.placeholder : ''"
                 style="width: 100%"

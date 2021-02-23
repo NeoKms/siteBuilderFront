@@ -1,22 +1,26 @@
 <template>
-    <v-container>
-        <v-row>
-            <v-col lg="8" sm="8" md="8" xl="8" xs="8">
-                <imageBox :centerMode="data.direction === 'col'"
-                          :data="data"></imageBox>
-            </v-col>
-            <v-col v-if="data.include" lg="4" sm="4" md="4" xl="4" xs="4">
-                <v-row
-                        :key="index"
-                        :span="elem.col"
-                        class="textAreaImage__field"
-                        v-for="(elem, index) in (data.include || [])"
-                >
-                    <component :data="elem" :is="blockComponent(elem.type)" />
-                </v-row>
-            </v-col>
-        </v-row>
-    </v-container>
+    <v-row :no-gutters="data.col===12">
+        <v-col
+                :lg="data.col" :sm="data.col" :md="data.col" :xl="data.col" :xs="data.col"
+        >
+            <imageBox :centerMode="data.direction === 'col'"
+                      :data="data"></imageBox>
+        </v-col>
+        <v-col v-if="data.include"
+               :lg="data.col===12?11:4" :sm="data.col===12?11:4" :md="data.col===12?11:4" :xl="data.col===12?11:4"
+               :xs="data.col===12?11:4"
+               :style="data.col===12?'margin-left: 12px':''"
+        >
+            <v-row
+                    :key="index"
+                    :span="elem.col"
+                    class="textAreaImage__field"
+                    v-for="(elem, index) in (data.include || [])"
+            >
+                <component :data="elem" :is="blockComponent(elem.type)" />
+            </v-row>
+        </v-col>
+    </v-row>
 </template>
 
 <script>

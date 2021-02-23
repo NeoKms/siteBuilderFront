@@ -10,7 +10,7 @@
 					<v-btn text small class="nav_btn" to="/">На главную</v-btn>
 					<v-btn text small class="nav_btn" to="/site">Перечень сайтов</v-btn>
 					<v-btn text small @click="testNotif2" class="nav_btn">Notif fast</v-btn>
-					<v-btn text small @click="testNotif" class="nav_btn">Notif ok\no</v-btn>
+<!--					<v-btn text small @click="testNotif" class="nav_btn">Notif ok\no</v-btn>-->
 				</v-toolbar-items>
 			</v-toolbar>
 		</v-card>
