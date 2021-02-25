@@ -30,6 +30,7 @@
     import TextAreaTitle from './TextAreaTitle.vue';
     import CheckboxSimple from './CheckboxSimple.vue';
     import DataPickerSimple from './DataPickerSimple.vue';
+    import SwitchSimple from './SwitchSimple';
 
     export default {
         name: "TextAreaImage",
@@ -37,6 +38,7 @@
             ImageBox,
             TextAreaSimple,
             TextAreaTitle,
+            SwitchSimple,
         },
         props: {
             data: {
@@ -66,6 +68,10 @@
                         name: 'dataPickerSimple',
                         component: DataPickerSimple,
                     },
+                    {
+                        name: 'SwitchSimple',
+                        component: SwitchSimple
+                    }
                 ],
             };
         },

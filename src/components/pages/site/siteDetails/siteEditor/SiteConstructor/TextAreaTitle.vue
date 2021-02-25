@@ -14,6 +14,8 @@
                     label="Описание"
                     :placeholder="data.placeholder ? data.placeholder : ''"
                     style="width: 100%"
+                    :counter-value="(val)=>`${val.length}/${data.maxLength}`"
+                    :error="data.value.length>data.maxLength"
             ></v-textarea>
         </v-row>
     </v-container>

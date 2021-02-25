@@ -6,23 +6,25 @@
                     <v-form label-position="top">
                         <v-expansion-panels accordion v-model="activeDataInd">
                             <template v-for="(elem, index) in pageValue.blockList">
-                                <v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item">
+                                <v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item" v-if="elem.active">
                                     <v-expansion-panel-header class="head_accordion siteLayout__collapse-header">
                                         {{elem.name}}
                                     </v-expansion-panel-header>
-                                    <v-expansion-panel-content class="acc_content">
+                                    <v-expansion-panel-content class="acc_content" v-if="activePageInd>-1">
                                         <v-row class="siteDataEdit__blockItem">
                                             <v-col :key="index2"
                                                    :span="elem2.col"
                                                    style="margin-bottom: 16px;"
                                                    v-for="(elem2, index2) in elem.elements"
                                                    :hidden="!elem2.active"
-                                                   :lg="elem2.col" :sm="elem2.col" :md="elem2.col" :xl="elem2.col" :xs="elem2.col"
+                                                   :lg="elem2.col" :sm="elem2.col" :md="elem2.col" :xl="elem2.col"
+                                                   :xs="elem2.col"
                                             >
                                                 {{elem2.data.label}}
-                                                {{elem2.type}}
-                                                <component :data="siteForm.template.pages[activePageInd].blockList[index].elements[index2].data" :is="blockComponent(elem2.type)"
-                                                           v-if="elem2.active" />
+                                                <component
+                                                        :data="((siteForm.template.pages[activePageInd]||{}).blockList[index].elements[index2]||{}).data"
+                                                        :is="blockComponent(elem2.type)"
+                                                        v-if="elem2.active" />
                                             </v-col>
                                         </v-row>
                                     </v-expansion-panel-content>
@@ -36,9 +38,16 @@
                 <v-expansion-panels accordion class="siteLayout__collapse" style="padding-right: 20px;"
                                     v-model="activePageInd">
                     <template v-for="(elem, index) in this.siteForm.template.pages">
-                        <v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item"
-                                           v-if="elem.active">
+                        <v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item">
                             <v-expansion-panel-header @click="changeFrame(elem.name)" class="head_accordion">
+                               <v-row no-gutters>
+                                   <v-switch
+                                           style="margin-top: -2px"
+                                           dense hide-details
+                                           v-model="siteForm.template.pages[index].active"
+                                           v-if="!elem.require"
+                                   ></v-switch>
+                               </v-row>
                                 {{elem.name}}
                             </v-expansion-panel-header>
                             <v-expansion-panel-content class="acc_content">
@@ -46,9 +55,15 @@
                                     class="siteLayout__collapse-blockMainList"
                                     v-for="(elem2, index2) in elem.blockList">
                                     <li class="siteLayout__collapse-blockMainItem block_head">
-										<span>
-										{{elem2.name}}
-									</span>
+                                        <span v-if="!siteForm.template.pages[index].blockList[index2].require">
+                                            <v-checkbox
+                                                    hide-details
+                                                    class="checkboxElement"
+                                                    :label="elem2.name"
+                                                    v-model="siteForm.template.pages[index].blockList[index2].active"
+                                            ></v-checkbox>
+                                        </span>
+                                        <span v-else>{{elem2.name}}</span>
                                         <v-btn @click="changeOrder(index2, siteForm.template.pages[index].blockList)"
                                                icon
                                                color="green"
@@ -64,7 +79,8 @@
                                             v-for="(elem3, index3) in elem2.elements">
                                             <li class="siteLayout__collapse-blockSubItem">
                                                 <v-checkbox :disabled="elem3.require" :label="elem3.name"
-                                                            class="checkboxElement" v-model="siteForm.template.pages[index].blockList[index2].elements[index3].active"></v-checkbox>
+                                                            class="checkboxElement"
+                                                            v-model="siteForm.template.pages[index].blockList[index2].elements[index3].active"></v-checkbox>
                                             </li>
                                         </ul>
                                     </li>
@@ -190,12 +206,7 @@
             pageValue() {
                 // eslint-disable-next-line vue/no-side-effects-in-computed-properties
                 this.activeDataInd = 0;
-                return this.sitePages.find((el) => {
-                    if (el.name === this.activeLayout) {
-                        console.log(el);
-                        return el;
-                    }
-                });
+                return this.sitePages.find(el => el.name === this.activeLayout);
             },
         },
         methods: {

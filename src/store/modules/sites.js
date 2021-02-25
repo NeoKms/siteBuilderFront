@@ -328,13 +328,15 @@ const template2 = {
             name: 'Главная',
             code: 'Main',
             require: true,
-            active: true,
+            active: false,
             blockList: [
                 {
                     id: '1',
-                    name: 'Блок 1',
+                    name: 'Главный баннер',
                     order: 1,
                     reorder: false,
+                    active: true,
+                    require: true,
                     elements: [
                         {
                             type: 'textAreaImage',
@@ -375,6 +377,7 @@ const template2 = {
                             require: false,
                             col: 12,
                             data: {
+                                col: 8,
                                 label: 'Акционный баннер',
                                 img: 'https://jrgreez.ru/examples/books-2158737_1920.jpg',
                                 size: {
@@ -390,7 +393,7 @@ const template2 = {
                                         options: [
                                             {
                                                 active: true,
-                                                label: 'Ссылка на страницу с акциями',
+                                                label: 'Ссылка на акции',
                                             },
                                         ],
                                     },
@@ -409,9 +412,11 @@ const template2 = {
                 },
                 {
                     id: '2',
-                    name: 'Блок 2',
+                    name: 'Информация о компании с фото-каруселью',
                     order: 2,
                     reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
                         {
                             type: 'textAreaSimple',
@@ -480,9 +485,11 @@ const template2 = {
                 },
                 {
                     id: '3',
-                    name: 'Блок 3',
+                    name: 'Основные преимущества',
                     order: 3,
                     reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
                         {
                             type: 'selectMultiple',
@@ -496,42 +503,64 @@ const template2 = {
                                 options: [
                                     {
                                         value: '1',
-                                        label: 'Комфортные условия',
+                                        label: 'Видеонаблюдение',
                                     },
                                     {
                                         value: '2',
-                                        label: 'Высокие потолки',
+                                        label: 'Энергоснабжение',
                                     },
                                     {
                                         value: '3',
-                                        label: 'Доступ в интернет',
+                                        label: 'Паркинг',
                                     },
                                     {
                                         value: '4',
-                                        label: 'Доступность от метро',
+                                        label: 'Доступ на объект',
                                     },
                                     {
                                         value: '5',
-                                        label: 'Доступность от метро',
+                                        label: 'Круглосуточная охрана',
                                     },
                                     {
                                         value: '6',
-                                        label: 'Доступность от метро',
+                                        label: 'Кафе',
                                     },
                                     {
                                         value: '7',
-                                        label: 'Доступность от метро',
+                                        label: 'Банкомат',
                                     },
                                     {
                                         value: '8',
-                                        label: 'Доступность от метро',
+                                        label: 'Аптека',
+                                    },
+                                    {
+                                        value: '9',
+                                        label: 'Конференц зал',
+                                    },
+                                    {
+                                        value: '10',
+                                        label: 'Магазин',
+                                    },
+                                    {
+                                        value: '11',
+                                        label: 'Супермаркет',
                                     },
                                 ],
                             },
                         },
+                    ],
+                },
+                {
+                    id: '4',
+                    name: 'Карусель публикаций',
+                    order: 4,
+                    reorder: true,
+                    active: true,
+                    require: false,
+                    elements: [
                         {
                             type: 'selectSimple',
-                            name: 'Публикации на главной',
+                            name: 'Тип публикаций',
                             active: true,
                             require: false,
                             col: 5,
@@ -593,10 +622,12 @@ const template2 = {
                     ],
                 },
                 {
-                    id: '4',
-                    name: 'Блок 4',
-                    order: 4,
+                    id: '5',
+                    name: 'Карусель видео',
+                    order: 5,
                     reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
                         {
                             type: 'blockTextareaImage',
@@ -681,10 +712,12 @@ const template2 = {
                     ],
                 },
                 {
-                    id: '5',
-                    name: 'Блок 5',
-                    order: 5,
+                    id: '6',
+                    name: 'Блок отзывов',
+                    order: 6,
                     reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
                         {
                             type: 'blockTextareaImage',
@@ -778,10 +811,12 @@ const template2 = {
                     ],
                 },
                 {
-                    id: '6',
-                    name: 'Блок 6',
-                    order: 6,
+                    id: '7',
+                    name: 'Обратная связь без баннера',
+                    order: 7,
                     reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
                         {
                             type: 'inputSimple',
@@ -896,10 +931,12 @@ const template2 = {
             active: true,
             blockList: [
                 {
-                    id: '1',
-                    name: 'Блок 1',
+                    id: '8',
+                    name: 'Трио блок с нумерацией',
                     order: 1,
                     reorder: false,
+                    active: true,
+                    require: true,
                     elements: [
                         {
                             type: 'blockTextareaImage',
@@ -997,17 +1034,35 @@ const template2 = {
                     ],
                 },
                 {
-                    id: '2',
-                    name: 'Блок 2',
+                    id: '9',
+                    name: 'Обратная связь с баннером',
                     order: 2,
                     reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
+                        {
+                            type: 'imageBox',
+                            name: 'Баннер',
+                            active: true,
+                            require: false,
+                            col: 6,
+                            data: {
+                                label: 'Изображение на баннер',
+                                size: {
+                                    width: '300',
+                                    height: '114',
+                                },
+                                img: 'https://jrgreez.ru/examples/coins-1726618_1920.jpg',
+                                note: 'Изображение на баннер',
+                            },
+                        },
                         {
                             type: 'inputSimple',
                             name: 'Заголовок',
                             active: true,
                             require: true,
-                            col: 12,
+                            col: 6,
                             data: {
                                 label: 'Заголовок формы',
                                 value: '',
@@ -1018,7 +1073,7 @@ const template2 = {
                             name: 'Тип',
                             active: true,
                             require: false,
-                            col: 12,
+                            col: 6,
                             data: {
                                 label: 'Тип формы обратной связи',
                                 value: '1',
@@ -1029,7 +1084,7 @@ const template2 = {
                                     },
                                     {
                                         value: '2',
-                                        label: 'Толерантная',
+                                        label: 'Формальная',
                                     },
                                 ],
                             },
@@ -1039,7 +1094,7 @@ const template2 = {
                             name: 'Фон',
                             active: true,
                             require: false,
-                            col: 12,
+                            col: 6,
                             data: {
                                 label: 'Фон',
                                 value: '1',
@@ -1060,7 +1115,7 @@ const template2 = {
                             name: 'Данные',
                             active: true,
                             require: false,
-                            col: 24,
+                            col: 6,
                             data: {
                                 row: true,
                                 label: 'Данные формы обратной связи',
@@ -1093,23 +1148,26 @@ const template2 = {
                             name: 'Фото блока',
                             active: true,
                             require: false,
-                            col: 24,
+                            col: 6,
                             data: {
+                                label: 'Фото блока обратной связи',
                                 size: {
                                     width: '310',
                                     height: '140',
                                 },
                                 img: 'https://jrgreez.ru/examples/typewriter-801921_1920.jpg',
-                                note: 'Фото блока обратной связи',
+                                note: 'Изображение на фон',
                             },
                         },
                     ],
                 },
                 {
-                    id: '3',
-                    name: 'Блок 3',
+                    id: '10',
+                    name: 'Блок с историей',
                     order: 3,
                     reorder: true,
+                    active: true,
+                    require: true,
                     elements: [
                         {
                             type: 'textAreaTitle',
@@ -1123,7 +1181,35 @@ const template2 = {
                                 value: "У бизнес-центра развитая инфраструктура: кафе, рестораны, заправочная станция, продуктовые магазины. Удобное транспортное сообщение, как для пешеходов, так и для автомобилистов. Неподалеку от бизнес-центра находится остановка общественного транспорта, а всего в 12 минутах ходьбы - станция метро “Чёрная Речка“?У бизнес-центра развитая инфраструктура: кафе, рестораны, заправочная станция, продуктовые магазины. Удобное транспортное сообщение, как для пешеходов, так и для автомобилистов. Неподалеку от бизнес-центра находится остановка общественного транспорта, а всего в 12 минутах ходьбы - станция метро “Чёрная Речка“.",
                                 rows: "5",
                                 placeholder: "Описание",
-                                length: "1500"
+                                maxLength: "400"
+                            }
+                        },
+                    ],
+                },
+                {
+                    id: '14',
+                    name: 'Карта с контактами',
+                    order: 4,
+                    reorder: false,
+                    active: true,
+                    require: false,
+                    elements: [
+                        {
+                            name: 'Контакты',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Шаблон контактов на карте'
+                            }
+                        },
+                        {
+                            name: 'Карта',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Шаблон карты'
                             }
                         },
                     ],
@@ -1137,10 +1223,12 @@ const template2 = {
             active: true,
             blockList: [
                 {
-                    id: '1',
-                    name: 'Блок 1',
+                    id: '11',
+                    name: 'Блок акций в виде списка',
                     order: 1,
                     reorder: false,
+                    active: true,
+                    require: true,
                     elements: [
                         {
                             type: 'blockTextareaImage',
@@ -1150,13 +1238,13 @@ const template2 = {
                             col: 12,
                             data: {
                                 label: 'Описание акций',
-                                direction: 'col',
+                                direction: 'row',
                                 col: 4,
                                 btnType: 'secondary',
                                 btnText: 'Добавить акцию',
                                 example: {
                                     col: 12,
-                                    img: '',
+                                    img: 'https://jrgreez.ru/examples/beverages-3105631_1920.jpg',
                                     size: {
                                         width: '210',
                                         height: '114',
@@ -1260,17 +1348,46 @@ const template2 = {
                     ],
                 },
                 {
-                    id: '2',
-                    name: 'Блок 2',
+                    id: '9',
+                    name: 'Обратная связь с баннером',
                     order: 2,
                     reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
+                        {
+                            type: 'imageBox',
+                            name: 'Баннер',
+                            active: true,
+                            require: false,
+                            col: 6,
+                            data: {
+                                label: 'Изображение на баннер',
+                                size: {
+                                    width: '300',
+                                    height: '114',
+                                },
+                                img: 'https://jrgreez.ru/examples/coins-1726618_1920.jpg',
+                                note: 'Изображение на баннер',
+                            },
+                        },
+                        {
+                            type: 'inputSimple',
+                            name: 'Заголовок',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Заголовок формы',
+                                value: '',
+                            },
+                        },
                         {
                             type: 'selectSimple',
                             name: 'Тип',
                             active: true,
                             require: false,
-                            col: 12,
+                            col: 6,
                             data: {
                                 label: 'Тип формы обратной связи',
                                 value: '1',
@@ -1281,7 +1398,7 @@ const template2 = {
                                     },
                                     {
                                         value: '2',
-                                        label: 'Толерантная',
+                                        label: 'Формальная',
                                     },
                                 ],
                             },
@@ -1291,7 +1408,7 @@ const template2 = {
                             name: 'Фон',
                             active: true,
                             require: false,
-                            col: 12,
+                            col: 6,
                             data: {
                                 label: 'Фон',
                                 value: '1',
@@ -1312,7 +1429,7 @@ const template2 = {
                             name: 'Данные',
                             active: true,
                             require: false,
-                            col: 24,
+                            col: 6,
                             data: {
                                 row: true,
                                 label: 'Данные формы обратной связи',
@@ -1345,15 +1462,44 @@ const template2 = {
                             name: 'Фото блока',
                             active: true,
                             require: false,
-                            col: 24,
+                            col: 6,
                             data: {
+                                label: 'Фото блока обратной связи',
                                 size: {
                                     width: '310',
                                     height: '140',
                                 },
-                                img: 'https://s15.stc.all.kpcdn.net/share/i/12/10427446/inx960x640.jpg',
-                                note: 'Фото блока обратной связи',
+                                img: 'https://jrgreez.ru/examples/typewriter-801921_1920.jpg',
+                                note: 'Изображение на фон',
                             },
+                        },
+                    ],
+                },
+                {
+                    id: '14',
+                    name: 'Карта с контактами',
+                    order: 3,
+                    reorder: false,
+                    active: true,
+                    require: false,
+                    elements: [
+                        {
+                            name: 'Контакты',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Шаблон контактов на карте'
+                            }
+                        },
+                        {
+                            name: 'Карта',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Шаблон карты'
+                            }
                         },
                     ],
                 },
@@ -1366,17 +1512,19 @@ const template2 = {
             active: true,
             blockList: [
                 {
-                    id: '1',
-                    name: 'Блок 1',
+                    id: '12',
+                    name: 'Блок публикаций с пагинацией',
                     order: 1,
                     reorder: true,
+                    active: true,
+                    require: true,
                     elements: [
                         {
                             type: 'selectSimple',
                             name: 'Порядок публикации',
                             active: true,
                             require: true,
-                            col: 12,
+                            col: 4,
                             data: {
                                 label: 'Порядок публикации',
                                 value: '1',
@@ -1397,7 +1545,7 @@ const template2 = {
                             name: 'Колличество на странице',
                             active: true,
                             require: true,
-                            col: 12,
+                            col: 4,
                             data: {
                                 label: 'Колличество на странице',
                                 value: '1',
@@ -1416,130 +1564,50 @@ const template2 = {
                                     },
                                 ],
                             },
-                        },
-                        {
-                            type: 'radioImage',
-                            name: 'Вид',
-                            active: true,
-                            require: true,
-                            col: 24,
-                            data: {
-                                label: 'Вид',
-                                value: '1',
-                                options: [
-                                    {
-                                        value: '1',
-                                        html: `
-                                        <div class="kind-1">
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                        </div>
-                                        <style>
-                                            .kind-1{
-                                                width: 100px;
-                                                height: 60px;
-                                                padding: 6px 8px;
-                                                display: flex;
-                                                flex-wrap: wrap;
-                                                justify-content: space-between;
-                                                align-items: center;
-                                            }
-                                            .kind-1 div {
-                                                width: 30%;
-                                                height: 12px;
-                                                background-color: #C4C4C4;
-                                            }
-                                        </style>
-                                        `,
-                                    },
-                                    {
-                                        value: '2',
-                                        html: `
-                                        <div class="kind-2">
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                        </div>
-                                        <style>
-                                            .kind-2{
-                                                width: 100px;
-                                                height: 60px;
-                                                padding: 6px 8px;
-                                                display: flex;
-                                                flex-wrap: wrap;
-                                                justify-content: space-between;
-                                                align-items: center;
-                                            }
-                                            .kind-2 div {
-                                                width: 22%;
-                                                height: 12px;
-                                                background-color: #C4C4C4;
-                                            }
-                                        </style>
-                                        `,
-                                    },
-                                    {
-                                        value: '3',
-                                        html: `
-                                        <div class="kind-3">
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                        </div>
-                                        <style>
-                                            .kind-3{
-                                                width: 100px;
-                                                height: 80px;
-                                                padding: 6px 8px;
-                                                display: flex;
-                                                flex-wrap: wrap;
-                                                justify-content: space-between;
-                                                align-items: center;
-                                            }
-                                            .kind-3 div {
-                                                width: 48%;
-                                                height: 20px;
-                                                background-color: #C4C4C4;
-                                            }
-                                        </style>
-                                        `,
-                                    },
-                                ],
-                            },
-                        },
+                        }
                     ],
                 },
                 {
-                    id: '2',
-                    name: 'Блок 2',
+                    id: '9',
+                    name: 'Обратная связь с баннером',
                     order: 2,
                     reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
+                        {
+                            type: 'imageBox',
+                            name: 'Баннер',
+                            active: true,
+                            require: false,
+                            col: 6,
+                            data: {
+                                label: 'Изображение на баннер',
+                                size: {
+                                    width: '300',
+                                    height: '114',
+                                },
+                                img: 'https://jrgreez.ru/examples/coins-1726618_1920.jpg',
+                                note: 'Изображение на баннер',
+                            },
+                        },
+                        {
+                            type: 'inputSimple',
+                            name: 'Заголовок',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Заголовок формы',
+                                value: '',
+                            },
+                        },
                         {
                             type: 'selectSimple',
                             name: 'Тип',
                             active: true,
                             require: false,
-                            col: 12,
+                            col: 6,
                             data: {
                                 label: 'Тип формы обратной связи',
                                 value: '1',
@@ -1550,7 +1618,7 @@ const template2 = {
                                     },
                                     {
                                         value: '2',
-                                        label: 'Толерантная',
+                                        label: 'Формальная',
                                     },
                                 ],
                             },
@@ -1560,7 +1628,7 @@ const template2 = {
                             name: 'Фон',
                             active: true,
                             require: false,
-                            col: 12,
+                            col: 6,
                             data: {
                                 label: 'Фон',
                                 value: '1',
@@ -1581,7 +1649,7 @@ const template2 = {
                             name: 'Данные',
                             active: true,
                             require: false,
-                            col: 24,
+                            col: 6,
                             data: {
                                 row: true,
                                 label: 'Данные формы обратной связи',
@@ -1614,15 +1682,44 @@ const template2 = {
                             name: 'Фото блока',
                             active: true,
                             require: false,
-                            col: 24,
+                            col: 6,
                             data: {
+                                label: 'Фото блока обратной связи',
                                 size: {
                                     width: '310',
                                     height: '140',
                                 },
-                                img: 'https://s15.stc.all.kpcdn.net/share/i/12/10427446/inx960x640.jpg',
-                                note: 'Фото блока обратной связи',
+                                img: 'https://jrgreez.ru/examples/typewriter-801921_1920.jpg',
+                                note: 'Изображение на фон',
                             },
+                        },
+                    ],
+                },
+                {
+                    id: '14',
+                    name: 'Карта с контактами',
+                    order: 3,
+                    reorder: false,
+                    active: true,
+                    require: false,
+                    elements: [
+                        {
+                            name: 'Контакты',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Шаблон контактов на карте'
+                            }
+                        },
+                        {
+                            name: 'Карта',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Шаблон карты'
+                            }
                         },
                     ],
                 },
@@ -1635,248 +1732,128 @@ const template2 = {
             active: true,
             blockList: [
                 {
-                    id: '1',
-                    name: 'Блок 1',
+                    id: '13',
+                    name: 'Шаблон страницы публикации',
                     order: 1,
                     reorder: false,
+                    active: true,
+                    require: true,
                     elements: [
                         {
                             name: 'Публикация',
                             active: true,
                             require: true,
+                            col: 12,
+                            data: {
+                                label: 'Шаблон публикации'
+                            }
                         },
                     ],
                 },
                 {
-                    id: '2',
-                    name: 'Блок 2',
+                    id: '4',
+                    name: 'Карусель публикаций',
                     order: 2,
                     reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
                         {
                             type: 'selectSimple',
-                            name: 'Порядок публикации',
+                            name: 'Тип публикаций',
                             active: true,
-                            require: true,
-                            col: 12,
+                            require: false,
+                            col: 5,
                             data: {
-                                label: 'Порядок публикации',
+                                label: 'Публикации на главной',
                                 value: '1',
                                 options: [
                                     {
                                         value: '1',
-                                        label: 'Отображать публикации со скидкой',
+                                        label: 'Публикации со скидкой',
                                     },
                                     {
                                         value: '2',
-                                        label: 'Отображать публикации без скидки',
+                                        label: 'Публикации без скидки',
                                     },
                                 ],
                             },
                         },
                         {
                             type: 'selectSimple',
-                            name: 'Колличество на странице',
+                            name: 'Количество публикаций',
                             active: true,
-                            require: true,
-                            col: 12,
+                            require: false,
+                            col: 2,
                             data: {
-                                label: 'Колличество на странице',
+                                label: 'Количество',
                                 value: '1',
                                 options: [
                                     {
                                         value: '1',
-                                        label: '12',
+                                        label: '4',
                                     },
                                     {
                                         value: '2',
-                                        label: '24',
+                                        label: '8',
                                     },
                                     {
                                         value: '3',
-                                        label: '48',
+                                        label: '16',
+                                    },
+                                    {
+                                        value: '4',
+                                        label: '24',
                                     },
                                 ],
+                            },
+                        },
+                        {
+                            type: 'SwitchSimple',
+                            name: 'Показывать только с фото',
+                            active: true,
+                            require: false,
+                            col: 5,
+                            data: {
+                                label: 'Показывать только с фото',
+                                value: true
                             },
                         },
                     ],
                 },
                 {
-                    id: '3',
-                    name: 'Блок 3',
+                    id: '9',
+                    name: 'Обратная связь с баннером',
                     order: 3,
                     reorder: true,
-                    elements: [
-                        {
-                            type: 'selectSimple',
-                            name: 'Тип',
-                            active: true,
-                            require: false,
-                            col: 12,
-                            data: {
-                                label: 'Тип формы обратной связи',
-                                value: '1',
-                                options: [
-                                    {
-                                        value: '1',
-                                        label: 'Стандартная',
-                                    },
-                                    {
-                                        value: '2',
-                                        label: 'Толерантная',
-                                    },
-                                ],
-                            },
-                        },
-                        {
-                            type: 'selectSimple',
-                            name: 'Фон',
-                            active: true,
-                            require: false,
-                            col: 12,
-                            data: {
-                                label: 'Фон',
-                                value: '1',
-                                options: [
-                                    {
-                                        value: '1',
-                                        label: 'Без фона',
-                                    },
-                                    {
-                                        value: '2',
-                                        label: 'С фоном',
-                                    },
-                                ],
-                            },
-                        },
-                        {
-                            type: 'checkboxSimple',
-                            name: 'Настройки подбора',
-                            active: true,
-                            require: false,
-                            col: 24,
-                            data: {
-                                row: true,
-                                label: 'Настройки подбора',
-                                options: [
-                                    {
-                                        active: true,
-                                        label: 'Площадь',
-                                    },
-                                    {
-                                        active: true,
-                                        label: 'Цена',
-                                    },
-                                    {
-                                        active: true,
-                                        label: 'Дополнительные опции',
-                                    },
-                                    {
-                                        active: true,
-                                        label: 'Электричество',
-                                    },
-                                    {
-                                        active: true,
-                                        label: 'Температура',
-                                    },
-                                ],
-                            },
-                        },
-                        {
-                            type: 'checkboxSimple',
-                            name: 'Данные формы обратной связи',
-                            active: true,
-                            require: false,
-                            col: 24,
-                            data: {
-                                row: true,
-                                label: 'Данные формы обратной связи',
-                                options: [
-                                    {
-                                        active: true,
-                                        label: 'Ваше имя',
-                                    },
-                                    {
-                                        active: true,
-                                        label: 'Телефон',
-                                    },
-                                    {
-                                        active: true,
-                                        label: 'E-mail',
-                                    },
-                                    {
-                                        active: true,
-                                        label: 'Город',
-                                    },
-                                    {
-                                        active: true,
-                                        label: 'Название организации',
-                                    },
-                                ],
-                            },
-                        },
-                        {
-                            type: 'imageBox',
-                            name: 'Фото блока',
-                            active: true,
-                            require: false,
-                            col: 24,
-                            data: {
-                                size: {
-                                    width: '310',
-                                    height: '140',
-                                },
-                                img: 'https://s15.stc.all.kpcdn.net/share/i/12/10427446/inx960x640.jpg',
-                                note: 'Фото блока обратной связи',
-                            },
-                        },
-                    ],
-                },
-            ],
-        },
-        {
-            name: 'Контакты',
-            require: true,
-            code: 'Contacts',
-            active: true,
-            blockList: [
-                {
-                    id: '1',
-                    name: 'Блок 1',
-                    order: 1,
-                    reorder: false,
-                    elements: [
-                        {
-                            name: 'Контакты',
-                            active: true,
-                            require: true,
-                        },
-                        {
-                            name: 'Карта',
-                            active: true,
-                            require: true,
-                        },
-                    ],
-                },
-                {
-                    id: '2',
-                    name: 'Блок 2',
-                    order: 2,
-                    reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
                         {
                             type: 'imageBox',
                             name: 'Баннер',
                             active: true,
                             require: false,
-                            col: 24,
+                            col: 6,
                             data: {
+                                label: 'Изображение на баннер',
                                 size: {
-                                    width: '411',
+                                    width: '300',
                                     height: '114',
                                 },
-                                img: 'https://s15.stc.all.kpcdn.net/share/i/12/10427446/inx960x640.jpg',
+                                img: 'https://jrgreez.ru/examples/coins-1726618_1920.jpg',
                                 note: 'Изображение на баннер',
+                            },
+                        },
+                        {
+                            type: 'inputSimple',
+                            name: 'Заголовок',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Заголовок формы',
+                                value: '',
                             },
                         },
                         {
@@ -1884,7 +1861,7 @@ const template2 = {
                             name: 'Тип',
                             active: true,
                             require: false,
-                            col: 12,
+                            col: 6,
                             data: {
                                 label: 'Тип формы обратной связи',
                                 value: '1',
@@ -1895,7 +1872,7 @@ const template2 = {
                                     },
                                     {
                                         value: '2',
-                                        label: 'Толерантная',
+                                        label: 'Формальная',
                                     },
                                 ],
                             },
@@ -1905,7 +1882,7 @@ const template2 = {
                             name: 'Фон',
                             active: true,
                             require: false,
-                            col: 12,
+                            col: 6,
                             data: {
                                 label: 'Фон',
                                 value: '1',
@@ -1926,7 +1903,7 @@ const template2 = {
                             name: 'Данные',
                             active: true,
                             require: false,
-                            col: 24,
+                            col: 6,
                             data: {
                                 row: true,
                                 label: 'Данные формы обратной связи',
@@ -1959,38 +1936,233 @@ const template2 = {
                             name: 'Фото блока',
                             active: true,
                             require: false,
-                            col: 24,
+                            col: 6,
                             data: {
+                                label: 'Фото блока обратной связи',
                                 size: {
                                     width: '310',
                                     height: '140',
                                 },
-                                img: 'https://s15.stc.all.kpcdn.net/share/i/12/10427446/inx960x640.jpg',
-                                note: 'Фото блока обратной связи',
+                                img: 'https://jrgreez.ru/examples/typewriter-801921_1920.jpg',
+                                note: 'Изображение на фон',
                             },
                         },
                     ],
                 },
                 {
-                    id: '3',
-                    name: 'Блок 3',
+                    id: '14',
+                    name: 'Карта с контактами',
+                    order: 4,
+                    reorder: false,
+                    active: true,
+                    require: false,
+                    elements: [
+                        {
+                            name: 'Контакты',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Шаблон контактов на карте'
+                            }
+                        },
+                        {
+                            name: 'Карта',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Шаблон карты'
+                            }
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            name: 'Контакты',
+            require: true,
+            code: 'Contacts',
+            active: true,
+            blockList: [
+                {
+                    id: '14',
+                    name: 'Карта с контактами',
+                    order: 1,
+                    reorder: false,
+                    active: true,
+                    require: true,
+                    elements: [
+                        {
+                            name: 'Контакты',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Шаблон контактов на карте'
+                            }
+                        },
+                        {
+                            name: 'Карта',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Шаблон карты'
+                            }
+                        },
+                    ],
+                },
+                {
+                    id: '9',
+                    name: 'Обратная связь с баннером',
+                    order: 2,
+                    reorder: true,
+                    active: true,
+                    require: false,
+                    elements: [
+                        {
+                            type: 'imageBox',
+                            name: 'Баннер',
+                            active: true,
+                            require: false,
+                            col: 6,
+                            data: {
+                                label: 'Изображение на баннер',
+                                size: {
+                                    width: '300',
+                                    height: '114',
+                                },
+                                img: 'https://jrgreez.ru/examples/coins-1726618_1920.jpg',
+                                note: 'Изображение на баннер',
+                            },
+                        },
+                        {
+                            type: 'inputSimple',
+                            name: 'Заголовок',
+                            active: true,
+                            require: true,
+                            col: 6,
+                            data: {
+                                label: 'Заголовок формы',
+                                value: '',
+                            },
+                        },
+                        {
+                            type: 'selectSimple',
+                            name: 'Тип',
+                            active: true,
+                            require: false,
+                            col: 6,
+                            data: {
+                                label: 'Тип формы обратной связи',
+                                value: '1',
+                                options: [
+                                    {
+                                        value: '1',
+                                        label: 'Стандартная',
+                                    },
+                                    {
+                                        value: '2',
+                                        label: 'Формальная',
+                                    },
+                                ],
+                            },
+                        },
+                        {
+                            type: 'selectSimple',
+                            name: 'Фон',
+                            active: true,
+                            require: false,
+                            col: 6,
+                            data: {
+                                label: 'Фон',
+                                value: '1',
+                                options: [
+                                    {
+                                        value: '1',
+                                        label: 'Без фона',
+                                    },
+                                    {
+                                        value: '2',
+                                        label: 'С фоном',
+                                    },
+                                ],
+                            },
+                        },
+                        {
+                            type: 'checkboxSimple',
+                            name: 'Данные',
+                            active: true,
+                            require: false,
+                            col: 6,
+                            data: {
+                                row: true,
+                                label: 'Данные формы обратной связи',
+                                options: [
+                                    {
+                                        active: true,
+                                        label: 'Ваше имя',
+                                    },
+                                    {
+                                        active: true,
+                                        label: 'Телефон',
+                                    },
+                                    {
+                                        active: true,
+                                        label: 'E-mail',
+                                    },
+                                    {
+                                        active: true,
+                                        label: 'Город',
+                                    },
+                                    {
+                                        active: true,
+                                        label: 'Название организации',
+                                    },
+                                ],
+                            },
+                        },
+                        {
+                            type: 'imageBox',
+                            name: 'Фото блока',
+                            active: true,
+                            require: false,
+                            col: 6,
+                            data: {
+                                label: 'Фото блока обратной связи',
+                                size: {
+                                    width: '310',
+                                    height: '140',
+                                },
+                                img: 'https://jrgreez.ru/examples/typewriter-801921_1920.jpg',
+                                note: 'Изображение на фон',
+                            },
+                        },
+                    ],
+                },
+                {
+                    id: '10',
+                    name: 'Блок с историей',
                     order: 3,
                     reorder: true,
+                    active: true,
+                    require: false,
                     elements: [
                         {
                             type: 'textAreaTitle',
                             name: 'История',
                             active: true,
                             require: false,
-                            col: 24,
+                            col: 12,
                             data: {
-                                title: '',
-                                label: 'История',
-                                value: '',
-                                rows: '5',
-                                placeholder: 'Описание',
-                                maxLength: '250',
-                            },
+                                title: "НЕМНОГО НАШЕЙ ИСТОРИИ",
+                                label: "История",
+                                value: "У бизнес-центра развитая инфраструктура: кафе, рестораны, заправочная станция, продуктовые магазины. Удобное транспортное сообщение, как для пешеходов, так и для автомобилистов. Неподалеку от бизнес-центра находится остановка общественного транспорта, а всего в 12 минутах ходьбы - станция метро “Чёрная Речка“?У бизнес-центра развитая инфраструктура: кафе, рестораны, заправочная станция, продуктовые магазины. Удобное транспортное сообщение, как для пешеходов, так и для автомобилистов. Неподалеку от бизнес-центра находится остановка общественного транспорта, а всего в 12 минутах ходьбы - станция метро “Чёрная Речка“.",
+                                rows: "5",
+                                placeholder: "Описание",
+                                maxLength: "400"
+                            }
                         },
                     ],
                 },

@@ -1,6 +1,6 @@
 <template>
     <v-row no-gutters class="justify-center">
-        <v-switch v-model="data.value"></v-switch>
+        <v-switch v-model="data.value" :label="data.label"></v-switch>
     </v-row>
 </template>
 
