@@ -25,6 +25,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     export default {
         name: "MtemplateChoose",
         props: {
@@ -33,20 +34,26 @@
                 required: true
             }
         },
+        data() {
+            return {
+                isLoading: true,
+                loadSuccess: false,
+            }
+        },
         mounted() {
             this.loadData();
         },
         computed: {
-            templatesList: function () {
-                return this.$store.getters.getTemplatesList
-            },
+            ...mapGetters('sites', {
+                templatesList: 'getTemplatesList'
+            })
         },
         methods: {
             async loadData() {
                 if (this.templatesList.length === 0) {
                     try {
                         this.isLoading = true;
-                        await this.$store.dispatch('fetchTemplatesList')
+                        await this.$store.dispatch('sites/fetchTemplatesList')
                     } catch (e) {
                         console.log(e);
                     } finally {

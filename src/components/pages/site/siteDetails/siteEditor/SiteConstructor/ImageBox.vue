@@ -1,6 +1,6 @@
 <template>
     <div class="imageBox" :label="data.label ? data.label : ''"
-                  style="margin-bottom: 0">
+         style="margin-bottom: 0">
         <div class="imageBox__image"
              :class="data.mask ? 'imageBox__mask' : '' "
              @click="loadImage"
@@ -13,41 +13,42 @@
         <span v-if="data.note" class="imageBox__note">
                 {{data.note}}
             </span>
-        <template v-if="showImageList">
-            <transition name="fade-overlay">
-                <div class="pb-overlay"
-                     v-show="showImageList">
-                </div>
-            </transition>
-            <transition name="fade-slide-modal">
-                <div v-show="showImageList"
-                     class="siteTemplateEdit__templates"
-                     @click.self="closeImageList"
-                >
-                    <v-btn type="icon" class="siteTemplateEdit__templates-close"
-                               @click="closeImageList">
-                        Close
-                    </v-btn>
-<!--                    <pb-title :level="4">Выберете изображение</pb-title>-->
-                    <v-row class="imageBox__wrapper">
-                        <v-col class="imageBox__item"
-                                 v-for="(item, index) in getImageList"
-                                 :key="index"
-                                cols="6"
-                                style="margin-bottom: 16px;">
-                            <div class="imageBox__item-img"
-                                 :style="{backgroundImage: 'url(' + item + ')'}"
-                                 @click="choseImage(item)"></div>
-                        </v-col>
-                    </v-row>
-                </div>
-            </transition>
-        </template>
+        <v-dialog
+                v-model="showImageList"
+                width="600px"
+        >
+            <v-card>
+                <v-card-title>
+                    <span class="headline">Выберете изображение</span>
+                </v-card-title>
+                <v-card-text>
+                    <div v-if="imageInLoad">
+                        <img style="margin-left: 170px" src="/assets/img/loading.gif" width="200" alt="loading">
+                    </div>
+                    <div v-else
+                         class="siteTemplateEdit__templates"
+                         @click.self="closeImageList"
+                    >
+                        <v-row class="imageBox__wrapper">
+                            <v-col class="imageBox__item"
+                                   v-for="(item, index) in imageList"
+                                   :key="index"
+                                   cols="6"
+                                   style="margin-bottom: 16px;">
+                                <div class="imageBox__item-img"
+                                     :style="{backgroundImage: 'url(' + item + ')'}"
+                                     @click="choseImage(item)"></div>
+                            </v-col>
+                        </v-row>
+                    </div>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
-    import { mapGetters, mapActions } from "vuex";
+    import {mapGetters} from "vuex";
 
     export default {
         name: "ImageBox",
@@ -62,32 +63,46 @@
         data() {
             return {
                 showImageList: false,
+                imageInLoad: false,
             };
         },
         computed: {
-            ...mapGetters([
-                'getImageList',
-            ]),
+            ...mapGetters('sites', {
+                imageList: 'getImageList',
+            }),
         },
         methods: {
-            ...mapActions([
-                'fetchImageList',
-            ]),
             /**
              * Загрузить список картинок
              */
-            async loadImage() {
-                await this.fetchImageList();
-                this.showImageList = true;
+            loadImage() {
+                if (!this.imageList.length) {
+                    this.imageInLoad = true;
+                    this.showImageList = true;
+                    this.$store.dispatch('sites/fetchImageList').then(res => {
+                        if (res) {
+                            this.imageInLoad = false
+                        } else {
+                            this.showImageList = false
+                            this.$store.commit('notifications/addMessage', {
+                                name: 'Ошибка загрузки изображений. Попробуйте позже',
+                                type: 'error',
+                                time: 3000,
+                            })
+                        }
+                    });
+                } else {
+                    this.showImageList = true
+                }
             },
             /**
-             * Закрыть список шаблонов
+             * Закрыть список картинок
              */
             closeImageList() {
                 this.showImageList = false;
             },
             /**
-             * Подстановка данных об  выбранной фотографии в поля формы Нового блока
+             * Подстановка данных об выбранной фотографии в поля формы Нового блока
              */
             async choseImage(item) {
                 this.data.img = item;
@@ -99,18 +114,20 @@
 </script>
 
 <style scoped>
-    .imageBox__mask{
+    .imageBox__mask {
         border-radius: 50%;
         overflow: hidden;
     }
-    .imageBox__image{
+
+    .imageBox__image {
         background-size: cover;
         background-position: 50% 50%;
         background-repeat: no-repeat;
         cursor: pointer;
         position: relative;
     }
-    .imageBox__image:before{
+
+    .imageBox__image:before {
         content: '';
         position: absolute;
         display: block;
@@ -122,9 +139,10 @@
         opacity: 0;
         transition: opacity 0.3s ease-in-out;
     }
-    .imageBox__change{
+
+    .imageBox__change {
         position: absolute;
-        top:50%;
+        top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         font-weight: 500;
@@ -137,33 +155,39 @@
         opacity: 0;
         transition: opacity 0.3s ease-in-out;
     }
+
     .imageBox__image:hover.imageBox__image:before,
-    .imageBox__image:focus.imageBox__image:before{
+    .imageBox__image:focus.imageBox__image:before {
         opacity: 1;
     }
+
     .imageBox__image:hover .imageBox__change,
-    .imageBox__image:focus .imageBox__change{
+    .imageBox__image:focus .imageBox__change {
         opacity: 1;
     }
-    .imageBox__note{
+
+    .imageBox__note {
         display: block;
         font-size: 12px;
         line-height: 16px;
         margin-top: 8px;
         color: #626B74;
     }
-    .imageBox__item{
+
+    .imageBox__item {
         height: 150px;
         cursor: pointer;
     }
-    .imageBox__item-img{
+
+    .imageBox__item-img {
         height: 100%;
         background-position: 50% 50%;
         background-size: cover;
         background-repeat: no-repeat;
     }
+
     .imageBox__item-img:hover,
-    .imageBox__item-img:focus{
-        outline: 1px solid #2946C6 ;
+    .imageBox__item-img:focus {
+        outline: 1px solid #2946C6;
     }
 </style>

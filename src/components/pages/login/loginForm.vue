@@ -3,8 +3,8 @@
 		<div class="form">
 			<img :src="logoImg" class="form__logo">
 			<h2> Please Sign in</h2>
-			<input type="text" id="login" name="login" placeholder="root" v-model="formData.login" required autofocus><br>
-			<input type="password" id="password" name="password" placeholder="root" v-model="formData.pass" required>
+			<v-text-field id="login" name="login" label="Логин" v-model="formData.login"  required autofocus></v-text-field>
+			<v-text-field id="password" name="password" label="Пароль" v-model="formData.pass"  required ></v-text-field>
 			<div class="form__refs">
 				<router-link :to="{name: 'registration'}" class="ref-left">Sign up</router-link>
 				<router-link :to="{name: 'resetPass'}" class="ref-right">Forgot password?</router-link>
@@ -37,7 +37,7 @@
 		methods: {
             login: function () {
 				//auth in API
-				this.$store.commit('login',this.formData)
+				this.$store.commit('login/login',this.formData)
 				const redirectPath = this.$route.query.redirect || '/'
 				// this.$router.go(-1)
 				this.$router.push(redirectPath)

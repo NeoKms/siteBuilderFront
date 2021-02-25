@@ -49,33 +49,57 @@
 						</v-col>
 					</v-row>
 					<v-row>
-						<v-col>
-							<table class="table-descr-sm">
-								<tr>
-									<td class="left">Название организации</td>
-									<td>ООО ТРАНССВЯЗЬ</td>
-								</tr>
-								<tr>
-									<td class="left">Телефон</td>
-									<td>88005553535</td>
-								</tr>
-								<tr>
-									<td class="left">Адрес</td>
-									<td>666666, г. Санкт-Петербург, ул. Пушкина д.1 лит А </td>
-								</tr>
-								<tr>
-									<td class="left">Основной E-mail</td>
-									<td>tmp1@gmila.com</td>
-								</tr>
-								<tr>
-									<td class="left">Обратная связь E-mail</td>
-									<td>tmp2@gmail.com</td>
-								</tr>
-								<tr>
-									<td class="left">Координаты</td>
-									<td>59.9558742615268 30.369708388251336</td>
-								</tr>
-							</table>
+						<v-col cols="6">
+							Название организации
+						</v-col>
+						<v-col cols="6">
+							{{site.contacts.title}}
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="6">
+							Телефон
+						</v-col>
+						<v-col cols="6">
+							{{site.contacts.phone}}
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="6">
+							Адрес
+						</v-col>
+						<v-col cols="6">
+							{{[
+							site.contacts.index,
+							site.contacts.city,
+							site.contacts.street,
+							site.contacts.litera,
+							site.contacts.house
+							].join(',')}}
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="6">
+							Основной E-mail
+						</v-col>
+						<v-col cols="6">
+							{{site.contacts.emailMain}}
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="6">
+							Обратная связь E-mail
+						</v-col>
+						<v-col cols="6">
+							{{site.contacts.emailFeedback}}
+						</v-col>
+					</v-row>
+					<v-row>
+						<v-col cols="6">
+							Координаты
+						</v-col>
+						<v-col cols="6">
+							{{site.contacts.coordinate.x}}<br>{{site.contacts.coordinate.y}}
 						</v-col>
 					</v-row>
 				</v-container>
@@ -89,14 +113,14 @@
 						<v-col>
 							<div class="template__img">
 									<v-img
-											v-show="site.template.data.img"
-											:src="site.template.data.img"
+											v-if="site.template.img"
+											:src="site.template.img"
 											width="250" height="155" contain
 									/>
-								<span v-show="!site.template.data.img">Выберите шаблон сайта</span>
+								<span v-else >Выберите шаблон сайта</span>
 							</div>
-							<div v-if="site.template.data.img">
-								{{site.template.data.name}}
+							<div v-if="site.template.img">
+								{{site.template.name}}
 							</div>
 						</v-col>
 					</v-row>
@@ -108,21 +132,21 @@
 <script>
     export default {
         name: "siteDescriptionView",
-		props: {
-			id: {
-				type: String,
-				required: true
-			},
-            tabName: {
-				type: String,
-				required: true
-			}
-		},
-		computed: {
-            site: function () {
-                return this.$store.getters.getSiteById(this.id)
+        props: {
+            id: {
+                type: String,
+                required: true
             },
-		}
+            tabName: {
+                type: String,
+                required: true
+            }
+        },
+        computed: {
+            site: function () {
+                return this.$store.getters['sites/getSiteById'](this.id)
+            },
+        }
     }
 </script>
 

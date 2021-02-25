@@ -16,7 +16,6 @@ export default new Vuex.Store({
 	state: {
 	},
 	mutations: {
-
 	},
 	getters: {
 		// eslint-disable-next-line no-unused-vars

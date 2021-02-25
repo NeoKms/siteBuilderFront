@@ -4,8 +4,7 @@
 			v-for="(site, index) in siteList"
 			:key="index"
 			:class="{active: site.active}"
-			@click="goToDetails"
-			@mouseover="setCurrentSiteId(site.id)"
+			@click="goToDetails(site.id)"
 		>
 			<div v-if="site.img" class="siteCard__img" :style="{ backgroundImage: 'url('+site.img+')'}"></div>
 			<div v-if="!site.img" class="siteCard__img" style="background-image: url('assets/img/none.png')"></div>
@@ -38,23 +37,20 @@
                 currentSiteId: 0
 			}
 		},
-        created() {
+        mounted() {
             if (this.siteList.length === 0) {
-                this.$store.commit('getSiteList')
+                this.$store.commit('sites/getSiteList')
             }
         },
         computed: {
-            ...mapGetters({
+            ...mapGetters('sites',{
                 siteList: 'getSiteList',
             }),
         },
         methods: {
-            goToDetails: function () {
-                this.$router.push({ name: 'siteDetails', params: { id: String(this.currentSiteId) } })
+            goToDetails: function (id) {
+                this.$router.push({ name: 'siteDetails', params: { id: String(id) } })
 			},
-            setCurrentSiteId: function (id) {
-				this.currentSiteId = id
-            }
         }
     }
 </script>

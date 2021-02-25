@@ -1,15 +1,16 @@
 <template>
-	<div>
-		<p>Тестовый компонент начальной страницы</p>
-	</div>
+	<div>main</div>
 </template>
-
 <script>
     export default {
-        name: "Main"
-    }
+		name: "Main",
+        data () {
+            return {
+            }
+        },
+        methods: {
+        }
+	}
 </script>
-
 <style scoped>
-
 </style>

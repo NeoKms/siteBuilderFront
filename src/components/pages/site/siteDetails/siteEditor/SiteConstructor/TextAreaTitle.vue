@@ -1,16 +1,24 @@
 <template>
-    <div>
-        <div class="textAreaTitle__inputTitle" label="Заголовок">
-            <v-text-field v-model="data.title"
-                          :placeholder="data.label"
-                          style="max-width: 336px; margin-bottom: 16px;"></v-text-field>
-        </div>
-        <div class="textAreaTitle__inputContent">
-            <v-text-field v-model="data.value"
-                          :placeholder="data.placeholder"
-                          style="width: 100%"></v-text-field>
-        </div>
-    </div>
+    <v-container>
+        <v-row>
+            <v-text-field
+                    v-model="data.title"
+                    label="Заголовок"
+            ></v-text-field>
+        </v-row>
+        <v-row>
+            <v-textarea
+                    counter
+                    :rows="data.rows || 5"
+                    v-model="data.value"
+                    label="Описание"
+                    :placeholder="data.placeholder ? data.placeholder : ''"
+                    style="width: 100%"
+                    :counter-value="(val)=>`${val.length}/${data.maxLength}`"
+                    :error="data.value.length>data.maxLength"
+            ></v-textarea>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -20,12 +28,6 @@
             data: {
                 type: Object,
             },
-        },
-        data() {
-            return {
-            };
-        },
-        methods: {
         },
     };
 

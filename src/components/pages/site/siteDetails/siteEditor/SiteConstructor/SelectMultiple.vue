@@ -1,13 +1,12 @@
 <template>
     <div :label="data.label">
-        SELECT
         <v-select
                 v-model="data.value"
                 :items="data.options"
-                label="Select"
+                item-text="label"
+                item-value="value"
                 multiple
                 chips
-                hint="What are the target regions"
                 persistent-hint
         ></v-select>
     </div>
@@ -21,19 +20,12 @@
                 type: Object,
             },
         },
-        data() {
-            return {
-            };
-        },
-        methods: {
-
-        },
     };
 
 </script>
 
 <style scoped>
-    .el-select-dropdown.is-multiple .el-select-dropdown__item.selected::after{
+    .el-select-dropdown.is-multiple .el-select-dropdown__item.selected::after {
         content: '';
     }
 </style>

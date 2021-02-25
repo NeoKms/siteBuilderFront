@@ -1,79 +1,97 @@
 <template>
-	<v-container>
-		<v-row>
-			<v-col cols="8">
-				<div class="mainRow">
-					<div class="mainRow__title">{{pageValue.name}}</div>
-				</div>
-			</v-col>
-			<v-col cols="4">
-				<v-checkbox v-model="siteForm.active" :label="siteForm.active.toString()"></v-checkbox>
-			</v-col>
-		</v-row>
-		<v-row>
-			<v-col cols="8">
-				<template v-if="pageValue">
-				<v-form label-position="top">
-					<v-expansion-panels v-model="activeDataInd" accordion>
-						<template v-for="(elem, index) in pageValue.blockList">
-							<v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item">
-								<v-expansion-panel-header class="head_accordion siteLayout__collapse-header" >
-									{{elem.name}}
-								</v-expansion-panel-header>
-								<v-expansion-panel-content class="acc_content">
-								<v-row class="siteDataEdit__blockItem">
-									<v-col :span="elem2.col"
-											v-for="(elem2, index2) in elem.elements"
-											:key="index2" style="margin-bottom: 16px;">
-										<component v-if="elem2.active" :is="blockComponent(elem2.type)" :data="elem2.data"/>
-									</v-col>
-								</v-row>
-								</v-expansion-panel-content>
-							</v-expansion-panel>
-						</template>
-					</v-expansion-panels>
-				</v-form>
-			</template>
-			</v-col>
-			<v-col cols="4" >
-				<v-expansion-panels v-model="this.activePageInd" accordion class="siteLayout__collapse" style="padding-right: 20px;">
-					<template v-for="(elem, index) in this.siteForm.template.pages">
-						<v-expansion-panel v-if="elem.active" :key="index" class="siteLayout__collapse-item" :name="elem.name">
-							<v-expansion-panel-header class="head_accordion" @click="changeFrame(elem.name)">
-								{{elem.name}}
-							</v-expansion-panel-header>
-							<v-expansion-panel-content class="acc_content">
-								<ul v-for="(elem2, index2) in elem.blockList"
-								:key="index2"
-								class="siteLayout__collapse-blockMainList">
-								<li class="siteLayout__collapse-blockMainItem block_head">
-									<span>
-										{{elem2.name}}
-									</span>
-									<v-btn v-if="!(!elem2.reorder
+    <v-container>
+        <v-row>
+            <v-col cols="8">
+                <template v-if="pageValue">
+                    <v-form label-position="top">
+                        <v-expansion-panels accordion v-model="activeDataInd">
+                            <template v-for="(elem, index) in pageValue.blockList">
+                                <v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item" v-if="elem.active">
+                                    <v-expansion-panel-header class="head_accordion siteLayout__collapse-header">
+                                        {{elem.name}}
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content class="acc_content" v-if="activePageInd>-1">
+                                        <v-row class="siteDataEdit__blockItem">
+                                            <v-col :key="index2"
+                                                   :span="elem2.col"
+                                                   style="margin-bottom: 16px;"
+                                                   v-for="(elem2, index2) in elem.elements"
+                                                   :hidden="!elem2.active"
+                                                   :lg="elem2.col" :sm="elem2.col" :md="elem2.col" :xl="elem2.col"
+                                                   :xs="elem2.col"
+                                            >
+                                                {{elem2.data.label}}
+                                                <component
+                                                        :data="((siteForm.template.pages[activePageInd]||{}).blockList[index].elements[index2]||{}).data"
+                                                        :is="blockComponent(elem2.type)"
+                                                        v-if="elem2.active" />
+                                            </v-col>
+                                        </v-row>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                            </template>
+                        </v-expansion-panels>
+                    </v-form>
+                </template>
+            </v-col>
+            <v-col cols="4">
+                <v-expansion-panels accordion class="siteLayout__collapse" style="padding-right: 20px;"
+                                    v-model="activePageInd">
+                    <template v-for="(elem, index) in this.siteForm.template.pages">
+                        <v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item">
+                            <v-expansion-panel-header @click="changeFrame(elem.name)" class="head_accordion">
+                               <v-row no-gutters>
+                                   <v-switch
+                                           style="margin-top: -2px"
+                                           dense hide-details
+                                           v-model="siteForm.template.pages[index].active"
+                                           v-if="!elem.require"
+                                   ></v-switch>
+                               </v-row>
+                                {{elem.name}}
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content class="acc_content">
+                                <ul :key="index2"
+                                    class="siteLayout__collapse-blockMainList"
+                                    v-for="(elem2, index2) in elem.blockList">
+                                    <li class="siteLayout__collapse-blockMainItem block_head">
+                                        <span v-if="!siteForm.template.pages[index].blockList[index2].require">
+                                            <v-checkbox
+                                                    hide-details
+                                                    class="checkboxElement"
+                                                    :label="elem2.name"
+                                                    v-model="siteForm.template.pages[index].blockList[index2].active"
+                                            ></v-checkbox>
+                                        </span>
+                                        <span v-else>{{elem2.name}}</span>
+                                        <v-btn @click="changeOrder(index2, siteForm.template.pages[index].blockList)"
+                                               icon
+                                               color="green"
+                                               v-if="!(!elem2.reorder
                                    || !(!!(elem.blockList[index2-1])
-                                   && (elem.blockList[index2-1]).reorder))" @click="changeOrder(index2, elem.blockList)"
-											сolor="primary" fab x-small dark>
-										<v-icon>mdi-swap-vertical</v-icon>
-									</v-btn>
-								</li>
-								<li>
-									<ul v-for="(elem3, index3) in elem2.elements"
-										class="siteLayout__collapse-blockSubList"
-										:key="index3">
-										<li class="siteLayout__collapse-blockSubItem">
-											<v-checkbox v-model="elem3.active" :disabled="elem3.require" :label="elem3.name" class="checkboxElement"></v-checkbox>
-										</li>
-									</ul>
-								</li>
-							</ul>
-							</v-expansion-panel-content>
-						</v-expansion-panel>
-					</template>
-				</v-expansion-panels>
-			</v-col>
-		</v-row>
-	</v-container>
+                                   && (elem.blockList[index2-1]).reorder))" x-small сolor="primary">
+                                            <v-icon>mdi-swap-vertical</v-icon>
+                                        </v-btn>
+                                    </li>
+                                    <li>
+                                        <ul :key="index3"
+                                            class="siteLayout__collapse-blockSubList"
+                                            v-for="(elem3, index3) in elem2.elements">
+                                            <li class="siteLayout__collapse-blockSubItem">
+                                                <v-checkbox :disabled="elem3.require" :label="elem3.name"
+                                                            class="checkboxElement"
+                                                            v-model="siteForm.template.pages[index].blockList[index2].elements[index3].active"></v-checkbox>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                    </template>
+                </v-expansion-panels>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -91,6 +109,8 @@
     import BlockTextareaTitle from './SiteConstructor/BlocksTextareaTitle.vue';
     import BlockTextareaImage from './SiteConstructor/BlocksTextareaImage.vue';
     import DataPickerSimple from './SiteConstructor/DataPickerSimple.vue';
+    import SwitchSimple from './SiteConstructor/SwitchSimple';
+
     export default {
         name: "siteContentEdit",
         props: {
@@ -105,7 +125,9 @@
         },
         data() {
             return {
-                siteForm: {"active":false},
+                siteForm2: {
+                    active: false
+                },
                 checkbox1: true,
                 blockElements: [
                     {
@@ -164,30 +186,27 @@
                         name: 'dataPickerSimple',
                         component: DataPickerSimple,
                     },
+                    {
+                        name: 'SwitchSimple',
+                        component: SwitchSimple
+                    }
                 ],
                 beforeActive: '',
                 activeData: '',
                 activeDataInd: null,
                 activeLayout: 'Главная',
                 activePageInd: 0,
-            };
+                siteForm: {}
+            }
         },
         computed: {
-            site: function () {
-                return this.$store.getters.getCopyObj(this.$store.getters.getSiteById(this.id))
-            },
             sitePages() {
-                console.log(this.siteForm);
                 return this.siteForm.template.pages;
             },
             pageValue() {
-				// eslint-disable-next-line vue/no-side-effects-in-computed-properties
+                // eslint-disable-next-line vue/no-side-effects-in-computed-properties
                 this.activeDataInd = 0;
-                return this.sitePages.find((el) => {
-                    if (el.name === this.activeLayout){
-                        return el;
-					}
-                });
+                return this.sitePages.find(el => el.name === this.activeLayout);
             },
         },
         methods: {
@@ -200,63 +219,67 @@
                 return false;
             },
             changeOrder(index, array) {
-                console.log(index);
                 array[index].order -= 1;
                 array[index - 1].order += 1;
-                console.log(array[index]);
-                console.log(array[index - 1]);
-
                 array.sort((elem1, elem2) => {
                     return elem1.order - elem2.order;
                 });
             },
         },
-		mounted() {
-            this.siteForm = this.site;
+        created() {
+            this.siteForm = this.$store.getters.getCopyObj(this.$store.getters['sites/getSiteById'](this.id))
         }
     }
 </script>
 
-<style scoped lang="scss">
-	.block_head {
-		font-size: 16px;
-		line-height: 24px;
-		padding-left: 4px;
-		border-left: 2px solid #2946c6;
-		margin-bottom: 4px;
-		display: flex;
-		justify-content: space-between;
-	}
-	ul, li {
-		text-align: left;
-		list-style-type: none;
-	}
-	.acc_content {
-		margin-top: 5px;
-	}
-	.head_accordion {
-		box-shadow: 0 0 1px rgba(0,0,0,0.5);
-		font-size: 20px;
-		line-height: 25px;
-	}
-	.mainRow {
-		display: flex;
-		&__title {
-			padding-left: 20px;
-			font-size: 20px;
-			line-height: 25px;
-			flex-grow: 1;
-			text-align: left;
-		}
-		button {
-			margin-right: 6px;
-			&.active {
-				color: #6200ea !important;
-			}
-		}
-	}
-	.checkboxElement {
-		margin: 0;
-		padding: 0;
-	}
+<style lang="scss" scoped>
+    .block_head {
+        font-size: 16px;
+        line-height: 24px;
+        padding-left: 4px;
+        border-left: 2px solid #2946c6;
+        margin-bottom: 4px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    ul, li {
+        text-align: left;
+        list-style-type: none;
+    }
+
+    .acc_content {
+        margin-top: 5px;
+    }
+
+    .head_accordion {
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+        font-size: 20px;
+        line-height: 25px;
+    }
+
+    .mainRow {
+        display: flex;
+
+        &__title {
+            padding-left: 20px;
+            font-size: 20px;
+            line-height: 25px;
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        button {
+            margin-right: 6px;
+
+            &.active {
+                color: #6200ea !important;
+            }
+        }
+    }
+
+    .checkboxElement {
+        margin: 0;
+        padding: 0;
+    }
 </style>

@@ -10,7 +10,7 @@
 					<v-btn text small class="nav_btn" to="/">На главную</v-btn>
 					<v-btn text small class="nav_btn" to="/site">Перечень сайтов</v-btn>
 					<v-btn text small @click="testNotif2" class="nav_btn">Notif fast</v-btn>
-					<v-btn text small @click="testNotif" class="nav_btn">Notif ok\no</v-btn>
+<!--					<v-btn text small @click="testNotif" class="nav_btn">Notif ok\no</v-btn>-->
 				</v-toolbar-items>
 			</v-toolbar>
 		</v-card>
@@ -36,7 +36,7 @@ export default {
   },
 	methods: {
         testNotif() {
-            this.$store.commit('addMessage', {
+            this.$store.commit('notifications/addMessage', {
                 name: 'Тест 1222222222222222222222222222\n2222222222222222222',
                 leftButton: 'Ok',
 				rightButton: 'No',
@@ -44,7 +44,7 @@ export default {
             })
         },
         testNotif2() {
-            this.$store.commit('addMessage', {
+            this.$store.commit('notifications/addMessage', {
                 name: 'Тест 2',
                 type: 'warning',
                 time: 1000,

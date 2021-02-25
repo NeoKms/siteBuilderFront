@@ -7,7 +7,6 @@
 
 <script>
     import siteList from './siteList/siteList'
-
     export default {
         name: "Site",
         components: {
