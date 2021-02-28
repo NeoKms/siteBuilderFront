@@ -60,7 +60,7 @@ export default {
 		text-decoration: none;
 	}
 	.main-body {
-		max-width: 960px;
+		max-width: 1161px;
 		text-align: center;
 		width: 100%;
 		background-color: #f5f5f5;
