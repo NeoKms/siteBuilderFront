@@ -10,7 +10,8 @@ const router = new Router({
         {
             path: '/site',
             name: 'site',
-            component: () => import("../components/pages/site/Site")
+            component: () => import("../components/pages/site/Site"),
+            meta: {requiresAuth: true, rights: {sites: 1}},
         },
         {
             path: '/',
@@ -22,30 +23,34 @@ const router = new Router({
             name: 'siteDetails',
             props: true,
             component: () => import("../components/pages/site/siteDetails/siteDetails"),
-            meta: {requiresAuth: true},
+            meta: {requiresAuth: true, rights: {sites: 1}},
             children: [
                 {
                     path: ":tabName",
                     name: "siteDescriptionView",
                     props: true,
+                    meta: {requiresAuth: true, rights: {sites: 1}},
                     component: () => import("../components/pages/site/siteDetails/siteView/siteDescriptionView"),
                 },
                 {
                     path: ":tabName",
                     name: "siteContentView",
                     props: true,
+                    meta: {requiresAuth: true, rights: {sites: 1}},
                     component: () => import("../components/pages/site/siteDetails/siteView/siteContentView"),
                 },
                 {
                     path: ":tabName/edit",
                     name: "siteDescriptionEdit",
                     props: true,
+                    meta: {requiresAuth: true, rights: {sites: 2}},
                     component: () => import("../components/pages/site/siteDetails/siteEditor/siteDescriptionEdit"),
                 },
                 {
                     path: ":tabName/edit",
                     name: "siteContentEdit",
                     props: true,
+                    meta: {requiresAuth: true, rights: {sites: 2}},
                     component: () => import("../components/pages/site/siteDetails/siteEditor/siteContentEdit"),
                 }
             ],
@@ -59,14 +64,24 @@ const router = new Router({
                 //         next({name: '404'})
                 //     }
                 // } else {
-                    next()
+                next()
                 // }
             }
         },
         {
             path: '/login',
             name: 'login',
-            component: () => import("../components/pages/login/loginForm")
+            component: () => import("../components/pages/login/loginForm"),
+            beforeEnter: (to, from, next) => {
+                store.dispatch('login/fetchCheckLogin')
+                    .then(isAuth => {
+                        if (isAuth) {
+                            next({name: 'home'})
+                        } else {
+                            next()
+                        }
+                    })
+            }
         },
         {
             path: '/404',
@@ -79,15 +94,36 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some( record => record.meta.requiresAuth)) {
-        if (!store.getters['login/getUserAuth']) {
-            next({
-                name: 'login',
-                query: {redirect: to.fullPath}
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        store.dispatch('login/fetchCheckLogin')
+            .then(isAuth => {
+                if (isAuth) {
+                    if (to.meta.rights) {
+                        let rights = store.getters['login/getUserRighst']
+                        let access = true
+                        for (let prop in to.meta.rights) {
+                            if (!rights[prop] || rights[prop] < to.meta.rights[prop]) {
+                                access = false
+                                break
+                            }
+                        }
+                        if (access) {
+                            next();
+                        } else {
+                            next({
+                                name: '404'
+                            })
+                        }
+                    } else {
+                        next();
+                    }
+                } else {
+                    next({
+                        name: 'login',
+                        query: {redirect: to.fullPath}
+                    })
+                }
             })
-        } else {
-            next()
-        }
     } else {
         next();
     }
