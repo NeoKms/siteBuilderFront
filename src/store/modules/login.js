@@ -1,4 +1,5 @@
-import axios from '../../plugins/axios'
+import axios from '@/plugins/axios'
+const {errRequestHandler} = require('@/plugins/errorResponser')
 
 export default {
     namespaced: true,
@@ -30,15 +31,10 @@ export default {
                         context.commit('login', respdata.result)
                         return true
                     } else {
-                        respdata.message==='error'?respdata.message=-1:''
-                        return respdata.message || -1
+                        return respdata.message || false
                     }
                 })
-                .catch(e => {
-                    console.log('err in fetchLogin')
-                    console.log(e)
-                    return -1
-                })
+                .catch(err => errRequestHandler(envConfig,err)); // eslint-disable-line
         },
         fetchCheckLogin(context) {
             return axios.get(envConfig.API_URL + '/auth/checklogin')// eslint-disable-line

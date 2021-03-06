@@ -32,7 +32,7 @@
 					sandbox="allow-scripts"
 					:width="this.iframe.width" :height="this.iframe.width" frameborder="1"
 			></iframe>
-			<img v-show="!iframe.loaded" src="/assets/img/loading.gif" width="200" alt="loading">
+			<img v-show="!iframe.loaded" src="@/assets/img/loading.gif" width="200" alt="loading">
 		</v-col>
 		<v-col cols="4" >
 			<v-expansion-panels accordion style="padding-right: 20px;" v-model="first">

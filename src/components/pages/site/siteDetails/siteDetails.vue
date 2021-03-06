@@ -1,36 +1,49 @@
 <template>
-	<v-container class="grey lighten-5"  v-if="loadSuccess">
-		<v-row>
-			<v-col cols="1">
-				<router-link :to="{name: 'site'}" icon>
-					<v-icon>mdi-keyboard-backspace</v-icon>
-				</router-link>
-			</v-col>
-			<v-col cols="11">
-				{{ siteName }} ({{ id }})
-			</v-col>
-		</v-row>
-		<v-row>
-			<v-tabs
-					background-color="#fafafa"
-					color="deep-purple accent-4"
-					left
-			>
-				<v-tab
-						v-for="(tab, index) in tabs" :key="index"
-						:to="{ name: tab.route, params: { tabName:  tab.name}}"
-				>
-					{{tab.label}}
-				</v-tab>
-			</v-tabs>
-		</v-row>
-		<v-row>
-			<router-view :key="this.$route.path" @editorOn="edit = true" @editorOff="edit = false"/>
-		</v-row>
-	</v-container>
+    <div>
+        <v-container class="grey lighten-5" v-if="!loading">
+            <v-row>
+                <v-col cols="1">
+                    <router-link :to="{name: 'site'}" icon>
+                        <v-icon>mdi-keyboard-backspace</v-icon>
+                    </router-link>
+                </v-col>
+                <v-col cols="11">
+                    {{ siteName }} ({{ id }})
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-tabs
+                        background-color="#fafafa"
+                        color="deep-purple accent-4"
+                        left
+                >
+                    <v-tab
+                            v-for="(tab, index) in tabs" :key="index"
+                            :to="{ name: tab.route, params: { tabName:  tab.name}}"
+                    >
+                        {{tab.label}}
+                    </v-tab>
+                </v-tabs>
+            </v-row>
+            <v-row>
+                <router-view :key="this.$route.path" @editorOn="edit = true" @editorOff="edit = false" />
+            </v-row>
+        </v-container>
+        <v-container v-if="loading">
+            <v-row justify="center">
+                <img src="@/assets/img/loading.gif" width="200" alt="loading">
+            </v-row>
+            <v-row justify="center">
+                Загрузка сайта...
+            </v-row>
+        </v-container>
+    </div>
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
+    import {errVueHandler} from '@/plugins/errorResponser'
+
     export default {
         name: "siteDetails",
         props: {
@@ -41,8 +54,7 @@
         },
         data() {
             return {
-                isLoading: false,
-                loadSuccess: false,
+                loading: true,
                 activeTab: 'description',
                 edit: false,
                 editTabs: {
@@ -57,14 +69,14 @@
                 }
             }
         },
-        mounted() {
+        async mounted() {
+            await this.loadData();
             this.setActiveTab()
-            this.loadData();
         },
         computed: {
-            siteData: function () {
-                return this.$store.getters['sites/getSiteById'](this.id)
-            },
+            ...mapGetters('sites', {
+                siteData: 'getSiteData',
+            }),
             siteName: function () {
                 return this.siteData.name
             },
@@ -87,20 +99,14 @@
             }
         },
         methods: {
-            async loadData() {
-                if (this.siteData === undefined) {
-                    try {
-                        this.isLoading = true;
-                        await this.$store.dispatch('sites/fetchSiteData', {id: this.id})
-                    } catch (e) {
-                        console.log(e);
-                    } finally {
-                        this.isLoading = false;
-                        this.loadSuccess = true;
-                    }
-                } else {
-                    this.loadSuccess = true;
-                }
+            loadData() {
+                return this.$store.dispatch('sites/fetchSiteData', {id: this.id})
+                    .then(res => {
+                        if (errVueHandler(this, res)) {
+                            this.loading = false
+                            //setTimeout(()=>this.loading = false,200)
+                        }
+                    })
             },
             setActiveTab() {
                 let {path} = this.$route;
@@ -137,17 +143,19 @@
 </script>
 
 <style scoped lang="scss">
-	.btn-cancel {
-		color: red !important;
-		i {
-			color: #ea0400 !important;
-		}
-	}
-	.btn-save {
-		color: #2946c6 !important;
-		i {
-			color: #2946c6 !important;
-		}
-	}
+    .btn-cancel {
+        color: red !important;
 
+        i {
+            color: #ea0400 !important;
+        }
+    }
+
+    .btn-save {
+        color: #2946c6 !important;
+
+        i {
+            color: #2946c6 !important;
+        }
+    }
 </style>

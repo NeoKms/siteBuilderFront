@@ -171,15 +171,15 @@
                                     @mouseleave="viewEdit = false"
                             >
                                 <v-img
-                                        v-show="siteForm.template.img"
+                                        v-show="siteForm.template.data.img"
                                         v-if="!viewEdit"
-                                        :src="siteForm.template.img"
+                                        :src="siteForm.template.data.img"
                                         width="250" height="155" contain
                                 />
                                 <span v-show="viewEdit">Выберите шаблон сайта</span>
                             </div>
-                            <div v-if="siteForm.template.img">
-                                {{siteForm.template.name}}
+                            <div v-if="siteForm.template.data.img">
+                                {{siteForm.template.data.name}}
                             </div>
                         </v-col>
                     </v-row>
@@ -195,6 +195,7 @@
     </v-container>
 </template>
 <script>
+    import {mapGetters} from 'vuex';
     import MtemplateChoose from './MtemplateChoose'
 
     export default {
@@ -217,38 +218,35 @@
             }
         },
         computed: {
+            ...mapGetters('sites', {
+                site: 'getSiteData',
+            }),
             selectedType: function () {
                 return this.siteForm.type.options.find(name => name.value === this.siteForm.type.value)
             },
-            site: function () {
-                return this.$store.getters.getCopyObj(this.$store.getters['sites/getSiteById'](this.id))
-            }
         },
         methods: {
             selectType(val) {
                 this.siteForm.type.value = val.value;
             },
             setChosenTmpl(id) {
-                this.siteForm.template.id = id
                 this.viewTemplates = false
-                this.siteForm.template = this.$store.getters.getCopyObj(this.$store.getters['sites/getTemplatById'](id))
+                let templateNow = this.$store.getters.getCopyObj(this.$store.getters['sites/getTemplateById'][id])
+                this.siteForm.template = {
+                    id: templateNow.id,
+                    data: templateNow,
+                }
             },
             editorCancel() {
-                this.$emit('editorCancel')
                 this.$router.push({name: 'siteDescriptionView', params: this.$router.history.current.params})
-                this.$emit('editorOff')
             },
             editorSave() {
-                this.$emit('editorSave')
                 this.$store.dispatch('sites/updateSiteData', this.siteForm)
-                //toDo сделать првоверку на значение
                 this.$router.push({name: 'siteDescriptionView', params: this.$router.history.current.params})
-                this.$emit('editorOff')
             }
         },
         created() {
-            this.siteForm = this.site;
-            this.$emit('editorOn')
+            this.siteForm =  this.$store.getters.getCopyObj(this.site);
         }
     }
 </script>
