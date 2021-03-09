@@ -14,13 +14,14 @@
                 <v-card dark align="center" elevation="7">
                     <v-img
                             class="white--text align-end"
-                            width="286px"
+                            width="300px"
                             :src="template.img"
                     />
                     <div>{{template.type_name}}</div>
                     <v-card-title
-                            class="headline"
+                            class="headline text-wrap"
                             v-text="template.name"
+
                     ></v-card-title>
                 </v-card>
             </v-col>

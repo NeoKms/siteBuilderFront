@@ -2,6 +2,7 @@ import axios from '@/plugins/axios'
 const {errRequestHandler} = require('@/plugins/errorResponser')
 
 export default {
+    name: 'login',
     namespaced: true,
     state: {
         user: {

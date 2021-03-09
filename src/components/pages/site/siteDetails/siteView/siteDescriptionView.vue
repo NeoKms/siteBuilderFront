@@ -116,14 +116,14 @@
                         <v-col>
                             <div class="template__img">
                                 <v-img
-                                        v-if="site.template.data.img"
-                                        :src="site.template.data.img"
+                                        v-if="site.template.img"
+                                        :src="site.template.img"
                                         width="250" height="155" contain
                                 />
                                 <span v-else>Выберите шаблон сайта</span>
                             </div>
-                            <div v-if="site.template.data.img">
-                                {{site.template.data.name}}
+                            <div v-if="site.template.img">
+                                {{site.template.name}}
                             </div>
                         </v-col>
                     </v-row>

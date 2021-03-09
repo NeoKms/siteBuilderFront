@@ -1,69 +1,72 @@
 <template>
-	<v-container>
-	<v-row>
-		<v-col cols="8">
-			<div class="mainRow">
-				<div class="mainRow__title">Предпросмотр</div>
-				<v-btn @click="changeFrameStyle(1)" :class="{active: this.iframe.now===1}">desktop</v-btn>
-				<v-btn @click="changeFrameStyle(2)" :class="{active: this.iframe.now===2}">tablet</v-btn>
-				<v-btn @click="changeFrameStyle(3)" :class="{active: this.iframe.now===3}">mobile</v-btn>
-			</div>
-		</v-col>
-		<v-col cols="4">
-			Страницы
-			<v-btn color="primary" fab x-small dark  :to="{ name: 'siteContentEdit', params: { tabName:  this.tabName}}">
-				<v-icon>mdi-pencil</v-icon>
-			</v-btn>
-		</v-col>
-	</v-row>
-	<v-row>
-		<v-col cols="8" class="iframe-column">
-			<iframe
-					class="iframe-scale"
-					name="main"
-					:style="{
+    <v-container>
+        <v-row>
+            <v-col cols="8">
+                <div class="mainRow">
+                    <div class="mainRow__title">Предпросмотр</div>
+                    <v-btn @click="changeFrameStyle(1)" :class="{active: this.iframe.now===1}">desktop</v-btn>
+                    <v-btn @click="changeFrameStyle(2)" :class="{active: this.iframe.now===2}">tablet</v-btn>
+                    <v-btn @click="changeFrameStyle(3)" :class="{active: this.iframe.now===3}">mobile</v-btn>
+                </div>
+            </v-col>
+            <v-col cols="4">
+                Страницы
+                <v-btn color="primary" fab x-small dark
+                       :to="{ name: 'siteContentEdit', params: { tabName:  this.tabName}}">
+                    <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="8" class="iframe-column">
+                <iframe
+                        class="iframe-scale"
+                        name="main"
+                        :style="{
 					'transform':'scale('+this.iframe.transform+')',
 					'margin-left':this.iframe.marginL+'px',
 					'margin-top':this.iframe.marginT+'px',
 					}"
-					:src="iframe.src"
-					@load="frameLoad"
-					v-show="iframe.loaded"
-					sandbox="allow-scripts"
-					:width="this.iframe.width" :height="this.iframe.width" frameborder="1"
-			></iframe>
-			<img v-show="!iframe.loaded" src="@/assets/img/loading.gif" width="200" alt="loading">
-		</v-col>
-		<v-col cols="4" >
-			<v-expansion-panels accordion style="padding-right: 20px;" v-model="first">
-				<template v-for="(elem, index) in sitePages">
-					<v-expansion-panel v-if="elem.active"
-									:key="index" class="siteLayout__collapse-item"
-									:name="elem.name">
-						<v-expansion-panel-header class="head_accordion" @click="changeFrame(elem.code)">
-                        {{elem.name}}
-						</v-expansion-panel-header>
-						<v-expansion-panel-content class="acc_content">
-						<ul v-for="(elem2, index2) in elem.blockList" :key="index2">
-							<li class="block_head">
-								{{elem2.name}}
-							</li>
-							<li>
-								<ul v-for="(elem3, index3) in elem2.elements" :key="index3">
-									<li	v-if="elem3.active">{{elem3.name}}</li>
-								</ul>
-							</li>
-						</ul>
-						</v-expansion-panel-content>
-					</v-expansion-panel>
-				</template>
-			</v-expansion-panels>
-		</v-col>
-	</v-row>
-	</v-container>
+                        :src="iframe.src"
+                        @load="frameLoad"
+                        v-show="iframe.loaded"
+                        sandbox="allow-scripts"
+                        :width="this.iframe.width" :height="this.iframe.width" frameborder="1"
+                ></iframe>
+                <img v-show="!iframe.loaded" src="@/assets/img/loading.gif" width="200" alt="loading">
+            </v-col>
+            <v-col cols="4">
+                <v-expansion-panels accordion style="padding-right: 20px;" v-model="first">
+                    <template v-for="(elem, index) in sitePages">
+                        <v-expansion-panel v-if="elem.active"
+                                           :key="index" class="siteLayout__collapse-item"
+                                           :name="elem.name">
+                            <v-expansion-panel-header class="head_accordion" @click="changeFrame(elem.code)">
+                                {{elem.name}}
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content class="acc_content">
+                                <ul v-for="(elem2, index2) in elem.blockList" :key="index2">
+                                    <li class="block_head">
+                                        {{elem2.name}}
+                                    </li>
+                                    <li>
+                                        <ul v-for="(elem3, index3) in elem2.elements" :key="index3">
+                                            <li v-if="elem3.active">{{elem3.name}}</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                    </template>
+                </v-expansion-panels>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
+
     export default {
         data() {
             return {
@@ -117,9 +120,9 @@
             }
         },
         computed: {
-            site: function () {
-                return this.$store.getters['sites/getSiteById'](this.id)
-            },
+            ...mapGetters('sites', {
+                site: 'getSiteData',
+            }),
             sitePages() {
                 return this.site.template.pages;
             },
@@ -165,38 +168,45 @@
 </script>
 
 <style scoped lang="scss">
-	.block_head {
-		font-size: 16px;
-		line-height: 24px;
-		padding-left: 4px;
-		border-left: 2px solid #2946c6;
-	}
-	ul, li {
-		text-align: left;
-		list-style-type: none;
-	}
-	.acc_content {
-		margin-top: 5px;
-	}
-	.head_accordion {
-		box-shadow: 0 0 1px rgba(0,0,0,0.5);
-		font-size: 20px;
-		line-height: 25px;
-	}
-	.mainRow {
-		display: flex;
-		&__title {
-			padding-left: 20px;
-			font-size: 20px;
-			line-height: 25px;
-			flex-grow: 1;
-			text-align: left;
-		}
-		button {
-			margin-right: 6px;
-			&.active {
-				color: #6200ea !important;
-			}
-		}
-	}
+    .block_head {
+        font-size: 16px;
+        line-height: 24px;
+        padding-left: 4px;
+        border-left: 2px solid #2946c6;
+    }
+
+    ul, li {
+        text-align: left;
+        list-style-type: none;
+    }
+
+    .acc_content {
+        margin-top: 5px;
+    }
+
+    .head_accordion {
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+        font-size: 20px;
+        line-height: 25px;
+    }
+
+    .mainRow {
+        display: flex;
+
+        &__title {
+            padding-left: 20px;
+            font-size: 20px;
+            line-height: 25px;
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        button {
+            margin-right: 6px;
+
+            &.active {
+                color: #6200ea !important;
+            }
+        }
+    }
 </style>

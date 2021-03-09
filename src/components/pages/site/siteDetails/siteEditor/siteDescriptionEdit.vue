@@ -171,15 +171,15 @@
                                     @mouseleave="viewEdit = false"
                             >
                                 <v-img
-                                        v-show="siteForm.template.data.img"
+                                        v-show="siteForm.template.img"
                                         v-if="!viewEdit"
-                                        :src="siteForm.template.data.img"
+                                        :src="siteForm.template.img"
                                         width="250" height="155" contain
                                 />
                                 <span v-show="viewEdit">Выберите шаблон сайта</span>
                             </div>
-                            <div v-if="siteForm.template.data.img">
-                                {{siteForm.template.data.name}}
+                            <div v-if="siteForm.template.img">
+                                {{siteForm.template.name}}
                             </div>
                         </v-col>
                     </v-row>
@@ -188,7 +188,7 @@
         </v-row>
         <v-dialog
                 v-model="viewTemplates"
-                max-width="900"
+                max-width="920"
         >
             <MtemplateChoose :viewTemplates="viewTemplates" @setChosenTmpl="setChosenTmpl" />
         </v-dialog>
@@ -232,10 +232,7 @@
             setChosenTmpl(id) {
                 this.viewTemplates = false
                 let templateNow = this.$store.getters.getCopyObj(this.$store.getters['sites/getTemplateById'][id])
-                this.siteForm.template = {
-                    id: templateNow.id,
-                    data: templateNow,
-                }
+                this.siteForm.template = templateNow
             },
             editorCancel() {
                 this.$router.push({name: 'siteDescriptionView', params: this.$router.history.current.params})
@@ -247,6 +244,8 @@
         },
         created() {
             this.siteForm =  this.$store.getters.getCopyObj(this.site);
+            this.$store.dispatch('objects/fetchObjectList')
+            this.$store.dispatch('liters/fetchLiterList')
         }
     }
 </script>

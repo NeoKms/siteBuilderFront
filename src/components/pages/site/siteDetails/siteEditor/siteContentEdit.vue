@@ -1,6 +1,26 @@
 <template>
     <v-container>
         <v-row>
+            <v-col cols="1" class="ct-c">
+                <v-btn
+                        small class="btn-save"
+                        @click="editorSave"
+                >
+                    <v-icon left>mdi-content-save</v-icon>
+                    Save
+                </v-btn>
+            </v-col>
+            <v-col cols="1" class="ct-c">
+                <v-btn
+                        small class="btn-cancel"
+                        @click="editorCancel"
+                >
+                    <v-icon left>mdi-close-circle</v-icon>
+                    Cancel
+                </v-btn>
+            </v-col>
+        </v-row>
+        <v-row>
             <v-col cols="8">
                 <template v-if="pageValue">
                     <v-form label-position="top">
@@ -110,6 +130,7 @@
     import BlockTextareaImage from './SiteConstructor/BlocksTextareaImage.vue';
     import DataPickerSimple from './SiteConstructor/DataPickerSimple.vue';
     import SwitchSimple from './SiteConstructor/SwitchSimple';
+    import {mapGetters} from 'vuex';
 
     export default {
         name: "siteContentEdit",
@@ -200,6 +221,9 @@
             }
         },
         computed: {
+            ...mapGetters('sites', {
+                site: 'getSiteData',
+            }),
             sitePages() {
                 return this.siteForm.template.pages;
             },
@@ -225,14 +249,37 @@
                     return elem1.order - elem2.order;
                 });
             },
+            editorCancel() {
+                this.$router.push({name: 'siteContentView', params: this.$router.history.current.params})
+            },
+            editorSave() {
+                this.$store.dispatch('sites/updateSiteData', this.siteForm)
+                this.$router.push({name: 'siteContentView', params: this.$router.history.current.params})
+            }
         },
         created() {
-            this.siteForm = this.$store.getters.getCopyObj(this.$store.getters['sites/getSiteById'](this.id))
+            this.siteForm = this.$store.getters.getCopyObj(this.site)
+            this.siteForm.contentUpdate = true
         }
     }
 </script>
 
 <style lang="scss" scoped>
+    .btn-cancel {
+        color: red !important;
+
+        i {
+            color: #ea0400 !important;
+        }
+    }
+
+    .btn-save {
+        color: #2946c6 !important;
+
+        i {
+            color: #2946c6 !important;
+        }
+    }
     .block_head {
         font-size: 16px;
         line-height: 24px;

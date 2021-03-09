@@ -2,12 +2,12 @@ import axios from '@/plugins/axios'
 const {errRequestHandler} = require('@/plugins/errorResponser')
 
 export default {
+    name: 'sites',
     namespaced: true,
     state: {
         siteList: [],
         siteData: false,
         templatesList: [],
-
         imageDataList: [],
     },
     getters: {
@@ -41,14 +41,25 @@ export default {
             state.siteList = data
         },
         setSiteData(state, data) {
+            if ('img' in data) {
+                data.img = reinitImg(data.img)
+            }
+            if (data.template && data.template.img) {
+                data.template.img = reinitImg(data.template.img)
+            }
             state.siteData = data
         },
         setTemplateList(state,data) {
+            data = data.map (el => {
+                if ('img' in el) {
+                    el.img = reinitImg(el.img)
+                }
+                return el
+            })
             state.templatesList = data
         },
-
-
         setImageList(state, data) {
+            data = data.map(el => reinitImg(el))
             state.imageDataList = data;
         }
     },
@@ -107,13 +118,9 @@ export default {
                     }
                 })
                 .catch(err => errRequestHandler(envConfig,err)); // eslint-disable-line no-undef
-            //context.commit('setSiteData', {ind: ind, data: payload})
         },
-
-
-
         fetchImageList(context) {
-            return axios.get('https://jrgreez.ru/examples/listphoto.php')
+            return axios.get(`${envConfig.API_URL}/templates/images`)// eslint-disable-line no-undef
                 .then(res => {
                     if (res.data && res.data.message === 'ok') {
                         context.commit('setImageList', res.data.result)
@@ -122,20 +129,13 @@ export default {
                         return false
                     }
                 })
-                .catch(err => {
-                    // eslint-disable-next-line no-undef
-                    if (envConfig.NODE_ENV!=='production'){
-                        console.error(err)
-                    }
-                    if (err.response.status===400) {
-                        return err.response.data.error
-                    } else if (err.response.status===401) {
-                        return -1
-                    } else if (err.response.status===403) {
-                        return 404
-                    }
-                    return ''
-                });
+                .catch(err => errRequestHandler(envConfig,err));// eslint-disable-line no-undef
         },
     },
 };
+function reinitImg(url) {
+    if (url.indexOf('http')===-1) {
+        url = `${envConfig.API_URL}/${url}` // eslint-disable-line no-undef
+    }
+    return url
+}
