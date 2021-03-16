@@ -7,8 +7,14 @@
                         <v-icon>mdi-keyboard-backspace</v-icon>
                     </router-link>
                 </v-col>
-                <v-col cols="11">
+                <v-col cols="8">
                     {{ siteName }} ({{ id }})
+                </v-col>
+                <v-col cols="3">
+                    <v-btn :disabled="editor" small v-if="siteData.processing" color="warning">В процессе публикации</v-btn>
+                    <v-btn :disabled="editor"  small v-if="!!siteData.active" color="error">Снять с публикации</v-btn>
+                    <v-btn :disabled="editor"  small v-else-if="cannotPublish" color="error" v-tooltip.auto="publishErrors.join('</br>')">Невозможно опубликовать</v-btn>
+                    <v-btn :disabled="editor"  small v-else color="green">Отправить на публикацию</v-btn>
                 </v-col>
             </v-row>
             <v-row>
@@ -26,7 +32,7 @@
                 </v-tabs>
             </v-row>
             <v-row>
-                <router-view :key="this.$route.path" @editorOn="edit = true" @editorOff="edit = false" />
+                <router-view :key="this.$route.path" />
             </v-row>
         </v-container>
         <v-container v-if="loading">
@@ -55,6 +61,7 @@
         data() {
             return {
                 loading: true,
+                editor: false,
                 activeTab: 'description',
                 edit: false,
                 editTabs: {
@@ -96,6 +103,33 @@
                     }
                 }
                 return tabs
+            },
+            publishErrors: function () {
+                let arr = []
+                if (!this.siteData.address) {
+                    arr.push("Не выбран адрес (домен)")
+                }
+                if (this.siteData.type.value<1) {
+                    arr.push("Не выбран тип")
+                }
+                if (this.siteData.template.id<1) {
+                    arr.push("Не выбран шаблон")
+                }
+                if (!this.siteData.publications.length) {
+                    arr.push("Не выбраны публикации")
+                }
+                if (!this.contactsChecked) {
+                    arr.push("Не заполнены контактные данные")
+                }
+                return arr
+            },
+            contactsChecked: function() {
+                let c = this.siteData.contacts
+                return !!c.city && !!c.coordinate.x && !!c.coordinate.y && !!c.emailFeedback && !!c.emailMain && !!c.index && !!c.litera && !!c.street && !!c.city && !!c.doubleMailing
+                    && !!c.house && !!c.phone && !!c.title
+            },
+            cannotPublish: function () {
+                return !!this.publishErrors.length
             }
         },
         methods: {
@@ -138,6 +172,14 @@
                     })
                 }
             },
+        },
+        created() {
+            this.$eventBus.$on('editorOn', () => {
+                this.editor = true
+            })
+            this.$eventBus.$on('editorOff', () => {
+                this.editor = false
+            })
         }
     }
 </script>

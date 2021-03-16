@@ -182,6 +182,9 @@
                 dataset: 'getPublicationList',
             }),
         },
+        mounted() {
+            this.$eventBus.$emit('editorOff')
+        },
         created() {
             if (this.site.publications.length) {
                 this.$store.dispatch('publications/fetchPublicationList', {

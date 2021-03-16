@@ -263,6 +263,9 @@
                 })
             }
         },
+        mounted() {
+            this.$eventBus.$emit('editorOn')
+        },
         created() {
             this.siteForm = this.$store.getters.getCopyObj(this.site)
             this.siteForm.contentUpdate = true

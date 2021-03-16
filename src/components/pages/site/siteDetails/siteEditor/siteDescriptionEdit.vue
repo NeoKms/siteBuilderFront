@@ -271,6 +271,9 @@
                     })
             }
         },
+        mounted() {
+            this.$eventBus.$emit('editorOn')
+        },
         created() {
             this.siteForm = this.$store.getters.getCopyObj(this.site);
             this.$store.dispatch('objects/fetchObjectList').then(res => errVueHandler(this,res))

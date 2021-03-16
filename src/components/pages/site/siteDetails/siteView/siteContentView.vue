@@ -163,7 +163,10 @@
                         break
                 }
             }
-        }
+        },
+        mounted() {
+            this.$eventBus.$emit('editorOff')
+        },
     }
 </script>
 
