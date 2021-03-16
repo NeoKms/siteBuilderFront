@@ -1,35 +1,36 @@
 <template>
-    <div>
-        <div v-if="!loading" class="siteContainer">
-            <div class="siteCard"
-                 v-for="(site, index) in siteList"
-                 :key="index"
-                 :class="{active: site.active}"
-                 @click="goToDetails(site.id)"
-            >
-                <div v-if="site.img" class="siteCard__img" :style="{ backgroundImage: 'url('+site.img+')'}"></div>
-                <div v-if="!site.img" class="siteCard__img" style="background-image: url('assets/img/none.png')"></div>
-                <div class="siteCard__info">
-                    <div class="title">
-                        <div class="title__type">{{ site.type.options.find( name => name.value === site.type.value).label }}
+    <v-container>
+        <v-row dense>
+            <div v-if="!loading" class="siteContainer">
+                <div class="siteCard"
+                     v-for="(site, index) in siteList"
+                     :key="index"
+                     :class="{active: site.active}"
+                     @click="goToDetails(site.id)"
+                >
+                    <div v-if="site.img" class="siteCard__img" :style="{ backgroundImage: 'url('+site.img+')'}"></div>
+                    <div v-if="!site.img" class="siteCard__img" :style="`background-image: url('${noneimg}')`"></div>
+                    <div class="siteCard__info">
+                        <div class="title">
+                            <div class="title__type">{{ (site.type.options.find( name => name.value === site.type.value)
+                                                     || {label:"--//--"}).label }}
+                            </div>
+                            <div class="title__active" :class="{active: site.active}"></div>
                         </div>
-                        <div class="title__active" :class="{active: site.active}"></div>
-                    </div>
-                    <div class="name">{{ site.name }}</div>
-                    <div class="address">https://{{ site.address }}</div>
-                    <div class="footer">
-                        <div>&nbsp;</div>
-                        <div class="popover">
-                            <div class="popover__dot"></div>
-                            <div class="popover__dot"></div>
-                            <div class="popover__dot"></div>
+                        <div class="name">{{ site.name }}</div>
+                        <div class="address">https://{{ site.address }}</div>
+                        <div class="footer">
+                            <v-spacer />
+                            <v-btn icon color="error" @click.stop="delSite(site)">
+                                <v-icon>mdi-close-thick</v-icon>
+                            </v-btn>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <img v-if="loading" src="@/assets/img/loading.gif" width="200" alt="loading">
-    </div>
+            <img v-if="loading" src="@/assets/img/loading.gif" width="200" alt="loading">
+        </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -42,15 +43,11 @@
             return {
                 currentSiteId: 0,
                 loading: true,
+                noneimg: require('@/assets/img/none.png'),
             }
         },
         created() {
-            this.$store.dispatch('sites/fetchSiteList')
-                .then(res => {
-                    if (errVueHandler(this,res)) {
-                        this.loading = false
-                    }
-                })
+            this.apiCall()
         },
         computed: {
             ...mapGetters('sites', {
@@ -58,6 +55,27 @@
             }),
         },
         methods: {
+            apiCall: function () {
+                this.$store.dispatch('sites/fetchSiteList')
+                    .then(res => {
+                        if (errVueHandler(this, res)) {
+                            this.loading = false
+                        }
+                    })
+            },
+            delSite: function (site) {
+                let confim = confirm(`Вы уверены, что хотите удалить сайт ${site.name}?`)
+                if (confim) {
+                    this.$store.dispatch('sites/delSite', {id: site.id}).then(res => {
+                        if (errVueHandler(this, res)) {
+                            this.apiCall()
+                            this.$store.commit('notifications/addMessage', {
+                                name: `Сайт ${site.name} успешно удален`,
+                            })
+                        }
+                    })
+                }
+            },
             goToDetails: function (id) {
                 this.$router.push({name: 'siteDetails', params: {id: String(id)}})
             },

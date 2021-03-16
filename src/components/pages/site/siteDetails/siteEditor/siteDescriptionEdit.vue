@@ -25,16 +25,16 @@
                                 Cancel
                             </v-btn>
                         </v-col>
-                        <v-col align="right" cols="6">
-                            <v-row>
-                                <v-col align="right" class="ct-c">
-                                </v-col>
-                                <v-col align="left" class="ct-c">
-                                    <v-switch v-model="siteForm.active"
-                                              :label="siteForm.active?'Активный':'Не активый'"></v-switch>
-                                </v-col>
-                            </v-row>
-                        </v-col>
+<!--                        <v-col align="right" cols="6">-->
+<!--                            <v-row>-->
+<!--                                <v-col align="right" class="ct-c">-->
+<!--                                </v-col>-->
+<!--                                <v-col align="left" class="ct-c">-->
+<!--                                    <v-switch v-model="siteForm.active"-->
+<!--                                              :label="siteForm.active?'Активный':'Не активый'"></v-switch>-->
+<!--                                </v-col>-->
+<!--                            </v-row>-->
+<!--                        </v-col>-->
                     </v-row>
                     <v-row>
                         <v-col>
@@ -65,6 +65,7 @@
                                                 @input="selectType"
                                                 persistent-hint
                                                 return-object
+                                                :error-messages="typeiderr"
                                                 single-line
                                         ></v-select>
                                     </td>
@@ -198,7 +199,6 @@
         >
             <MtemplateChoose :viewTemplates="viewTemplates" @setChosenTmpl="setChosenTmpl" />
         </v-dialog>
-        {{siteForm.publications}}
     </v-container>
 </template>
 <script>
@@ -220,6 +220,7 @@
                 viewTemplates: false,
                 viewEdit: false,
                 siteForm: {},
+                typeiderr: []
             }
         },
         props: {
@@ -257,6 +258,10 @@
                 this.$router.push({name: 'siteDescriptionView', params: this.$router.history.current.params})
             },
             editorSave() {
+                if (this.siteForm.type.value<0) {
+                    this.typeiderr = ['Выберите тип сайта']
+                    return;
+                }
                 this.$store.dispatch('sites/updateSiteData', this.siteForm)
                     .then(res => {
                         if (errVueHandler(this, res)) {

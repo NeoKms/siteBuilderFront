@@ -1,5 +1,5 @@
 <template>
-    <v-container class="grey lighten-5" v-if="site">
+    <v-container v-if="site">
         <v-row align-content="center">
             <v-col cols="8">
                 <v-container class="description">
@@ -16,7 +16,7 @@
                                 <v-col align="right" class="ct-c">
                                     <div class="mark" :class="{yes: site.active}"></div>
                                 </v-col>
-                                <v-col align="left" class="ct-c">{{site.active?'Активный':'Не активый'}}</v-col>
+                                <v-col align="left" class="ct-c">{{site.active?'Опубликован':'Не опубликован'}}</v-col>
                             </v-row>
                         </v-col>
                     </v-row>
@@ -33,7 +33,7 @@
                                 </tr>
                                 <tr>
                                     <td class="left">Тип</td>
-                                    <td>{{site.type.options.find( name => name.value === site.type.value ).label}}</td>
+                                    <td>{{(site.type.options.find( name => name.value === site.type.value )||{label:'--||--'}).label}}</td>
                                 </tr>
                                 <tr>
                                     <td class="left">Описание</td>

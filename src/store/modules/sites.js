@@ -136,6 +136,29 @@ export default {
                 })
                 .catch(err => errRequestHandler(envConfig,err));// eslint-disable-line no-undef
         },
+        setNewSite(context,payload) {
+            return axios.post(`${envConfig.API_URL}/sites`,payload)// eslint-disable-line no-undef
+                .then(res => {
+                    if (res.data && res.data.message === 'ok') {
+                        context.commit('setSiteData', res.data.result)
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                .catch(err => errRequestHandler(envConfig,err));// eslint-disable-line no-undef
+        },
+        delSite(context,payload) {
+            return axios.delete(`${envConfig.API_URL}/sites/${payload.id}`)// eslint-disable-line no-undef
+                .then(res => {
+                    if (res.data && res.data.message === 'ok') {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                .catch(err => errRequestHandler(envConfig,err));// eslint-disable-line no-undef
+        },
     },
 };
 function reinitImg(url) {
