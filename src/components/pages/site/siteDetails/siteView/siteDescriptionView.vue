@@ -42,6 +42,21 @@
                             </table>
                         </v-col>
                     </v-row>
+                    <v-row class="title">
+                        Публикации
+                    </v-row>
+                    <v-row style="margin-top: 10px">
+                        <v-data-table
+                                :loading="loading"
+                                dense
+                                :items="dataset"
+                                :headers="headers"
+                        >
+                            <template v-slot:no-data>
+                                У данного сайта нет пбуликаций
+                            </template>
+                        </v-data-table>
+                    </v-row>
                 </v-container>
             </v-col>
             <v-col cols="4">
@@ -134,6 +149,7 @@
 </template>
 <script>
     import {mapGetters} from 'vuex';
+    import {errVueHandler} from '@/plugins/errorResponser'
 
     export default {
         name: "siteDescriptionView",
@@ -147,10 +163,38 @@
                 required: true
             }
         },
+        data() {
+            return {
+                loading: true,
+                headers: [
+                    {text: 'Код', value: 'name'},
+                    {text: 'Площадь', value: 'sqr'},
+                    {text: 'Ставка', value: 'rate'},
+                    {text: 'Назначение', value: 'destination'},
+                ]
+            }
+        },
         computed: {
             ...mapGetters('sites', {
                 site: 'getSiteData',
             }),
+            ...mapGetters('publications', {
+                dataset: 'getPublicationList',
+            }),
+        },
+        created() {
+            if (this.site.publications.length) {
+                this.$store.dispatch('publications/fetchPublicationList', {
+                    ids: this.site.publications.map(el => el.id)
+                })
+                    .then(res => {
+                        errVueHandler(this, res)
+                        this.loading = false
+                    })
+            } else {
+                this.loading = false
+                this.$store.commit('publications/setPublicationList',[])
+            }
         }
     }
 </script>

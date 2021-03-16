@@ -9,6 +9,8 @@ export default {
         siteData: false,
         templatesList: [],
         imageDataList: [],
+        domains: ['s1.jrgreez.ru','s2.jrgreez.ru','s3.jrgreez.ru','s4.jrgreez.ru'],
+        permittedDomains: []
     },
     getters: {
         getSiteList(state) {
@@ -20,7 +22,6 @@ export default {
         getTemplatesList(state) {
             return state.templatesList;
         },
-
         getSiteByIdInd: state => id => {
             return state.sitesDataList.findIndex(siteData => Number(siteData.id) === Number(id));
         },
@@ -31,13 +32,17 @@ export default {
             out[item.id] = item
             return out
         }, {}),
-
         getImageList(state) {
             return state.imageDataList;
+        },
+        getPermittedDomains(state) {
+            return state.permittedDomains;
         },
     },
     mutations: {
         setSiteList(state, data) {
+            let existDomains = data.filter(el=>el.active===1).map(el=>el.address)
+            state.permittedDomains = state.domains.filter(el=>!existDomains.includes(el))
             state.siteList = data
         },
         setSiteData(state, data) {

@@ -26,7 +26,8 @@
                     <v-form label-position="top">
                         <v-expansion-panels accordion v-model="activeDataInd">
                             <template v-for="(elem, index) in pageValue.blockList">
-                                <v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item" v-if="elem.active">
+                                <v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item"
+                                                   v-if="elem.active">
                                     <v-expansion-panel-header class="head_accordion siteLayout__collapse-header">
                                         {{elem.name}}
                                     </v-expansion-panel-header>
@@ -60,14 +61,14 @@
                     <template v-for="(elem, index) in this.siteForm.template.pages">
                         <v-expansion-panel :key="index" :name="elem.name" class="siteLayout__collapse-item">
                             <v-expansion-panel-header @click="changeFrame(elem.name)" class="head_accordion">
-                               <v-row no-gutters>
-                                   <v-switch
-                                           style="margin-top: -2px"
-                                           dense hide-details
-                                           v-model="siteForm.template.pages[index].active"
-                                           v-if="!elem.require"
-                                   ></v-switch>
-                               </v-row>
+                                <v-row no-gutters>
+                                    <v-switch
+                                            style="margin-top: -2px"
+                                            dense hide-details
+                                            v-model="siteForm.template.pages[index].active"
+                                            v-if="!elem.require"
+                                    ></v-switch>
+                                </v-row>
                                 {{elem.name}}
                             </v-expansion-panel-header>
                             <v-expansion-panel-content class="acc_content">
@@ -131,6 +132,7 @@
     import DataPickerSimple from './SiteConstructor/DataPickerSimple.vue';
     import SwitchSimple from './SiteConstructor/SwitchSimple';
     import {mapGetters} from 'vuex';
+    import {errVueHandler} from '@/plugins/errorResponser'
 
     export default {
         name: "siteContentEdit",
@@ -253,8 +255,12 @@
                 this.$router.push({name: 'siteContentView', params: this.$router.history.current.params})
             },
             editorSave() {
-                this.$store.dispatch('sites/updateSiteData', this.siteForm)
-                this.$router.push({name: 'siteContentView', params: this.$router.history.current.params})
+                this.$store.dispatch('sites/updateSiteData', this.siteForm).then(res => {
+                    if (errVueHandler(this, res)) {
+                        this.$store.commit('notifications/addMessage', {name: 'Успешно сохранено'})
+                        this.$router.push({name: 'siteContentView', params: this.$router.history.current.params})
+                    }
+                })
             }
         },
         created() {
@@ -280,6 +286,7 @@
             color: #2946c6 !important;
         }
     }
+
     .block_head {
         font-size: 16px;
         line-height: 24px;

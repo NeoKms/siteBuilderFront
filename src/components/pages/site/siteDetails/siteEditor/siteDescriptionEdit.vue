@@ -48,7 +48,10 @@
                                 <tr>
                                     <td class="left">Адрес</td>
                                     <td>
-                                        <v-text-field v-model="siteForm.address"></v-text-field>
+                                        <v-select
+                                                v-model="siteForm.address"
+                                                :items="permittedDomains"
+                                        ></v-select>
                                     </td>
                                 </tr>
                                 <tr>
@@ -77,6 +80,9 @@
                                 </tr>
                             </table>
                         </v-col>
+                    </v-row>
+                    <v-row>
+                        <PublicationsTable v-if="siteForm.id" @newSelected="addNewSelected" />
                     </v-row>
                 </v-container>
             </v-col>
@@ -192,16 +198,21 @@
         >
             <MtemplateChoose :viewTemplates="viewTemplates" @setChosenTmpl="setChosenTmpl" />
         </v-dialog>
+        {{siteForm.publications}}
     </v-container>
 </template>
 <script>
     import {mapGetters} from 'vuex';
     import MtemplateChoose from './MtemplateChoose'
+    import PublicationsTable from './PublicationsTable'
+    import {errVueHandler} from '@/plugins/errorResponser'
+
 
     export default {
         name: "siteDescriptionEdit",
         components: {
             MtemplateChoose,
+            PublicationsTable,
         },
         data() {
             return {
@@ -220,12 +231,20 @@
         computed: {
             ...mapGetters('sites', {
                 site: 'getSiteData',
+                permittedDomains: 'getPermittedDomains',
             }),
             selectedType: function () {
                 return this.siteForm.type.options.find(name => name.value === this.siteForm.type.value)
             },
         },
         methods: {
+            addNewSelected(val) {
+                if (val.value) {
+                    this.siteForm.publications.push({id: val.item.id})
+                } else {
+                    this.siteForm.publications.splice(this.siteForm.publications.findIndex(el => el.id === val.item.id), 1)
+                }
+            },
             selectType(val) {
                 this.siteForm.type.value = val.value;
             },
@@ -239,13 +258,21 @@
             },
             editorSave() {
                 this.$store.dispatch('sites/updateSiteData', this.siteForm)
-                this.$router.push({name: 'siteDescriptionView', params: this.$router.history.current.params})
+                    .then(res => {
+                        if (errVueHandler(this, res)) {
+                            this.$store.commit('notifications/addMessage', {name: 'Успешно сохранено'})
+                            this.$router.push({name: 'siteDescriptionView', params: this.$router.history.current.params})
+                        }
+                    })
             }
         },
         created() {
-            this.siteForm =  this.$store.getters.getCopyObj(this.site);
-            this.$store.dispatch('objects/fetchObjectList')
-            this.$store.dispatch('liters/fetchLiterList')
+            this.siteForm = this.$store.getters.getCopyObj(this.site);
+            this.$store.dispatch('objects/fetchObjectList').then(res => errVueHandler(this,res))
+            this.$store.dispatch('liters/fetchLiterList').then(res => errVueHandler(this,res))
+            if (!this.permittedDomains.length) {
+                this.$store.dispatch('sites/fetchSiteList').then(res => errVueHandler(this,res))
+            }
         }
     }
 </script>
