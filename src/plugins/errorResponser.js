@@ -1,5 +1,5 @@
 module.exports = {
-    errVueHandler: (self,res) => {
+    errVueHandler: (self,res, customError) => {
         if (res === true) {
             return true
         }
@@ -14,7 +14,7 @@ module.exports = {
             })
         } else {
             self.$store.commit('notifications/addMessage', {
-                name: res === '' || res === false ? 'Неизвестная ошибка' : res,
+                name: customError ? customError : (res === '' || res === false ? 'Неизвестная ошибка' : (Array.isArray(res)) ? res.join('\n') : res),
                 type: 'error',
                 time: 3000,
             })

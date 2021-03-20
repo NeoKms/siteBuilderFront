@@ -7,14 +7,17 @@
                         <v-icon>mdi-keyboard-backspace</v-icon>
                     </router-link>
                 </v-col>
-                <v-col cols="8">
+                <v-col cols="7">
                     {{ siteName }} ({{ id }})
                 </v-col>
-                <v-col cols="3">
-                    <v-btn :disabled="editor" small v-if="siteData.processing" color="warning">В процессе публикации</v-btn>
-                    <v-btn :disabled="editor"  small v-if="!!siteData.active" color="error">Снять с публикации</v-btn>
-                    <v-btn :disabled="editor"  small v-else-if="cannotPublish" color="error" v-tooltip.auto="publishErrors.join('</br>')">Невозможно опубликовать</v-btn>
-                    <v-btn :disabled="editor"  small v-else color="green">Отправить на публикацию</v-btn>
+                <v-col cols="4">
+                    <v-btn :disabled="editor" small  v-if="siteData.processing" color="warning">
+                        В процессе {{siteData.processing===1 ? 'публикации' : 'снятия с публикации'}}
+                        <v-btn :disabled="editor" small  color="info" loading="true" icon>loading</v-btn>
+                    </v-btn>
+                    <v-btn :disabled="editor" small v-else-if="!!siteData.active" color="error" @click="unPublish">Снять с публикации</v-btn>
+                    <v-btn :disabled="editor" small v-else-if="cannotPublish" color="error" v-tooltip.auto="publishErrors.join('</br>')">Невозможно опубликовать</v-btn>
+                    <v-btn :disabled="editor" small v-else color="green" @click="Publish">Отправить на публикацию</v-btn>
                 </v-col>
             </v-row>
             <v-row>
@@ -78,11 +81,15 @@
         },
         async mounted() {
             await this.loadData();
+            if (!this.siteList.length) {
+                this.$store.dispatch('sites/fetchSiteList').then(res => errVueHandler(this, res))
+            }
             this.setActiveTab()
         },
         computed: {
             ...mapGetters('sites', {
                 siteData: 'getSiteData',
+                siteList: 'getSiteList',
             }),
             siteName: function () {
                 return this.siteData.name
@@ -106,6 +113,9 @@
             },
             publishErrors: function () {
                 let arr = []
+                if (!this.siteList.length || this.siteList.find(el=>el.address===this.siteData.address && el.active)) {
+                    arr.push("Данный домен уже опубликован.")
+                }
                 if (!this.siteData.address) {
                     arr.push("Не выбран адрес (домен)")
                 }
@@ -138,7 +148,6 @@
                     .then(res => {
                         if (errVueHandler(this, res)) {
                             this.loading = false
-                            //setTimeout(()=>this.loading = false,200)
                         }
                     })
             },
@@ -172,6 +181,28 @@
                     })
                 }
             },
+            Publish() {
+                this.$store.dispatch('sites/publishSite', {id: this.id})
+                    .then(res => {
+                        if (errVueHandler(this, res)) {
+                            this.siteData.processing = 1
+                            this.$store.commit('notifications/addMessage', {
+                                name: 'Сайт успешно отправлен на публикацию',
+                            })
+                        }
+                    })
+            },
+            unPublish() {
+                this.$store.dispatch('sites/unPublishSite', {id: this.id})
+                    .then(res => {
+                        if (errVueHandler(this, res)) {
+                            this.siteData.processing = 2
+                            this.$store.commit('notifications/addMessage', {
+                                name: 'Сайт успешно отправлен на снятие с публикации',
+                            })
+                        }
+                    })
+            }
         },
         created() {
             this.$eventBus.$on('editorOn', () => {

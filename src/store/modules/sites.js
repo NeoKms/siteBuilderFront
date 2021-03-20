@@ -9,7 +9,7 @@ export default {
         siteData: false,
         templatesList: [],
         imageDataList: [],
-        domains: ['s1.jrgreez.ru','s2.jrgreez.ru','s3.jrgreez.ru','s4.jrgreez.ru'],
+        domains: ['s1.test.lan','s2.test.lan','s3.test.lan','s4.test.lan'],
         permittedDomains: []
     },
     getters: {
@@ -137,7 +137,7 @@ export default {
                 .catch(err => errRequestHandler(envConfig,err));// eslint-disable-line no-undef
         },
         setNewSite(context,payload) {
-            return axios.post(`${envConfig.API_URL}/sites`,payload)// eslint-disable-line no-undef
+            return axios.put(`${envConfig.API_URL}/sites`,payload)// eslint-disable-line no-undef
                 .then(res => {
                     if (res.data && res.data.message === 'ok') {
                         context.commit('setSiteData', res.data.result)
@@ -150,6 +150,28 @@ export default {
         },
         delSite(context,payload) {
             return axios.delete(`${envConfig.API_URL}/sites/${payload.id}`)// eslint-disable-line no-undef
+                .then(res => {
+                    if (res.data && res.data.message === 'ok') {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                .catch(err => errRequestHandler(envConfig,err));// eslint-disable-line no-undef
+        },
+        publishSite(context,payload) {
+            return axios.put(`${envConfig.API_URL}/sites/${payload.id}/publish`)// eslint-disable-line no-undef
+                .then(res => {
+                    if (res.data && res.data.message === 'ok') {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                .catch(err => errRequestHandler(envConfig,err));// eslint-disable-line no-undef
+        },
+        unPublishSite(context,payload) {
+            return axios.put(`${envConfig.API_URL}/sites/${payload.id}/unpublish`)// eslint-disable-line no-undef
                 .then(res => {
                     if (res.data && res.data.message === 'ok') {
                         return true
