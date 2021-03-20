@@ -1,0 +1,65 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: vue-interface-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: front.dev.lan
+      http:
+        paths:
+          - backend:
+              serviceName: vue-interface
+              servicePort: 80
+            path: /
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: site-builder-front
+  namespace: default
+  labels:
+    app: site-builder-front
+spec:
+  ports:
+    - port: 80
+  clusterIP: None
+  selector:
+    app: site-builder-front
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: site-builder-front
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: site-builder-front
+  replicas: 1
+  strategy:
+    type: "RollingUpdate"
+  template:
+    metadata:
+      labels:
+        app: site-builder-front
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+        - image: upachko/site_builder_front:__VERSION__
+          name: site-builder-front
+          imagePullPolicy: Always
+          env:
+            - name: VUE_PRODUCTION
+              value: "true"
+            - name: VUE_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: node-api-default
+                  key: URL
+          lifecycle:
+            postStart:
+              exec:
+                command: ["sh", "/usr/share/nginx/html/getenv.sh"]
