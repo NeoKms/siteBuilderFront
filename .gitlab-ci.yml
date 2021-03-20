@@ -1,0 +1,73 @@
+stages:
+  - build
+  - deploy
+
+build to develop:
+  stage: build
+  only:
+    refs:
+      - develop
+  environment:
+    name: develop
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://localhost:2375/
+  image: cr.yandex/yc/metadata-token-docker-helper:0.2
+  services:
+    - docker:19.03.1-dind
+  script:
+    - docker login --username $DOCKER_LOGIN --password $DOCKER_PASSWORD
+    - docker build . -t upachko/site_builder_front:gitlab-dev-$CI_COMMIT_SHORT_SHA
+    - docker push upachko/site_builder_front:gitlab-dev-$CI_COMMIT_SHORT_SHA
+    - echo $CI_COMMIT_SHORT_SHA
+
+build to production:
+  stage: build
+  only:
+    refs:
+      - master
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://localhost:2375/
+  image: cr.yandex/yc/metadata-token-docker-helper:0.2
+  services:
+    - docker:19.03.1-dind
+  script:
+    - docker login --username $DOCKER_LOGIN --password $DOCKER_PASSWORD
+    - docker build . -t upachko/site_builder_front:gitlab-$CI_COMMIT_SHORT_SHA
+    - docker push upachko/site_builder_front:gitlab-$CI_COMMIT_SHORT_SHA
+    - echo $CI_COMMIT_SHORT_SHA
+
+deploy to production:
+  only:
+    refs:
+      - master
+    kubernetes: active
+  image: gcr.io/cloud-builders/kubectl:latest
+  stage: deploy
+  script:
+    - kubectl config set-cluster k8s --server="$KUBE_URL" --insecure-skip-tls-verify=true
+    - kubectl config set-credentials admin --token="$KUBE_TOKEN"
+    - kubectl config set-context default --cluster=k8s --user=admin
+    - kubectl config use-context default
+    - sed -i "s/__VERSION__/gitlab-$CI_COMMIT_SHORT_SHA/" k8s.yaml
+    - kubectl apply -f k8s.yaml
+
+deploy to develop:
+  only:
+    refs:
+      - develop
+    kubernetes: active
+  image: gcr.io/cloud-builders/kubectl:latest
+  stage: deploy
+  environment:
+    name: develop
+  script:
+    - kubectl config set-cluster k8s --server="$KUBE_URL_DEV" --insecure-skip-tls-verify=true
+    - kubectl config set-credentials admin --token="$KUBE_TOKEN_DEV"
+    - kubectl config set-context default --cluster=k8s --user=admin
+    - kubectl config use-context default
+    - sed -i "s/__VERSION__/gitlab-dev-$CI_COMMIT_SHORT_SHA/" k8s.yaml
+    - kubectl apply -f k8s.yaml
