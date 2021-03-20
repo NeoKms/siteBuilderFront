@@ -1,4 +1,5 @@
 export default {
+    name: 'notifications',
     namespaced: true,
     state: {
         messages: [],
@@ -23,5 +24,6 @@ export default {
                 }, msgData.time)
             }
         },
-    }
+    },
+    actions: {}
 }

@@ -25,16 +25,16 @@
                                 Cancel
                             </v-btn>
                         </v-col>
-                        <v-col align="right" cols="6">
-                            <v-row>
-                                <v-col align="right" class="ct-c">
-                                </v-col>
-                                <v-col align="left" class="ct-c">
-                                    <v-switch v-model="siteForm.active"
-                                              :label="siteForm.active?'Активный':'Не активый'"></v-switch>
-                                </v-col>
-                            </v-row>
-                        </v-col>
+<!--                        <v-col align="right" cols="6">-->
+<!--                            <v-row>-->
+<!--                                <v-col align="right" class="ct-c">-->
+<!--                                </v-col>-->
+<!--                                <v-col align="left" class="ct-c">-->
+<!--                                    <v-switch v-model="siteForm.active"-->
+<!--                                              :label="siteForm.active?'Активный':'Не активый'"></v-switch>-->
+<!--                                </v-col>-->
+<!--                            </v-row>-->
+<!--                        </v-col>-->
                     </v-row>
                     <v-row>
                         <v-col>
@@ -48,7 +48,10 @@
                                 <tr>
                                     <td class="left">Адрес</td>
                                     <td>
-                                        <v-text-field v-model="siteForm.address"></v-text-field>
+                                        <v-select
+                                                v-model="siteForm.address"
+                                                :items="permittedDomains"
+                                        ></v-select>
                                     </td>
                                 </tr>
                                 <tr>
@@ -62,6 +65,7 @@
                                                 @input="selectType"
                                                 persistent-hint
                                                 return-object
+                                                :error-messages="typeiderr"
                                                 single-line
                                         ></v-select>
                                     </td>
@@ -77,6 +81,9 @@
                                 </tr>
                             </table>
                         </v-col>
+                    </v-row>
+                    <v-row>
+                        <PublicationsTable v-if="siteForm.id" @newSelected="addNewSelected" />
                     </v-row>
                 </v-container>
             </v-col>
@@ -188,19 +195,24 @@
         </v-row>
         <v-dialog
                 v-model="viewTemplates"
-                max-width="900"
+                max-width="920"
         >
             <MtemplateChoose :viewTemplates="viewTemplates" @setChosenTmpl="setChosenTmpl" />
         </v-dialog>
     </v-container>
 </template>
 <script>
+    import {mapGetters} from 'vuex';
     import MtemplateChoose from './MtemplateChoose'
+    import PublicationsTable from './PublicationsTable'
+    import {errVueHandler} from '@/plugins/errorResponser'
+
 
     export default {
         name: "siteDescriptionEdit",
         components: {
             MtemplateChoose,
+            PublicationsTable,
         },
         data() {
             return {
@@ -208,6 +220,7 @@
                 viewTemplates: false,
                 viewEdit: false,
                 siteForm: {},
+                typeiderr: []
             }
         },
         props: {
@@ -217,38 +230,57 @@
             }
         },
         computed: {
+            ...mapGetters('sites', {
+                site: 'getSiteData',
+                permittedDomains: 'getPermittedDomains',
+            }),
             selectedType: function () {
                 return this.siteForm.type.options.find(name => name.value === this.siteForm.type.value)
             },
-            site: function () {
-                return this.$store.getters.getCopyObj(this.$store.getters['sites/getSiteById'](this.id))
-            }
         },
         methods: {
+            addNewSelected(val) {
+                if (val.value) {
+                    this.siteForm.publications.push({id: val.item.id})
+                } else {
+                    this.siteForm.publications.splice(this.siteForm.publications.findIndex(el => el.id === val.item.id), 1)
+                }
+            },
             selectType(val) {
                 this.siteForm.type.value = val.value;
             },
             setChosenTmpl(id) {
-                this.siteForm.template.id = id
                 this.viewTemplates = false
-                this.siteForm.template = this.$store.getters.getCopyObj(this.$store.getters['sites/getTemplatById'](id))
+                let templateNow = this.$store.getters.getCopyObj(this.$store.getters['sites/getTemplateById'][id])
+                this.siteForm.template = templateNow
             },
             editorCancel() {
-                this.$emit('editorCancel')
                 this.$router.push({name: 'siteDescriptionView', params: this.$router.history.current.params})
-                this.$emit('editorOff')
             },
             editorSave() {
-                this.$emit('editorSave')
+                if (this.siteForm.type.value<0) {
+                    this.typeiderr = ['Выберите тип сайта']
+                    return;
+                }
                 this.$store.dispatch('sites/updateSiteData', this.siteForm)
-                //toDo сделать првоверку на значение
-                this.$router.push({name: 'siteDescriptionView', params: this.$router.history.current.params})
-                this.$emit('editorOff')
+                    .then(res => {
+                        if (errVueHandler(this, res)) {
+                            this.$store.commit('notifications/addMessage', {name: 'Успешно сохранено'})
+                            this.$router.push({name: 'siteDescriptionView', params: this.$router.history.current.params})
+                        }
+                    })
             }
         },
+        mounted() {
+            this.$eventBus.$emit('editorOn')
+        },
         created() {
-            this.siteForm = this.site;
-            this.$emit('editorOn')
+            this.siteForm = this.$store.getters.getCopyObj(this.site);
+            this.$store.dispatch('objects/fetchObjectList').then(res => errVueHandler(this,res))
+            this.$store.dispatch('liters/fetchLiterList').then(res => errVueHandler(this,res))
+            if (!this.permittedDomains.length) {
+                this.$store.dispatch('sites/fetchSiteList').then(res => errVueHandler(this,res))
+            }
         }
     }
 </script>

@@ -1,36 +1,58 @@
 <template>
-	<v-container class="grey lighten-5"  v-if="loadSuccess">
-		<v-row>
-			<v-col cols="1">
-				<router-link :to="{name: 'site'}" icon>
-					<v-icon>mdi-keyboard-backspace</v-icon>
-				</router-link>
-			</v-col>
-			<v-col cols="11">
-				{{ siteName }} ({{ id }})
-			</v-col>
-		</v-row>
-		<v-row>
-			<v-tabs
-					background-color="#fafafa"
-					color="deep-purple accent-4"
-					left
-			>
-				<v-tab
-						v-for="(tab, index) in tabs" :key="index"
-						:to="{ name: tab.route, params: { tabName:  tab.name}}"
-				>
-					{{tab.label}}
-				</v-tab>
-			</v-tabs>
-		</v-row>
-		<v-row>
-			<router-view :key="this.$route.path" @editorOn="edit = true" @editorOff="edit = false"/>
-		</v-row>
-	</v-container>
+    <div>
+        <v-container class="grey lighten-5" v-if="!loading">
+            <v-row>
+                <v-col cols="1">
+                    <router-link :to="{name: 'site'}" icon>
+                        <v-icon>mdi-keyboard-backspace</v-icon>
+                    </router-link>
+                </v-col>
+                <v-col cols="7">
+                    {{ siteName }} ({{ id }})
+                </v-col>
+                <v-col cols="4">
+                    <v-btn :disabled="editor" small  v-if="siteData.processing" color="warning">
+                        В процессе {{siteData.processing===1 ? 'публикации' : 'снятия с публикации'}}
+                        <v-btn :disabled="editor" small  color="info" loading="true" icon>loading</v-btn>
+                    </v-btn>
+                    <v-btn :disabled="editor" small v-else-if="!!siteData.active" color="error" @click="unPublish">Снять с публикации</v-btn>
+                    <v-btn :disabled="editor" small v-else-if="cannotPublish" color="error" v-tooltip.auto="publishErrors.join('</br>')">Невозможно опубликовать</v-btn>
+                    <v-btn :disabled="editor" small v-else color="green" @click="Publish">Отправить на публикацию</v-btn>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-tabs
+                        background-color="#fafafa"
+                        color="deep-purple accent-4"
+                        left
+                >
+                    <v-tab
+                            v-for="(tab, index) in tabs" :key="index"
+                            :to="{ name: tab.route, params: { tabName:  tab.name}}"
+                    >
+                        {{tab.label}}
+                    </v-tab>
+                </v-tabs>
+            </v-row>
+            <v-row>
+                <router-view :key="this.$route.path" />
+            </v-row>
+        </v-container>
+        <v-container v-if="loading">
+            <v-row justify="center">
+                <img src="@/assets/img/loading.gif" width="200" alt="loading">
+            </v-row>
+            <v-row justify="center">
+                Загрузка сайта...
+            </v-row>
+        </v-container>
+    </div>
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
+    import {errVueHandler} from '@/plugins/errorResponser'
+
     export default {
         name: "siteDetails",
         props: {
@@ -41,8 +63,8 @@
         },
         data() {
             return {
-                isLoading: false,
-                loadSuccess: false,
+                loading: true,
+                editor: false,
                 activeTab: 'description',
                 edit: false,
                 editTabs: {
@@ -57,14 +79,18 @@
                 }
             }
         },
-        mounted() {
+        async mounted() {
+            await this.loadData();
+            if (!this.siteList.length) {
+                this.$store.dispatch('sites/fetchSiteList').then(res => errVueHandler(this, res))
+            }
             this.setActiveTab()
-            this.loadData();
         },
         computed: {
-            siteData: function () {
-                return this.$store.getters['sites/getSiteById'](this.id)
-            },
+            ...mapGetters('sites', {
+                siteData: 'getSiteData',
+                siteList: 'getSiteList',
+            }),
             siteName: function () {
                 return this.siteData.name
             },
@@ -84,23 +110,46 @@
                     }
                 }
                 return tabs
+            },
+            publishErrors: function () {
+                let arr = []
+                if (!this.siteList.length || this.siteList.find(el=>el.address===this.siteData.address && el.active)) {
+                    arr.push("Данный домен уже опубликован.")
+                }
+                if (!this.siteData.address) {
+                    arr.push("Не выбран адрес (домен)")
+                }
+                if (this.siteData.type.value<1) {
+                    arr.push("Не выбран тип")
+                }
+                if (this.siteData.template.id<1) {
+                    arr.push("Не выбран шаблон")
+                }
+                if (!this.siteData.publications.length) {
+                    arr.push("Не выбраны публикации")
+                }
+                if (!this.contactsChecked) {
+                    arr.push("Не заполнены контактные данные")
+                }
+                return arr
+            },
+            contactsChecked: function() {
+                let c = this.siteData.contacts
+                return !!c.city && !!c.coordinate.x && !!c.coordinate.y && !!c.emailFeedback && !!c.emailMain && !!c.index && !!c.litera && !!c.street && !!c.city && !!c.doubleMailing
+                    && !!c.house && !!c.phone && !!c.title
+            },
+            cannotPublish: function () {
+                return !!this.publishErrors.length
             }
         },
         methods: {
-            async loadData() {
-                if (this.siteData === undefined) {
-                    try {
-                        this.isLoading = true;
-                        await this.$store.dispatch('sites/fetchSiteData', {id: this.id})
-                    } catch (e) {
-                        console.log(e);
-                    } finally {
-                        this.isLoading = false;
-                        this.loadSuccess = true;
-                    }
-                } else {
-                    this.loadSuccess = true;
-                }
+            loadData() {
+                return this.$store.dispatch('sites/fetchSiteData', {id: this.id})
+                    .then(res => {
+                        if (errVueHandler(this, res)) {
+                            this.loading = false
+                        }
+                    })
             },
             setActiveTab() {
                 let {path} = this.$route;
@@ -132,22 +181,54 @@
                     })
                 }
             },
+            Publish() {
+                this.$store.dispatch('sites/publishSite', {id: this.id})
+                    .then(res => {
+                        if (errVueHandler(this, res)) {
+                            this.siteData.processing = 1
+                            this.$store.commit('notifications/addMessage', {
+                                name: 'Сайт успешно отправлен на публикацию',
+                            })
+                        }
+                    })
+            },
+            unPublish() {
+                this.$store.dispatch('sites/unPublishSite', {id: this.id})
+                    .then(res => {
+                        if (errVueHandler(this, res)) {
+                            this.siteData.processing = 2
+                            this.$store.commit('notifications/addMessage', {
+                                name: 'Сайт успешно отправлен на снятие с публикации',
+                            })
+                        }
+                    })
+            }
+        },
+        created() {
+            this.$eventBus.$on('editorOn', () => {
+                this.editor = true
+            })
+            this.$eventBus.$on('editorOff', () => {
+                this.editor = false
+            })
         }
     }
 </script>
 
 <style scoped lang="scss">
-	.btn-cancel {
-		color: red !important;
-		i {
-			color: #ea0400 !important;
-		}
-	}
-	.btn-save {
-		color: #2946c6 !important;
-		i {
-			color: #2946c6 !important;
-		}
-	}
+    .btn-cancel {
+        color: red !important;
 
+        i {
+            color: #ea0400 !important;
+        }
+    }
+
+    .btn-save {
+        color: #2946c6 !important;
+
+        i {
+            color: #2946c6 !important;
+        }
+    }
 </style>
