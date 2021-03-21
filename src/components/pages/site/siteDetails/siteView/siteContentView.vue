@@ -71,7 +71,7 @@
         data() {
             return {
                 iframe: {
-                    src: 'https://jrgreez.ru/testsite/index.html',
+                    src: '',
                     loaded: false,
                     transform: 0.378,
                     marginL: -615,
@@ -80,32 +80,6 @@
                     now: 1
                 },
                 first: 0,
-                framesSrc: [
-                    {
-                        name: 'Main',
-                        src: 'https://jrgreez.ru/testsite/index.html',
-                    },
-                    {
-                        name: 'Info',
-                        src: 'https://jrgreez.ru/testsite/Informaciya.html',
-                    },
-                    {
-                        name: 'Actions',
-                        src: 'https://jrgreez.ru/testsite/Akcii.html',
-                    },
-                    {
-                        name: 'Publications',
-                        src: 'https://jrgreez.ru/testsite/Publikacii.html',
-                    },
-                    {
-                        name: 'Detail',
-                        src: 'https://jrgreez.ru/testsite/object.html',
-                    },
-                    {
-                        name: 'Contacts',
-                        src: 'https://jrgreez.ru/testsite/Kontakty.html',
-                    }
-                ]
             }
         },
         name: "siteContentView",
@@ -122,6 +96,7 @@
         computed: {
             ...mapGetters('sites', {
                 site: 'getSiteData',
+                framesSrc: 'getFramesSrc',
             }),
             sitePages() {
                 return this.site.template.pages;
@@ -165,6 +140,7 @@
             }
         },
         mounted() {
+            this.iframe.src = this.framesSrc[0].src
             this.$eventBus.$emit('editorOff')
         },
     }
