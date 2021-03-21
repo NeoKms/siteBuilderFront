@@ -9,10 +9,39 @@ export default {
         siteData: false,
         templatesList: [],
         imageDataList: [],
-        domains: ['s1.test.lan','s2.test.lan','s3.test.lan','s4.test.lan'],
-        permittedDomains: []
+        domains: ['s1.build.lan','s2.build.lan','s3.build.lan','s4.build.lan'],
+        permittedDomains: [],
+        framesSrc: [
+            {
+                name: 'Main',
+                src: `${envConfig.API_URL}/upload/testsite/index.html`,// eslint-disable-line no-undef
+            },
+            {
+                name: 'Info',
+                src: `${envConfig.API_URL}/upload/testsite/Informaciya.html`,// eslint-disable-line no-undef
+            },
+            {
+                name: 'Actions',
+                src: `${envConfig.API_URL}/upload/testsite/Akcii.html`,// eslint-disable-line no-undef
+            },
+            {
+                name: 'Publications',
+                src: `${envConfig.API_URL}/upload/testsite/Publikacii.html`,// eslint-disable-line no-undef
+            },
+            {
+                name: 'Detail',
+                src: `${envConfig.API_URL}/upload/testsite/object.html`,// eslint-disable-line no-undef
+            },
+            {
+                name: 'Contacts',
+                src: `${envConfig.API_URL}/upload/testsite/Kontakty.html`,// eslint-disable-line no-undef
+            }
+        ]
     },
     getters: {
+        getFramesSrc(state) {
+          return state.framesSrc
+        },
         getSiteList(state) {
             return state.siteList;
         },
@@ -49,8 +78,8 @@ export default {
             if ('img' in data) {
                 data.img = reinitImg(data.img)
             }
-            if (data.template && data.template.img) {
-                data.template.img = reinitImg(data.template.img)
+            if (data.template) {
+                data.template = reinitImgInObj(data.template)
             }
             state.siteData = data
         },
@@ -188,4 +217,14 @@ function reinitImg(url) {
         url = `${envConfig.API_URL}/${url}` // eslint-disable-line no-undef
     }
     return url
+}
+function reinitImgInObj(obj) {
+    for (let key in obj) {
+        if (typeof obj[key] === 'object') {
+            obj[key] = reinitImgInObj(obj[key])
+        } else if (key === 'img' && obj[key]) {
+            obj[key] = reinitImg(obj[key])
+        }
+    }
+    return obj
 }
