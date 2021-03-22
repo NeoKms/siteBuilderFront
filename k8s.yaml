@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-    - host: front.dev.lan
+    - host: front.build.lan
       http:
         paths:
           - backend:
@@ -53,11 +53,14 @@ spec:
           imagePullPolicy: Always
           env:
             - name: VUE_PRODUCTION
-              value: "true"
+              valueFrom:
+                configMapKeyRef:
+                  name: server-type
+                  key: PRODUCTION
             - name: VUE_API_URL
               valueFrom:
                 secretKeyRef:
-                  name: node-api-default
+                  name: api-default
                   key: URL
           lifecycle:
             postStart:
