@@ -3,6 +3,7 @@ const envConfig = (() => {
     envstring = envstring.split(';')
     let result = {
         API_URL:'http://api.dev.lan:3001',
+        WEBSOCKET_HOST: 'http://api.dev.lan:9001'
     }
     for (let i=0;i<envstring.length;i++) {
         if (envstring[i].indexOf('=')+1) {
