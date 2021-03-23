@@ -28,6 +28,7 @@
 </template>
 <script>
     import PushNotifications from './components/notification/PushNotifications.vue'
+    import {errVueHandler} from '@/plugins/errorResponser'
 
     export default {
         name: 'App',
@@ -52,6 +53,13 @@
             }
         },
         mounted() {
+            this.$store.commit('connectionWs')
+            this.$store.dispatch('sites/fetchSiteList')
+                .then(res => {
+                    if (errVueHandler(this, res)) {
+                        return this.$store.dispatch('notifications/connectToWsBuilder')
+                    }
+                })
             for (let prop in process.env) {
                 envConfig[prop.replace('VUE_APP_','')] = process.env[prop] // eslint-disable-line
             }

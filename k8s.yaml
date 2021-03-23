@@ -63,6 +63,12 @@ spec:
                 secretKeyRef:
                   name: api-default
                   key: URL
+            #wss
+            - name: VUE_WEBSOCKET_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: wsserver-default
+                  key: HOST2
           lifecycle:
             postStart:
               exec:
