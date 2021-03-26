@@ -43,6 +43,7 @@ export default {
                             type: data.status === 'error' ? 'error' : 'success',
                             time: 10000
                         }
+comsole.log(data)
                         const site_id = data.site_id
                         // console.log(context.rootGetters['sites/getSiteList'] )
                         let findedSite = (context.rootGetters['sites/getSiteList'] || []).find(el=>el.id===site_id)
