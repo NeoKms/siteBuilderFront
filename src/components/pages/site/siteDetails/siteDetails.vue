@@ -13,7 +13,7 @@
                 <v-col cols="4">
                     <v-btn :disabled="editor" small  v-if="siteData.processing" color="warning">
                         В процессе {{siteData.processing===1 ? 'публикации' : 'снятия с публикации'}}
-                        <v-btn :disabled="editor" small  color="info" loading="true" icon>loading</v-btn>
+                        <v-btn :disabled="editor" small  color="info" :loading="true" icon>loading</v-btn>
                     </v-btn>
                     <v-btn :disabled="editor" small v-else-if="!!siteData.active" color="error" @click="unPublish">Снять с публикации</v-btn>
                     <v-btn :disabled="editor" small v-else-if="cannotPublish" color="error" v-tooltip.auto="publishErrors.join('</br>')">Невозможно опубликовать</v-btn>
@@ -187,7 +187,8 @@
                         if (errVueHandler(this, res)) {
                             this.siteData.processing = 1
                             this.$store.commit('notifications/addMessage', {
-                                name: 'Сайт успешно отправлен на публикацию',
+                                name: 'Сайт отправлен на публикацию',
+                                time: 2000,
                             })
                         }
                     })
@@ -198,7 +199,8 @@
                         if (errVueHandler(this, res)) {
                             this.siteData.processing = 2
                             this.$store.commit('notifications/addMessage', {
-                                name: 'Сайт успешно отправлен на снятие с публикации',
+                                name: 'Сайт отправлен на снятие с публикации',
+                                time: 2000,
                             })
                         }
                     })

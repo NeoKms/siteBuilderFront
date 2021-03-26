@@ -43,19 +43,19 @@ export default {
                             type: data.status === 'error' ? 'error' : 'success',
                             time: 10000
                         }
-comsole.log(data)
                         const site_id = data.site_id
-                        // console.log(context.rootGetters['sites/getSiteList'] )
-                        let findedSite = (context.rootGetters['sites/getSiteList'] || []).find(el=>el.id===site_id)
+                        let findedSite = (context.rootGetters['sites/getSiteList'] || []).find(el=>parseInt(el.id)===parseInt(site_id))
                         if (findedSite) {
                             if (data.status === 'error') {
                                 tmp.name = data.error || 'Неизвестная ошибка'
                             } else if (data.status === 'deleted') {
                                 tmp.name = 'Сайт был снят с публикации'
+                                context.commit('sites/setProcessing',{site_id,pr:0,active: false},{ root: true })
                             } else if (data.status === 'success') {
+                                context.commit('sites/setProcessing',{site_id,pr:0,active: true},{ root: true })
                                 tmp.name = 'Сайт был успешно опубликован'
                             }
-                            tmp.name += ` (${findedSite.name}:${findedSite.address})`
+                            tmp.name += `\nСайт: ${findedSite.name}, http://${findedSite.address}`
                             context.commit('addMessage', tmp)
                         }
                         }

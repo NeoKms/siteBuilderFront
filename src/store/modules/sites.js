@@ -69,6 +69,12 @@ export default {
         },
     },
     mutations: {
+        setProcessing(state,data) {
+            if (state.siteData && parseInt(state.siteData.id)===parseInt(data.site_id)) {
+                state.siteData.active = data.active
+                state.siteData.processing = data.pr
+            }
+        },
         setSiteList(state, data) {
             let existDomains = data.filter(el=>el.active===1).map(el=>el.address)
             state.permittedDomains = state.domains.filter(el=>!existDomains.includes(el))
