@@ -11,36 +11,11 @@ export default {
         imageDataList: [],
         domains: ['s1.build.lan','s2.build.lan','s3.build.lan','s4.build.lan'],
         permittedDomains: [],
-        framesSrc: [
-            {
-                name: 'Main',
-                src: `${envConfig.API_URL}/upload/testsite/index.html`,// eslint-disable-line no-undef
-            },
-            {
-                name: 'Info',
-                src: `${envConfig.API_URL}/upload/testsite/Informaciya.html`,// eslint-disable-line no-undef
-            },
-            {
-                name: 'Actions',
-                src: `${envConfig.API_URL}/upload/testsite/Akcii.html`,// eslint-disable-line no-undef
-            },
-            {
-                name: 'Publications',
-                src: `${envConfig.API_URL}/upload/testsite/Publikacii.html`,// eslint-disable-line no-undef
-            },
-            {
-                name: 'Detail',
-                src: `${envConfig.API_URL}/upload/testsite/object.html`,// eslint-disable-line no-undef
-            },
-            {
-                name: 'Contacts',
-                src: `${envConfig.API_URL}/upload/testsite/Kontakty.html`,// eslint-disable-line no-undef
-            }
-        ]
+        previewHtml: '',
     },
     getters: {
-        getFramesSrc(state) {
-          return state.framesSrc
+        getPreview(state){
+            return state.previewHtml
         },
         getSiteList(state) {
             return state.siteList;
@@ -69,6 +44,9 @@ export default {
         },
     },
     mutations: {
+        setPreview(state,data) {
+            state.previewHtml = data
+        },
         setProcessing(state,data) {
             if (state.siteData && parseInt(state.siteData.id)===parseInt(data.site_id)) {
                 state.siteData.active = data.active
@@ -216,6 +194,18 @@ export default {
                 })
                 .catch(err => errRequestHandler(envConfig,err));// eslint-disable-line no-undef
         },
+        fetchPreview(context,payload) {
+            return axios.post(`${envConfig.PREVIEW_URL}/preview.php`,payload)// eslint-disable-line no-undef
+                .then(res => {
+                    if (res.data && res.data.message === 'ok') {
+                        context.commit('setPreview',res.data.html)
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                .catch(err => errRequestHandler(envConfig,err));// eslint-disable-line no-undef
+        }
     },
 };
 function reinitImg(url) {
