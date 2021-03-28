@@ -53,12 +53,9 @@
             }
         },
         mounted() {
-            this.$store.commit('connectionWs')
-            this.$store.dispatch('sites/fetchSiteList')
-                .then(res => {
-                    if (errVueHandler(this, res)) {
-                        return this.$store.dispatch('notifications/connectToWsBuilder')
-                    }
+            this.$store.dispatch('connectionWs')
+                .then( () => {
+                    this.$store.dispatch('sites/fetchSiteList').then(res => errVueHandler(this, res))
                 })
             for (let prop in process.env) {
                 envConfig[prop.replace('VUE_APP_','')] = process.env[prop] // eslint-disable-line
