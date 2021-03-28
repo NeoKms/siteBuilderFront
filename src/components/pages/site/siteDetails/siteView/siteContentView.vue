@@ -27,8 +27,7 @@
 					'margin-left':this.iframe.marginL+'px',
 					'margin-top':this.iframe.marginT+'px',
 					}"
-                        :src="iframe.src"
-                        @load="frameLoad"
+                        :srcdoc="preview"
                         v-show="iframe.loaded"
                         sandbox="allow-scripts"
                         :width="this.iframe.width" :height="this.iframe.width" frameborder="1"
@@ -41,7 +40,7 @@
                         <v-expansion-panel v-if="elem.active"
                                            :key="index" class="siteLayout__collapse-item"
                                            :name="elem.name">
-                            <v-expansion-panel-header class="head_accordion" @click="changeFrame(elem.code)">
+                            <v-expansion-panel-header class="head_accordion" @click="changeFrame(elem.name)">
                                 {{elem.name}}
                             </v-expansion-panel-header>
                             <v-expansion-panel-content class="acc_content">
@@ -66,11 +65,13 @@
 
 <script>
     import {mapGetters} from 'vuex';
+    import {errVueHandler} from '@/plugins/errorResponser'
 
     export default {
         data() {
             return {
                 iframe: {
+                    name: 'Главная',
                     src: '',
                     loaded: false,
                     transform: 0.378,
@@ -96,21 +97,34 @@
         computed: {
             ...mapGetters('sites', {
                 site: 'getSiteData',
-                framesSrc: 'getFramesSrc',
+                preview: 'getPreview',
             }),
             sitePages() {
                 return this.site.template.pages;
             },
         },
         methods: {
+            getPreview() {
+                this.iframe.loaded = false;
+                this.$store.dispatch('sites/fetchPreview',{
+                    "template_id": this.site.template.id,
+                    "site_id": this.site.id,
+                    "page_name": this.iframe.name,
+                    "auth" :"8fea39d82cfaae83ed954e7f8e821a3c981c6e854ad2155fc2a86f7d01a8fa52"
+                })
+                    .then(res => {
+                        if (errVueHandler(this, res)){
+                            this.iframe.loaded = true
+                        }
+                    })
+            },
             frameLoad: function () {
                 this.iframe.loaded = true;
             },
             changeFrame: function (name) {
-                const src = this.framesSrc.find(data => data.name === name).src;
-                if (typeof src !== 'undefined' && src !== this.iframe.src) {
-                    this.iframe.loaded = false;
-                    this.iframe.src = src;
+                if (this.iframe.name !== name) {
+                    this.iframe.name = name;
+                    this.getPreview()
                 }
             },
             changeFrameStyle: function (type) {
@@ -140,7 +154,7 @@
             }
         },
         mounted() {
-            this.iframe.src = this.framesSrc[0].src
+            this.getPreview()
             this.$eventBus.$emit('editorOff')
         },
     }

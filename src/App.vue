@@ -29,6 +29,8 @@
 <script>
     import PushNotifications from './components/notification/PushNotifications.vue'
     import {errVueHandler} from '@/plugins/errorResponser'
+    import {mapGetters} from 'vuex';
+
 
     export default {
         name: 'App',
@@ -52,11 +54,20 @@
                 })
             }
         },
+        computed: {
+            ...mapGetters('login', {
+                isAuth: 'getUserAuth',
+            }),
+        },
         mounted() {
-            this.$store.dispatch('connectionWs')
-                .then( () => {
-                    this.$store.dispatch('sites/fetchSiteList').then(res => errVueHandler(this, res))
-                })
+            setTimeout(()=>{
+                if (this.isAuth) {
+                    this.$store.dispatch('connectionWs')
+                        .then(() => {
+                            this.$store.dispatch('sites/fetchSiteList').then(res => errVueHandler(this, res))
+                        })
+                }
+            },1000);
             for (let prop in process.env) {
                 envConfig[prop.replace('VUE_APP_','')] = process.env[prop] // eslint-disable-line
             }

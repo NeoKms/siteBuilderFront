@@ -20,6 +20,7 @@
 </template>
 
 <script>
+    import {errVueHandler} from '@/plugins/errorResponser'
     export default {
         name: "loginForm",
         data() {
@@ -37,6 +38,10 @@
                 this.$store.dispatch('login/fetchLogin', this.formData)
                     .then(res => {
                         if (res === true) {
+                            this.$store.dispatch('connectionWs')
+                                .then( () => {
+                                    this.$store.dispatch('sites/fetchSiteList').then(res => errVueHandler(this, res))
+                                })
                             this.$router.push(this.$route.query.redirect || '/')
                         } else {
                             this.$store.commit('notifications/addMessage', {
