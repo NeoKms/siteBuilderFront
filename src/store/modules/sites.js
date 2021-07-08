@@ -9,7 +9,7 @@ export default {
         siteData: false,
         templatesList: [],
         imageDataList: [],
-        domains: ['s1.build.lan','s2.build.lan','s3.build.lan','s4.build.lan'],
+        domains: ['s1.jrgreez.ru','s2.jrgreez.ru','s3.jrgreez.ru','s4.jrgreez.ru'],
         permittedDomains: [],
         previewHtml: '',
     },

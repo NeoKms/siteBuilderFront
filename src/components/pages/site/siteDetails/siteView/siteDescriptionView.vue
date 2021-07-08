@@ -29,7 +29,7 @@
                                 </tr>
                                 <tr>
                                     <td class="left">Адрес</td>
-                                    <td>{{site.address}}</td>
+                                    <td><a :href="'http://'+site.address" target="_blank">{{site.address}}</a></td>
                                 </tr>
                                 <tr>
                                     <td class="left">Тип</td>
@@ -114,6 +114,14 @@
                     </v-row>
                     <v-row>
                         <v-col cols="6">
+                            Дублирование почты
+                        </v-col>
+                        <v-col cols="6">
+                            {{site.contacts.doubleMailing ? 'Да' : 'Нет'}}
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="6">
                             Координаты
                         </v-col>
                         <v-col cols="6">
@@ -132,7 +140,7 @@
                             <div class="template__img">
                                 <v-img
                                         v-if="site.template.img"
-                                        :src="site.template.img"
+                                        :src="`${site.template.img}_${site.template.style[0].elements[0].data.value}.jpg`"
                                         width="250" height="155" contain
                                 />
                                 <span v-else>Выберите шаблон сайта</span>
@@ -232,6 +240,11 @@
             width: 250px;
             height: 160px;
             display: grid;
+        }
+    }
+    .table-descr {
+        td {
+            padding: 5px 10px 5px 10px;
         }
     }
 </style>

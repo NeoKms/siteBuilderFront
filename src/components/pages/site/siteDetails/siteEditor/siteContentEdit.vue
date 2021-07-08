@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-row>
+        <v-row justify="center" align="center">
             <v-col cols="1" class="ct-c">
                 <v-btn
                         small class="btn-save"
@@ -19,6 +19,20 @@
                     Cancel
                 </v-btn>
             </v-col>
+            <v-spacer/>
+            <v-col cols="2">
+                <span>Цветовая схема</span>
+            </v-col>
+            <v-col cols="3">
+                <v-select
+                        v-model="siteForm.template.style[0].elements[0].data.value"
+                        :items="siteForm.template.style[0].elements[0].data.options"
+                        item-text="label"
+                        item-value="value"
+                        single-line
+                ></v-select>
+            </v-col>
+
         </v-row>
         <v-row>
             <v-col cols="8">

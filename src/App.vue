@@ -48,7 +48,7 @@
             },
             testNotif2() {
                 this.$store.commit('notifications/addMessage', {
-                    name: 'Тест 2',
+                    name: 'Хэй, я тестовое уведомление',
                     type: 'warning',
                     time: 1000,
                 })

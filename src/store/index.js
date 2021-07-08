@@ -54,14 +54,14 @@ export default new Vuex.Store({
                 let findedSite = (context.rootGetters['sites/getSiteList'] || []).find(el=>parseInt(el.id)===parseInt(site_id))
                 if (findedSite) {
                     if (data.status === 'error') {
-                        tmp.name = data.error || 'Неизвестная ошибка'
+                        tmp.name = 'Ошибка: ' + (data.error || 'Неизвестная ошибка')
                         context.commit('sites/setProcessing',{site_id,pr:0,active: false},{ root: true })
                     } else if (data.status === 'deleted') {
                         tmp.name = 'Сайт был снят с публикации'
                         context.commit('sites/setProcessing',{site_id,pr:0,active: false},{ root: true })
-                    } else if (data.status === 'success') {
+                    } else if (data.status === 'success' || data.status === 'update') {
                         context.commit('sites/setProcessing',{site_id,pr:0,active: true},{ root: true })
-                        tmp.name = 'Сайт был успешно опубликован'
+                        tmp.name = data.text || 'Сайт был успешно опубликован'
                     }
                     tmp.name += `\nСайт: ${findedSite.name}, http://${findedSite.address}`
                     context.commit('notifications/addMessage', tmp,{ root: true })

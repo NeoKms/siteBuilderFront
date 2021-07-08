@@ -15,7 +15,7 @@
                     <v-img
                             class="white--text align-end"
                             width="300px"
-                            :src="template.img"
+                            :src="template.img+'.jpg'"
                     />
                     <div>{{template.type_name}}</div>
                     <v-card-title

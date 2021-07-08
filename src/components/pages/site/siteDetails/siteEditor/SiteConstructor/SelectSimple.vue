@@ -6,7 +6,6 @@
                 item-text="label"
                 item-value="value"
                 persistent-hint
-                return-object
                 single-line
         ></v-select>
     </div>

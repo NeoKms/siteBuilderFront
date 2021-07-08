@@ -25,16 +25,6 @@
                                 Cancel
                             </v-btn>
                         </v-col>
-<!--                        <v-col align="right" cols="6">-->
-<!--                            <v-row>-->
-<!--                                <v-col align="right" class="ct-c">-->
-<!--                                </v-col>-->
-<!--                                <v-col align="left" class="ct-c">-->
-<!--                                    <v-switch v-model="siteForm.active"-->
-<!--                                              :label="siteForm.active?'Активный':'Не активый'"></v-switch>-->
-<!--                                </v-col>-->
-<!--                            </v-row>-->
-<!--                        </v-col>-->
                     </v-row>
                     <v-row>
                         <v-col>
@@ -45,7 +35,7 @@
                                         <v-text-field v-model="siteForm.name"></v-text-field>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr v-if="!siteForm.active">
                                     <td class="left">Адрес</td>
                                     <td>
                                         <v-select
@@ -152,6 +142,12 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="left">Дублирование почты</td>
+                                    <td>
+                                        <v-checkbox v-model="siteForm.contacts.doubleMailing"></v-checkbox>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="left">Координаты</td>
                                     <td>
                                         <v-text-field v-model="siteForm.contacts.coordinate.x" label="x"></v-text-field>
@@ -180,7 +176,7 @@
                                 <v-img
                                         v-show="siteForm.template.img"
                                         v-if="!viewEdit"
-                                        :src="siteForm.template.img"
+                                        :src="templateImage"
                                         width="250" height="155" contain
                                 />
                                 <span v-show="viewEdit">Выберите шаблон сайта</span>
@@ -234,9 +230,20 @@
                 site: 'getSiteData',
                 permittedDomains: 'getPermittedDomains',
             }),
-            selectedType: function () {
+            selectedType() {
                 return this.siteForm.type.options.find(name => name.value === this.siteForm.type.value)
             },
+            templateImage() {
+                if (this.siteForm.template && this.siteForm.template.img) {
+                    if (this.siteForm.template.style) {
+                        return `${this.siteForm.template.img}_${this.siteForm.template.style[0].elements[0].data.value}.jpg`
+                    } else {
+                        return `${this.siteForm.template.img}.jpg`
+                    }
+                } else {
+                    return ''
+                }
+            }
         },
         methods: {
             addNewSelected(val) {
