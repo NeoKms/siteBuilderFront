@@ -83,7 +83,8 @@
                         :items="dataset"
                         :headers="headers"
                         show-select
-                        :single-select="true"
+                        :single-select="false"
+                        @toggle-select-all="$emit('newSelected',$event)"
                         @item-selected="$emit('newSelected',$event)"
                 >
                     <template v-slot:no-data>
@@ -171,7 +172,7 @@
             }
         },
         mounted() {
-            this.selectedPublForSite = this.$store.getters.getCopyObj(this.site).publications
+            this.selectedPublForSite = JSON.parse(JSON.stringify(this.site.publications))
         },
         created() {
             this.$store.dispatch('objects/fetchObjectList')

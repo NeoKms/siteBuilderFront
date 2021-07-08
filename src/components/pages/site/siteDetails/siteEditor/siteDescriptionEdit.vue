@@ -247,10 +247,14 @@
         },
         methods: {
             addNewSelected(val) {
+                // eslint-disable-next-line no-prototype-builtins
+                if (!val.hasOwnProperty('items')) {
+                    val.items = [val.item]
+                }
                 if (val.value) {
-                    this.siteForm.publications.push({id: val.item.id})
+                    val.items.map(item => this.siteForm.publications.push({id: item.id}))
                 } else {
-                    this.siteForm.publications.splice(this.siteForm.publications.findIndex(el => el.id === val.item.id), 1)
+                    val.items.map(item => this.siteForm.publications.splice(this.siteForm.publications.findIndex(el => el.id === item.id), 1))
                 }
             },
             selectType(val) {
