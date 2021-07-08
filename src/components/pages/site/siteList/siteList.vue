@@ -20,7 +20,7 @@
                         <div class="name">{{ site.name }}</div>
                         <div class="address">https://{{ site.address }}</div>
                         <div class="footer">
-                            <span v-if="site.processing">В процессе публикации</span>
+                            <span v-if="site.processing">В процессе <br>{{site.processing ===2 ? "снятия с " : ''}} публикации</span>
                             <v-spacer />
                             <v-btn icon color="error" @click.stop="delSite(site)">
                                 <v-icon>mdi-close-thick</v-icon>

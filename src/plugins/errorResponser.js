@@ -9,8 +9,13 @@ module.exports = {
                 query: {redirect: self.$route.fullPath}
             })
         } else if (res === 404) {
-            self.$router.push({
-                name: '404'
+            // self.$router.push({
+            //     name: '404'
+            // })
+            self.$store.commit('notifications/addMessage', {
+                name: customError ? customError : (res === '' || res === false ? 'Неизвестная ошибка' : (Array.isArray(res)) ? res.join('\n') : res),
+                type: 'error',
+                time: 3000,
             })
         } else {
             self.$store.commit('notifications/addMessage', {
